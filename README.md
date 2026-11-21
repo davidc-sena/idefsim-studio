@@ -92,23 +92,34 @@ python -m pytest
 
 | Símbolo | Atalho | Interpretação na simulação |
 |---|---|---|
-| Entidade (círculo) | E | Sem fluxo de entrada é uma **fonte de chegadas** (intervalo, primeira chegada, lote, máximo). Com fluxo de entrada é uma **transformação**: a entidade passa a ser deste tipo. |
+| Entidade (círculo) | E | Sem fluxo de entrada é uma **fonte de chegadas** (intervalo, primeira chegada, lote, máximo). Com fluxo de entrada é uma **transformação**: a entidade passa a ser deste tipo. Pode ter **atributos** (ex.: `tipo`, `peso`), cada um com um valor fixo ou uma distribuição, sorteados na chegada ou na transformação. |
 | Fluxo de entrada no sistema (seta com dois traços **antes** da entidade) | Shift+E | Indica que a entidade chega de fora do sistema. Clique sobre a entidade do lado de onde ela chega; o lado e a presença da seta também podem ser alterados nas Propriedades. Entidades que recebem fluxo do próprio modelo (transformação) não têm essa seta. |
 | Função (retângulo) | F | Captura 1 unidade de cada recurso ligado, processa durante o tempo definido e libera os recursos. Sem recurso, capacidade infinita. |
 | Recurso | R | Capacidade (n.º de unidades). Fica **abaixo** da função; a *Ligação de recurso* sobe e entra pela base da função. |
 | Controle | C | Documental. Fica **acima** da função; a *Ligação de controle* entra pelo topo da função. |
 | Movimentação (seta larga) | M | Como a função, mas representa um transporte. |
 | Regra E (&) | 1 | Várias entradas: espera uma entidade de cada ramo (junção ou montagem). Várias saídas: segue por todos os ramos (paralelo). |
-| Regra OU (X) | 2 | Segue **uma** saída, escolhida pelas probabilidades. |
+| Regra OU (X) | 2 | Segue **uma** saída. Tipo de decisão: **probabilidade**; **atributo da entidade** (uma condição por saída, ex.: `tipo == 1 e peso < 15`, e uma saída `senão`); ou **apenas visual** (um critério em texto, ex.: "menor fila", que aparece no diagrama; na simulação as saídas têm chances iguais). |
 | Regra E/OU (O) | 3 | Cada saída é seguida de forma independente com sua probabilidade (pelo menos uma). |
 | Ponto final | X | A entidade sai do sistema (contabiliza o tempo no sistema). |
-| Conexão | K | Conectores com o **mesmo nome** estão ligados (útil para diagramas grandes). |
+| Conexão (triângulo com letra) | K | Liga partes do diagrama. A letra é **automática**: a nova conexão completa o par pendente ou recebe a próxima letra (A, A, B, B…). |
 | Informação explicativa | N | Nota de texto, sem efeito na simulação. |
 
-**Distribuições** (notação semelhante à do Arena): `5`, `CONST(5)`, `EXPO(média)`,
-`NORM(média, desvio)`, `TRIA(mín, moda, máx)`, `UNIF(mín, máx)`, `LOGN(média, desvio)`,
-`ERLA(média, k)`, `WEIB(escala, forma)`. Para vírgula decimal, separe os argumentos
-com `;`, por exemplo `NORM(5,5; 0,8)`.
+**Distribuições:** nos tempos (intervalo entre chegadas, primeira chegada, processamento,
+deslocamento) escolha a distribuição num menu e preencha os parâmetros. Estão disponíveis
+as distribuições do JaamSim:
+
+| Uso | Distribuições |
+|---|---|
+| Tempos e atributos | Constante (valor médio), Exponencial, Normal, Triangular, Uniforme, Log-normal, Erlang, Gama, Weibull, Log-logística, Beta, Discreta, Contínua empírica |
+| Só atributos (contagens) | Poisson, Binomial, Geométrica, Binomial negativa, Uniforme discreta |
+
+Ao trocar de distribuição, os parâmetros novos já vêm preenchidos a partir da média
+atual. No arquivo, a distribuição é guardada em texto (ex.: `TRIA(3; 4,5; 6)`).
+
+**Condições** da regra OU por atributo: `==`, `!=`, `<`, `<=`, `>`, `>=`, `+ - * /`,
+`e`, `ou`, `não` e parênteses, sobre os atributos das entidades. Escreva `senão` na saída
+padrão.
 
 ### Indicadores calculados
 
@@ -163,7 +174,10 @@ correspondência abaixo (sintaxe conferida no código-fonte e nos exemplos ofici
 | Função | `Queue` + `EntityProcessor` (`ResourceList`, `Capacity`, `ServiceTime`) |
 | Movimentação | `EntityConveyor` (com `Seize`/`Release` se tiver recurso) |
 | Recurso | `Resource` (`Capacity`) |
-| Regra OU (X) | `Branch` + `DiscreteDistribution` |
+| Regra OU (X): probabilidade | `Branch` + `DiscreteDistribution` |
+| Regra OU (X): por atributo | `Branch` com `Choice { 'this.obj.tipo == 1 && this.obj.peso < 15 ? 1 : 2' }` |
+| Regra OU (X): apenas visual | `Branch` com chances iguais + `Text` com o critério (e aviso para implementar) |
+| Atributos | `AttributeDefinitionList` na `SimEntity` + `Assign` que sorteia os valores (`[Distribuição].Value`) |
 | Regra E (&): divisão / junção | `Duplicate` / `Queue` por ramo + `Combine` |
 | Regra E (&) seguida de Entidade | `Queue` por ramo + `Assemble` (montagem) |
 | Regra E/OU (O) | `Duplicate` + `Branch` por ramo (segue ou descarta) |
@@ -171,8 +185,10 @@ correspondência abaixo (sintaxe conferida no código-fonte e nos exemplos ofici
 | Conexão | ligação direta ao conector de mesmo nome |
 | Controle / Informação explicativa | `Text` |
 
-Também são convertidos as distribuições (`EXPO`, `NORM`, `TRIA`, `UNIF`, `LOGN`, `ERLA`,
-`WEIB`), a duração, o aquecimento, o número de replicações e a semente. O arquivo sai em
+Também são convertidas todas as distribuições (com as palavras-chave do JaamSim, ex.:
+`GammaDistribution Mean/Shape`, `BetaDistribution AlphaParam/BetaParam/Location/Scale`),
+a duração, o aquecimento, o número de replicações e a semente. Os objetos ficam espaçados
+como no diagrama (1 px = 5 cm), e os auxiliares (filas, distribuições) não se sobrepõem. O arquivo sai em
 ASCII (sem acentos nos nomes) para abrir corretamente em qualquer sistema. Exemplos prontos
 em [`examples/jaamsim/`](examples/jaamsim/).
 

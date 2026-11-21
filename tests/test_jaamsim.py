@@ -13,7 +13,8 @@ from idefsim.model import ConnectionKind as CK, ElementKind as EK, Model
 
 DIST = {"UnitType", "RandomSeed", "MinValue", "MaxValue", "Location", "Scale"}
 KEYWORDS = {
-    "SimEntity": set(),
+    "SimEntity": {"AttributeDefinitionList"},
+    "Assign": {"NextComponent", "AttributeAssignmentList"},
     "EntityGenerator": {"NextComponent", "FirstArrivalTime", "InterArrivalTime",
                         "EntitiesPerArrival", "PrototypeEntity", "MaxNumber", "BaseName"},
     "Queue": set(),
@@ -37,6 +38,15 @@ KEYWORDS = {
     "ErlangDistribution": DIST | {"Mean", "Shape"},
     "WeibullDistribution": DIST | {"Shape"},
     "DiscreteDistribution": DIST | {"ValueList", "ProbabilityList"},
+    "GammaDistribution": DIST | {"Mean", "Shape"},
+    "BetaDistribution": DIST | {"AlphaParam", "BetaParam"},
+    "LogLogisticDistribution": DIST | {"Shape"},
+    "ContinuousDistribution": DIST | {"ValueList", "CumulativeProbabilityList"},
+    "PoissonDistribution": DIST | {"Mean"},
+    "BinomialDistribution": DIST | {"NumberOfTrials", "Probability"},
+    "GeometricDistribution": DIST | {"Probability"},
+    "NegativeBinomialDistribution": DIST | {"SuccessfulTrials", "Probability"},
+    "DiscreteUniformDistribution": DIST,
     "Text": {"Format", "TextHeight"},
     "View": {"Description", "ViewCenter", "ViewPosition", "ShowWindow", "Lock2D"},
     "OverlayText": {"ScreenPosition", "TextHeight", "Format"},
@@ -49,7 +59,7 @@ GRAPHICS = {"Position", "Points"}
 REFS = {"NextComponent": "flow", "NextComponentList": "flow", "TargetComponentList": "flow",
         "WaitQueue": "Queue", "WaitQueueList": "Queue", "ResourceList": "Resource",
         "PrototypeEntity": "SimEntity"}
-FLOW = {"EntityGenerator", "EntityProcessor", "Seize", "Release", "EntityDelay", "EntityConveyor", "Branch",
+FLOW = {"EntityGenerator", "Assign", "EntityProcessor", "Seize", "Release", "EntityDelay", "EntityConveyor", "Branch",
         "Duplicate", "Combine", "Assemble", "EntitySink", "Queue"}
 INVALID = set(" \t\n{}'\"[]#.")
 
@@ -98,13 +108,26 @@ def check(cfg: str):
         if key in ("Duration", "TravelTime", "InterArrivalTime", "FirstArrivalTime", "Choice",
                    "ServiceTime"):
             tok = val.split()
-            assert tok[0] in types or re.match(r"^-?[\d.]+(e-?\d+)?$", tok[0]), f"{obj} {key}: {val}"
+            assert (tok[0] in types or re.match(r"^-?[\d.]+(e-?\d+)?$", tok[0])
+                    or (key == "Choice" and val.startswith("'") and val.endswith("'"))), f"{obj} {key}: {val}"
         if key == "ProbabilityList":
             assert abs(sum(float(x) for x in val.split()) - 1) < 1e-6
         if key == "ValueList":
-            vals = val.split()
-            probs = dict(((o, k), v) for o, k, v in kws)[(obj, "ProbabilityList")].split()
+            vals = [v for v in val.split() if re.match(r"^-?[\d.]", v)]   # sem a unidade
+            plist = "ProbabilityList" if types[obj] == "DiscreteDistribution" else \
+                "CumulativeProbabilityList"
+            probs = dict(((o, k), v) for o, k, v in kws)[(obj, plist)].split()
             assert len(vals) == len(probs)
+    # referências [Objeto] e this.obj.atributo dentro de expressões
+    defined_attrs = set()
+    for obj, key, val in kws:
+        if key == "AttributeDefinitionList":
+            defined_attrs |= set(re.findall(r"\{ (\w+)  ", val))
+    for obj, key, val in kws:
+        for ref in re.findall(r"\[(\w+)\]", val):
+            assert ref in types, f"{obj} {key}: [{ref}] não existe"
+        for att in re.findall(r"this\.obj\.(\w+)", val):
+            assert att in defined_attrs, f"{obj} {key}: atributo {att} não definido"
     queues = [n for n, t in types.items() if t == "Queue"]
     assert sorted(queues) == sorted(used_queues), "cada Queue deve ser usada por exatamente um objeto"
     # toda saída de fluxo alcança um EntitySink
@@ -207,3 +230,61 @@ def test_all_elements_and_distributions():
 def test_name_sanitizing():
     assert jaamsim_name("Peça usinada #2 [lote].x") == "Peca_usinada_2_lote_x"
     assert jaamsim_name("1ª etapa") == "N1a_etapa"
+
+
+
+def _demo_attributes_model():
+    m = Model(name="Triagem")
+    ped = m.add_element(EK.ENTITY, 0, 200, "Pedido", interarrival="GAMM(4; 2)",
+                        first_arrival="BETA(2; 3; 0; 5)")
+    ped.params["attributes"] = [{"name": "tipo", "value": "DISC(1; 0,6; 2; 0,4)"},
+                                {"name": "peso", "value": "NORM(12; 3)"},
+                                {"name": "itens", "value": "POIS(3)"},
+                                {"name": "fixo", "value": "-2"}]
+    tri = m.add_element(EK.FUNCTION, 180, 200, "Triar", duration="LOGL(2; 3)")
+    ou = m.add_element(EK.RULE_OR, 340, 200)
+    ou.params["decision"] = "condition"
+    leve = m.add_element(EK.FUNCTION, 500, 100, "Leve", duration="CONT(1; 0; 2; 0,5; 4; 1)")
+    pes = m.add_element(EK.FUNCTION, 500, 300, "Pesado", duration="DISC(3; 0,5; 5; 0,5)")
+    vis = m.add_element(EK.RULE_OR, 660, 200)
+    vis.params.update(decision="visual", criterion="menor fila")
+    a = m.add_element(EK.EXIT, 820, 100, "Doca A")
+    b = m.add_element(EK.EXIT, 820, 300, "Doca B")
+    for s_, t_ in ((ped, tri), (tri, ou), (leve, vis), (pes, vis), (vis, a), (vis, b)):
+        m.add_connection(CK.FLOW, s_.id, t_.id)
+    m.add_connection(CK.FLOW, ou.id, leve.id).condition = "tipo == 1 e peso < 15"
+    m.add_connection(CK.FLOW, ou.id, pes.id).condition = "senão"
+    return m
+
+
+def test_attributes_conditions_and_visual_rule():
+    res = export_jaamsim(_demo_attributes_model())
+    types, kws = check(res.text)
+    d = {(o, k): v for o, k, v in kws}
+    assert d[("Pedido", "AttributeDefinitionList")] == "{ tipo  0 }  { peso  0 }  { itens  0 }  { fixo  0 }"
+    asg = next(n for n, t in types.items() if t == "Assign")
+    assert d[("Pedido_Chegada", "NextComponent")] == asg          # sorteia antes de seguir
+    assert "'this.obj.tipo = [Pedido_tipo].Value'" in d[(asg, "AttributeAssignmentList")]
+    assert "'this.obj.fixo = -2'" in d[(asg, "AttributeAssignmentList")]
+    assert types["Pedido_itens"] == "PoissonDistribution"
+    assert ("Pedido_itens", "UnitType") not in d                   # contagem: unidade fixa
+    assert d[("Regra_OU_Branch", "Choice")] == \
+        "'this.obj.tipo == 1 && this.obj.peso < 15 ? 1 : 2'"
+    assert d[("Regra_OU_2_Branch", "Choice")] == "Regra_OU_2_Prob"   # visual: chances iguais
+    assert d[("Regra_OU_2_Prob", "ProbabilityList")] == "0.5  0.5"
+    assert any("menor fila" in w for w in res.warnings)
+    assert types["Leve_Tempo"] == "ContinuousDistribution"
+    assert d[("Leve_Tempo", "ValueList")] == "1  2  4  min"
+    assert d[("Pesado_Tempo", "ProbabilityList")] == "0.5  0.5"
+    assert d[("Pedido_Primeira_Tempo", "Location")] == "0  min"
+    assert d[("Pedido_Primeira_Tempo", "Scale")] == "5  min"
+
+
+def test_objects_are_spaced():
+    import itertools
+    for model in (usinagem_inspecao(), montagem(), _demo_attributes_model()):
+        pts = [tuple(map(float, m.groups())) for m in re.finditer(
+            r"Position \{ (-?[\d.e-]+)  (-?[\d.e-]+)  0.0  m \}", export_jaamsim(model).text)]
+        closest = min(((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5
+                      for a, b in itertools.combinations(pts, 2))
+        assert closest >= 1.0, f"objetos a {closest:.2f} m um do outro"

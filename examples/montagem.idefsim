@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "d14d0a6eb9",
+      "id": "b8a7ad1c3b",
       "kind": "entity",
       "name": "Base",
       "x": 60,
@@ -26,11 +26,12 @@
         "max_arrivals": 0,
         "batch_size": 1,
         "external_arrival": true,
-        "arrival_side": "left"
+        "arrival_side": "left",
+        "attributes": []
       }
     },
     {
-      "id": "8595b0c440",
+      "id": "800491c428",
       "kind": "entity",
       "name": "Tampa",
       "x": 60,
@@ -42,11 +43,12 @@
         "max_arrivals": 0,
         "batch_size": 1,
         "external_arrival": true,
-        "arrival_side": "left"
+        "arrival_side": "left",
+        "attributes": []
       }
     },
     {
-      "id": "cd48ee46f7",
+      "id": "5ee387781a",
       "kind": "function",
       "name": "Preparar base",
       "x": 220,
@@ -57,7 +59,7 @@
       }
     },
     {
-      "id": "6fbf3637e9",
+      "id": "7eda6aded0",
       "kind": "function",
       "name": "Preparar tampa",
       "x": 220,
@@ -68,7 +70,7 @@
       }
     },
     {
-      "id": "1099599503",
+      "id": "8ead37aabe",
       "kind": "rule_and",
       "name": "&",
       "x": 380,
@@ -77,7 +79,7 @@
       "params": {}
     },
     {
-      "id": "62b236d3d9",
+      "id": "5f3eea6d5e",
       "kind": "entity",
       "name": "Produto",
       "x": 480,
@@ -89,11 +91,12 @@
         "max_arrivals": 0,
         "batch_size": 1,
         "external_arrival": false,
-        "arrival_side": "left"
+        "arrival_side": "left",
+        "attributes": []
       }
     },
     {
-      "id": "57f2e46acb",
+      "id": "923cfc80bb",
       "kind": "function",
       "name": "Montar",
       "x": 620,
@@ -104,7 +107,7 @@
       }
     },
     {
-      "id": "2c650006fc",
+      "id": "f710855d32",
       "kind": "resource",
       "name": "Montador",
       "x": 620,
@@ -115,7 +118,7 @@
       }
     },
     {
-      "id": "aafe0e3078",
+      "id": "f3d887c52c",
       "kind": "exit",
       "name": "Armazém",
       "x": 780,
@@ -126,66 +129,66 @@
   ],
   "connections": [
     {
-      "id": "278e0ffda0",
+      "id": "e6229372bb",
       "kind": "flow",
-      "source": "d14d0a6eb9",
-      "target": "cd48ee46f7",
+      "source": "b8a7ad1c3b",
+      "target": "5ee387781a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "a814e94a69",
+      "id": "ed37fe0896",
       "kind": "flow",
-      "source": "8595b0c440",
-      "target": "6fbf3637e9",
+      "source": "800491c428",
+      "target": "7eda6aded0",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ee8db8b576",
+      "id": "d162823d4c",
       "kind": "flow",
-      "source": "cd48ee46f7",
-      "target": "1099599503",
+      "source": "5ee387781a",
+      "target": "8ead37aabe",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "0c4930e642",
+      "id": "020dc1776d",
       "kind": "flow",
-      "source": "6fbf3637e9",
-      "target": "1099599503",
+      "source": "7eda6aded0",
+      "target": "8ead37aabe",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "28b5232f3b",
+      "id": "26823bcb9e",
       "kind": "flow",
-      "source": "1099599503",
-      "target": "62b236d3d9",
+      "source": "8ead37aabe",
+      "target": "5f3eea6d5e",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "fca785f155",
+      "id": "65858ff4a4",
       "kind": "flow",
-      "source": "62b236d3d9",
-      "target": "57f2e46acb",
+      "source": "5f3eea6d5e",
+      "target": "923cfc80bb",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "a91254e35b",
+      "id": "8bdf0bd089",
       "kind": "flow",
-      "source": "57f2e46acb",
-      "target": "aafe0e3078",
+      "source": "923cfc80bb",
+      "target": "f3d887c52c",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "a0ef332c04",
+      "id": "f724dccd4f",
       "kind": "resource",
-      "source": "2c650006fc",
-      "target": "57f2e46acb",
+      "source": "f710855d32",
+      "target": "923cfc80bb",
       "label": "",
       "probability": 1.0
     }

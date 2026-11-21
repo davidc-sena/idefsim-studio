@@ -1,17 +1,19 @@
 """Painel de propriedades do modelo, elemento ou ligação selecionada."""
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout, QLabel, QLineEdit,
-                               QPlainTextEdit, QScrollArea, QSpinBox, QVBoxLayout, QWidget)
+from PySide6.QtCore import Qt, QTimer, Signal
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
+                               QHBoxLayout, QLabel, QLineEdit, QPlainTextEdit, QPushButton,
+                               QScrollArea, QSpinBox, QVBoxLayout, QWidget)
 
-from .. import distributions as dist
+from .. import expressions as expr
 from . import shapes
-from ..model import (CONNECTION_LABELS, KIND_LABELS, Connection, ConnectionKind as CK,
-                     Element, ElementKind as EK, Model, PROCESS_KINDS)
+from ..model import (CONNECTION_LABELS, DECISION_LABELS, KIND_LABELS, Connection,
+                     ConnectionKind as CK, Element, ElementKind as EK, Model, PROCESS_KINDS)
+from .dist_editor import DistributionEditor
 
-DIST_HELP = ("Distribuições aceitas:\n" + "\n".join(dist.SUPPORTED)
-             + "\n\nUse ';' para separar argumentos com vírgula decimal, ex.: NORM(5,5; 0,8)")
+COND_HELP = ("Condição sobre atributos da entidade, ex.: tipo == 1 · peso > 10 e tipo != 3 · "
+             "prioridade >= 2 ou urgente == 1. Escreva 'senão' na saída padrão.")
 
 
 class _TextEdit(QPlainTextEdit):
@@ -86,6 +88,17 @@ class PropertiesPanel(QScrollArea):
         self.form.addRow(label, sp)
         return sp
 
+    def _dist(self, label, value, apply, for_time=True):
+        """Menu de distribuições + campos dos parâmetros."""
+        unit = self.model.settings.time_unit if (for_time and self.model) else ""
+        ed = DistributionEditor(value, for_time=for_time, unit=unit)
+        ed.changed.connect(apply)
+        self.form.addRow(label, ed)
+        return ed
+
+    def _rebuild_later(self, model, e):
+        QTimer.singleShot(0, lambda: self.show_element(model, e))
+
     def _text(self, label, value, apply):
         ed = _TextEdit(value)
         ed.setFixedHeight(80)
@@ -153,7 +166,9 @@ class PropertiesPanel(QScrollArea):
             self._line("Nome", e.name, set_name,
                        "Conectores com o mesmo nome se conectam entre si." if e.kind == EK.CONNECTOR else "")
         else:
-            self.form.addRow(QLabel(self._rule_help(e.kind)))
+            help_ = QLabel(self._rule_help(e.kind))
+            help_.setWordWrap(True)
+            self.form.addRow(help_)
 
         if e.kind == EK.ENTITY:
             ext = QCheckBox("Fluxo de entrada no sistema")
@@ -174,17 +189,18 @@ class PropertiesPanel(QScrollArea):
                 self.form.addRow(QLabel("<i>Entidade de transformação: as entidades que chegam "
                                         "passam a ser deste tipo.</i>"))
             else:
-                self._line("Intervalo entre chegadas", e.params.get("interarrival", ""),
-                           set_param("interarrival", "Intervalo entre chegadas"), DIST_HELP, dist.is_valid)
-                self._line("Primeira chegada", e.params.get("first_arrival", "0"),
-                           set_param("first_arrival", "Primeira chegada"), DIST_HELP, dist.is_valid)
+                self._dist("Intervalo entre chegadas", e.params.get("interarrival", ""),
+                           set_param("interarrival", "Intervalo entre chegadas"))
+                self._dist("Primeira chegada", e.params.get("first_arrival", "0"),
+                           set_param("first_arrival", "Primeira chegada"))
                 self._spin("Entidades por chegada", e.params.get("batch_size", 1),
                            set_param("batch_size", "Lote"), 1, 10**6)
                 self._spin("Máx. de chegadas", e.params.get("max_arrivals", 0),
                            set_param("max_arrivals", "Máx. chegadas"), 0, 10**9, "0 = ilimitado")
+            self._attributes(model, e)
         elif e.kind in PROCESS_KINDS:
-            self._line("Tempo" + (" de processamento" if e.kind == EK.FUNCTION else " de deslocamento"),
-                       e.params.get("duration", ""), set_param("duration", "Tempo"), DIST_HELP, dist.is_valid)
+            self._dist("Tempo" + (" de processamento" if e.kind == EK.FUNCTION else " de deslocamento"),
+                       e.params.get("duration", ""), set_param("duration", "Tempo"))
             res = model.resources_of(e.id)
             self.form.addRow("Recursos", QLabel(", ".join(r.name for r in res) or
                                                 "<i>nenhum (capacidade infinita)</i>"))
@@ -197,20 +213,127 @@ class PropertiesPanel(QScrollArea):
             used = [model.elements[c.target].name for c in model.outgoing(e.id, CK.RESOURCE)]
             self.form.addRow("Usado em", QLabel(", ".join(used) or "<i>—</i>"))
 
+        if e.kind == EK.RULE_OR:
+            box = QComboBox()
+            keys = list(DECISION_LABELS)
+            box.addItems([DECISION_LABELS[k] for k in keys])
+            box.setCurrentIndex(keys.index(model.decision_of(e.id)))
+
+            def set_decision(i):
+                e.params["decision"] = keys[i]
+                self.elementRenamed.emit(e.id)
+                self.edited.emit("Tipo de decisão", f"{e.id}.decision")
+                self._rebuild_later(model, e)
+            box.currentIndexChanged.connect(set_decision)
+            self.form.addRow("Decisão", box)
+            if model.decision_of(e.id) == "visual":
+                crit = self._line("Critério", e.params.get("criterion", ""),
+                                  set_param("criterion", "Critério"),
+                                  "Texto mostrado no diagrama, ex.: menor fila, turno, prioridade.")
+                crit.setPlaceholderText("ex.: menor fila")
+                self.form.addRow(QLabel("<i>Apenas documenta a decisão: na simulação as saídas "
+                                        "são sorteadas com chances iguais.</i>"))
+
         self._text("Descrição", e.description, set_desc)
         outs = model.outgoing(e.id)
-        if len(outs) > 1:
+        decision = model.decision_of(e.id)
+        if len(outs) > 1 and decision != "visual":
             self.form.addRow(QLabel("<b>Saídas</b>"))
             for c in outs:
-                self._prob_row(model, c, model.elements[c.target].name)
+                name = model.elements[c.target].name
+                if decision == "condition":
+                    self._cond_row(model, c, f"→ {name}")
+                else:
+                    self._prob_row(model, c, name)
+
+    # ------------------------------------------------------------ atributos
+    def _attributes(self, model, e) -> None:
+        attrs = e.params.setdefault("attributes", [])
+        self.form.addRow(QLabel("<b>Atributos</b>"))
+        if not attrs:
+            self.form.addRow(QLabel("<i>Nenhum. Atributos são sorteados quando a entidade chega "
+                                    "(ou se transforma) e podem ser usados na regra OU.</i>"))
+        for i, a in enumerate(attrs):
+            top = QWidget()
+            row = QHBoxLayout(top)
+            row.setContentsMargins(0, 0, 0, 0)
+            name = QLineEdit(a.get("name", ""))
+            name.setPlaceholderText("nome, ex.: tipo")
+            name.setToolTip("Letras sem acento, números e _ , começando por letra.")
+            rm = QPushButton("Remover")
+            row.addWidget(name, 1)
+            row.addWidget(rm)
+            ed = DistributionEditor(a.get("value", "0"), for_time=False)
+
+            def check(text, w=name):
+                w.setStyleSheet("" if expr.valid_attribute_name(text.strip()) else "background:#ffe3e0")
+
+            def set_name(a=a, w=name):
+                v = w.text().strip()
+                if v != a.get("name"):
+                    a["name"] = v
+                    self.edited.emit("Nome do atributo", f"{e.id}.attr.{id(a)}")
+
+            def set_value(t, a=a):
+                a["value"] = t
+                self.edited.emit("Valor do atributo", f"{e.id}.attrv.{id(a)}")
+
+            def remove(_=False, i=i):
+                del attrs[i]
+                self.edited.emit("Remover atributo", "")
+                self._rebuild_later(model, e)
+            name.textChanged.connect(check)
+            check(name.text())
+            name.editingFinished.connect(set_name)
+            ed.changed.connect(set_value)
+            rm.clicked.connect(remove)
+            self.form.addRow(f"Atributo {i + 1}", top)
+            self.form.addRow("Valor", ed)
+        add = QPushButton("+ Adicionar atributo")
+
+        def add_attr():
+            used = {x.get("name") for x in attrs}
+            n = 1
+            while f"atributo{n}" in used:
+                n += 1
+            attrs.append({"name": f"atributo{n}", "value": "0"})
+            self.edited.emit("Adicionar atributo", "")
+            self._rebuild_later(model, e)
+        add.clicked.connect(add_attr)
+        self.form.addRow(add)
+
+    def _cond_row(self, model, c: Connection, label: str):
+        known = model.attribute_names()
+
+        def check(text):
+            t = text.strip()
+            ok = not t or expr.is_default(t)
+            if not ok:
+                try:
+                    expr.parse(t)
+                    ok = True
+                except expr.ExpressionError:
+                    ok = False
+            return ok
+
+        def apply(v, c=c):
+            c.condition = v.strip()
+            self.elementRenamed.emit(c.source)
+            self.edited.emit("Condição", f"{c.id}.cond")
+        tip = COND_HELP + ("\nAtributos definidos: " + ", ".join(known) if known else
+                           "\nAinda não há atributos nas entidades.")
+        ed = self._line(label, c.condition, apply, tip, check)
+        ed.setPlaceholderText("ex.: tipo == 1   (ou 'senão')")
+        return ed
 
     @staticmethod
     def _rule_help(kind: EK) -> str:
         return {
             EK.RULE_AND: "<b>&amp; (E)</b>: com várias entradas aguarda uma entidade de cada "
                          "ramo (junção/montagem); com várias saídas segue todos os ramos.",
-            EK.RULE_OR: "<b>X (OU)</b>: a entidade segue apenas uma das saídas, escolhida "
-                        "pelas probabilidades.",
+            EK.RULE_OR: "<b>X (OU)</b>: a entidade segue apenas uma das saídas, escolhida por "
+                        "probabilidade, por condição sobre seus atributos ou, no modo "
+                        "apenas visual, sem regra simulada.",
             EK.RULE_ANDOR: "<b>O (E/OU)</b>: cada saída é seguida de forma independente "
                            "com sua probabilidade.",
         }[kind]
@@ -250,5 +373,10 @@ class PropertiesPanel(QScrollArea):
                 self.edited.emit("Pontas da seta", f"{c.id}.{attr}")
             box.currentIndexChanged.connect(apply)
             self.form.addRow(f"{label} da seta", box)
-        if c.kind == CK.FLOW and len(model.outgoing(c.source)) > 1 or s.kind == EK.RULE_ANDOR:
+        decision = model.decision_of(s.id)
+        if c.kind == CK.FLOW and s.kind == EK.RULE_OR and decision == "condition":
+            self._cond_row(model, c, "Condição")
+        elif c.kind == CK.FLOW and s.kind == EK.RULE_OR and decision == "visual":
+            pass
+        elif c.kind == CK.FLOW and len(model.outgoing(c.source)) > 1 or s.kind == EK.RULE_ANDOR:
             self._prob_row(model, c, "probabilidade")

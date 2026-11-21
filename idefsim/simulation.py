@@ -29,6 +29,7 @@ from typing import Callable
 import simpy
 
 from . import distributions as dist
+from . import expressions as expr
 from .model import ConnectionKind as CK, ElementKind as EK, Model, PROCESS_KINDS
 from .validation import has_errors, validate
 
@@ -71,6 +72,7 @@ class Token:
     id: int
     type: str
     created: float
+    attrs: dict = field(default_factory=dict)   # atributos da entidade
 
 
 @dataclass
@@ -158,6 +160,13 @@ class _Replication:
         for e in model.elements.values():
             if e.kind in PROCESS_KINDS:
                 self.dists[e.id] = dist.parse(e.params["duration"])
+        # atributos (nome, distribuição) de cada entidade e modo de decisão das regras OU
+        self.attr_defs = {
+            e.id: [(a["name"].strip(), dist.parse(a.get("value", "0"), allow_negative=True))
+                   for a in e.params.get("attributes", []) if a.get("name", "").strip()]
+            for e in model.by_kind(EK.ENTITY)}
+        self.decisions = {e.id: model.decision_of(e.id) for e in model.by_kind(EK.RULE_OR)}
+        self.unmatched = 0
 
         self.resources: dict[str, simpy.Resource] = {}
         self.res_busy: dict[str, TimeWeighted] = {}
@@ -203,8 +212,15 @@ class _Replication:
                     break
                 n += 1
                 tok = self._new_token(ent.name)
+                self._assign_attributes(tok, ent, overwrite=True)
                 self.env.process(self._travel(tok, ent.id, None))
             yield self.env.timeout(inter.sample(self.rng))
+
+    def _assign_attributes(self, tok: Token, ent, overwrite: bool) -> None:
+        """Sorteia os atributos definidos na entidade ``ent`` (na chegada ou transformação)."""
+        for a in self.attr_defs.get(ent.id, []):
+            if overwrite or a[0] not in tok.attrs:
+                tok.attrs[a[0]] = a[1].sample(self.rng, clip=False)
 
     def _new_token(self, typ: str) -> Token:
         self.next_id += 1
@@ -234,6 +250,18 @@ class _Replication:
                 return c
         return conns[-1]
 
+    def _by_condition(self, tok: Token, outs):
+        """Primeira saída cuja condição é verdadeira; senão, a saída padrão (ou a última)."""
+        default = None
+        for c in outs:
+            cond = (c.condition or "").strip()
+            if not cond or expr.is_default(cond):
+                default = default or c
+            elif expr.evaluate(cond, tok.attrs):
+                return c
+        self.unmatched += 1
+        return default or outs[-1]
+
     def _travel(self, tok: Token, node: str, via):
         m = self.m
         while True:
@@ -248,6 +276,7 @@ class _Replication:
                 return
             elif k == EK.ENTITY and via is not None:
                 tok.type = el.name
+                self._assign_attributes(tok, el, overwrite=False)
             elif k == EK.CONNECTOR and not outs:
                 target = self.connector_exit.get(el.name.strip().upper())
                 if target is None:
@@ -269,7 +298,7 @@ class _Replication:
                             self.wip.add(self.env.now, -1)
                 if len(outs) > 1:
                     for c in outs[1:]:
-                        clone = Token(self._bump(), tok.type, tok.created)
+                        clone = Token(self._bump(), tok.type, tok.created, dict(tok.attrs))
                         self.wip.add(self.env.now, 1)
                         self.env.process(self._travel(clone, c.target, c))
                     outs = outs[:1]
@@ -278,7 +307,7 @@ class _Replication:
                 if not chosen:
                     chosen = [max(outs, key=lambda c: c.probability)]
                 for c in chosen[1:]:
-                    clone = Token(self._bump(), tok.type, tok.created)
+                    clone = Token(self._bump(), tok.type, tok.created, dict(tok.attrs))
                     self.wip.add(self.env.now, 1)
                     self.env.process(self._travel(clone, c.target, c))
                 outs = chosen[:1]
@@ -286,7 +315,14 @@ class _Replication:
             if not outs:
                 self._leave(tok, el.name)
                 return
-            nxt = outs[0] if len(outs) == 1 else self._choose(outs, self.rng)
+            if len(outs) == 1:
+                nxt = outs[0]
+            elif k == EK.RULE_OR and self.decisions.get(node) == "condition":
+                nxt = self._by_condition(tok, outs)
+            elif k == EK.RULE_OR and self.decisions.get(node) == "visual":
+                nxt = outs[int(self.rng.random() * len(outs))]   # sem regra: chances iguais
+            else:
+                nxt = self._choose(outs, self.rng)
             node, via = nxt.target, nxt
 
     def _bump(self) -> int:
@@ -339,6 +375,8 @@ class _Replication:
         r[("Sistema", "Global", "Tempo médio no sistema")] = mean(all_tis)
         if self.consumed:
             r[("Sistema", "Global", "Entidades consumidas em junções")] = self.consumed
+        if self.unmatched:
+            r[("Sistema", "Global", "Decisões OU sem condição verdadeira")] = self.unmatched
         for t in types:
             r[("Entidade", t, "Criadas")] = self.created.get(t, 0)
             r[("Entidade", t, "Saídas")] = self.exited.get(t, 0)

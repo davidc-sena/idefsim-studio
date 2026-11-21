@@ -1,7 +1,7 @@
 """IDEF-SIM Studio — criação e gestão de modelos conceituais IDEF-SIM
 para simulação a eventos discretos."""
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 # Créditos exibidos na janela de abertura e em "Sobre"
 APP_NAME = "IDEF-SIM Studio"

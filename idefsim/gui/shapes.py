@@ -16,7 +16,7 @@ SIZES: dict[EK, tuple[float, float]] = {
     EK.RULE_OR: (38, 38),
     EK.RULE_ANDOR: (38, 38),
     EK.EXIT: (40, 40),
-    EK.CONNECTOR: (36, 36),
+    EK.CONNECTOR: (42, 38),
     EK.NOTE: (150, 56),
 }
 
@@ -32,7 +32,7 @@ FILL = {
 INK = QColor("#1d1d1f")
 SELECT = QColor("#1a73e8")
 RULE_SYMBOL = {EK.RULE_AND: "&", EK.RULE_OR: "X", EK.RULE_ANDOR: "O"}
-CIRCULAR = {EK.ENTITY, EK.EXIT, EK.CONNECTOR}
+CIRCULAR = {EK.ENTITY, EK.EXIT}
 
 
 def node_rect(kind: EK) -> QRectF:
@@ -51,9 +51,17 @@ def movement_polygon(r: QRectF) -> QPolygonF:
         QPointF(r.left(), r.bottom() - body)])
 
 
+def triangle_polygon(r: QRectF) -> QPolygonF:
+    """Conexão com outra figura: triângulo com a ponta para cima."""
+    return QPolygonF([QPointF(r.center().x(), r.top()), r.bottomRight(), r.bottomLeft()])
+
+
 def node_path(kind: EK, r: QRectF) -> QPainterPath:
     p = QPainterPath()
-    if kind in CIRCULAR:
+    if kind == EK.CONNECTOR:
+        p.addPolygon(triangle_polygon(r))
+        p.closeSubpath()
+    elif kind in CIRCULAR:
         p.addEllipse(r)
     elif kind == EK.MOVEMENT:
         p.addPolygon(movement_polygon(r))
@@ -121,9 +129,12 @@ def paint_node(p: QPainter, kind: EK, r: QRectF, name: str, selected: bool = Fal
         return
     elif kind == EK.CONNECTOR:
         p.setBrush(QBrush(QColor("white")))
-        p.drawEllipse(r)
-        _fit_font(p, name, r.adjusted(3, 3, -3, -3), 10, bold=True)
-        p.drawText(r, Qt.AlignCenter, name if show_name else "A")
+        p.drawPolygon(triangle_polygon(r))
+        text = name if show_name else "A"
+        inner = QRectF(r.left() + r.width() * 0.25, r.top() + r.height() * 0.38,
+                       r.width() * 0.5, r.height() * 0.58)
+        _fit_font(p, text, inner, 10, bold=True)
+        p.drawText(inner, Qt.AlignCenter, text)
         return
     elif kind == EK.NOTE:
         fold = 12

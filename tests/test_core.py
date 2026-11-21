@@ -125,3 +125,50 @@ def test_arrow_heads_saved_and_defaults():
     m2 = Model.from_dict(m.to_dict())
     assert m2.connections[ctrl.id].heads == (True, False)
     assert "head_end" not in m2.connections[note.id].to_dict()  # padrão não é gravado
+
+
+def test_all_jaamsim_distributions_sample_near_mean():
+    import random
+    rng = random.Random(7)
+    for t in ("GAMM(6; 2)", "BETA(2; 5; 1; 9)", "LOGL(4; 3)", "DISC(1; 0,3; 2; 0,7)",
+              "CONT(2; 0; 4; 0,6; 9; 1)", "POIS(3)", "BINO(10; 0,2)", "GEOM(0,3)",
+              "NBIN(2; 0,4)", "DUNI(1; 6)"):
+        d = dist.parse(t, allow_negative=True)
+        mean = sum(d.sample(rng, clip=False) for _ in range(20000)) / 20000
+        assert mean == pytest.approx(d.mean(), rel=0.05), t
+    with pytest.raises(dist.DistributionError):
+        dist.parse("POIS(3)", for_time=True)          # contagem não serve como tempo
+    with pytest.raises(dist.DistributionError):
+        dist.parse("DISC(1; 0,5; 2; 0,4)")             # probabilidades não somam 1
+
+
+def test_conditions_are_safe_and_translated():
+    from idefsim import expressions as x
+    assert x.evaluate("tipo == 1 e peso < 15", {"tipo": 1, "peso": 10})
+    assert not x.evaluate("não (tipo == 1) ou peso > 20", {"tipo": 1, "peso": 10})
+    assert x.to_jaamsim("tipo == 1 e peso < 15") == "this.obj.tipo == 1 && this.obj.peso < 15"
+    for bad in ('__import__("os")', "tipo.x == 1", "open('f')"):
+        with pytest.raises(x.ExpressionError):
+            x.parse(bad)
+
+
+def test_simulation_routes_by_attribute():
+    from idefsim.examples import triagem_atributos
+    m = triagem_atributos()
+    m.settings.replications = 3
+    rows = {(r.obj, r.metric): r.mean for r in run_simulation(m).rows()}
+    leve, pesado = rows[("Embalar leve", "Atendimentos concluídos")], \
+        rows[("Embalar pesado", "Atendimentos concluídos")]
+    # P(tipo == 1 e peso < 15) = 0,6 · Φ(1) ≈ 0,505
+    assert 0.40 < leve / (leve + pesado) < 0.60
+    ou = next(e for e in m.elements.values() if e.kind == EK.RULE_OR)
+    for c in m.outgoing(ou.id):
+        c.condition = "tipo == 99" if "leve" in m.elements[c.target].name else "senão"
+    rows = {(r.obj, r.metric): r.mean for r in run_simulation(m).rows()}
+    assert rows.get(("Embalar leve", "Atendimentos concluídos"), 0) == 0
+
+
+def test_connector_letters_pair_automatically():
+    m = Model()
+    names = [m.add_element(EK.CONNECTOR).name for _ in range(5)]
+    assert names == ["A", "A", "B", "B", "C"]

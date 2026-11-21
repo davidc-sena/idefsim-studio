@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QGraphicsItem
 
 from ..model import (Connection, ConnectionKind as CK, Element, ElementKind as EK,
                      PROCESS_KINDS, RULE_KINDS)
+from .. import expressions as expr
 from . import shapes
 
 GRID = 10
@@ -44,12 +45,18 @@ class NodeItem(QGraphicsItem):
         for ed in self.edges:
             ed.adjust()
 
+    def _criterion(self) -> str:
+        e = self.element
+        if e.kind == EK.RULE_OR and e.params.get("decision") == "visual":
+            return e.params.get("criterion", "").strip()
+        return ""
+
     def has_entry_arrow(self) -> bool:
         return self.element.kind == EK.ENTITY and bool(self.element.params.get("external_arrival"))
 
     def boundingRect(self) -> QRectF:
         r = self._rect.adjusted(-3, -3, 3, 3)
-        if self.element.kind == EK.EXIT:
+        if self.element.kind == EK.EXIT or self._criterion():
             r = r.adjusted(-40, 0, 40, 34)
         if self.has_entry_arrow():
             L = shapes.ENTRY_LENGTH + 4
@@ -62,6 +69,15 @@ class NodeItem(QGraphicsItem):
     def paint(self, painter, option, widget=None):
         shapes.paint_node(painter, self.element.kind, self._rect, self.element.name,
                           self.isSelected())
+        crit = self._criterion()
+        if crit:  # regra OU apenas visual: critério escrito abaixo do símbolo
+            box = QRectF(self._rect.left() - 40, self._rect.bottom() + 2, self._rect.width() + 80, 30)
+            f = QFont(painter.font())
+            shapes.set_font_size(f, 8)
+            f.setItalic(True)
+            painter.setFont(f)
+            painter.setPen(shapes.SELECT if self.isSelected() else shapes.INK)
+            painter.drawText(box, Qt.AlignHCenter | Qt.AlignTop | Qt.TextWordWrap, crit)
         if self.has_entry_arrow():
             side = self.element.params.get("arrival_side", "left")
             vx, vy = shapes.SIDE_VECTORS.get(side, (-1, 0))
@@ -86,6 +102,21 @@ class NodeItem(QGraphicsItem):
             rad = self._rect.width() / 2
             d = math.hypot(dx, dy)
             return QPointF(c.x() + dx / d * rad, c.y() + dy / d * rad)
+        if self.element.kind == EK.CONNECTOR:  # interseção do raio com o triângulo
+            poly = shapes.triangle_polygon(self._rect)
+            best = None
+            for i in range(3):
+                a, b = poly[i], poly[(i + 1) % 3]
+                ex, ey = b.x() - a.x(), b.y() - a.y()
+                den = dx * ey - dy * ex
+                if abs(den) < 1e-9:
+                    continue
+                t = (a.x() * ey - a.y() * ex) / den        # ao longo do raio (origem no centro)
+                u = (a.x() * dy - a.y() * dx) / den        # ao longo da aresta
+                if t > 0 and -1e-9 <= u <= 1 + 1e-9 and (best is None or t < best):
+                    best = t
+            if best is not None:
+                return QPointF(c.x() + dx * best, c.y() + dy * best)
         hw, hh = self._rect.width() / 2, self._rect.height() / 2
         if self.element.kind == EK.MOVEMENT:  # corpo da seta é mais estreito
             hh -= self._rect.height() * 0.22
@@ -158,6 +189,13 @@ class EdgeItem(QGraphicsItem):
         if c.kind == CK.FLOW:
             src = self.model.elements[c.source]
             n_out = len(self.model.outgoing(src.id))
+            decision = self.model.decision_of(src.id)
+            if src.kind == EK.RULE_OR and decision == "condition":
+                cond = c.condition.strip()
+                parts.append("senão" if not cond or expr.is_default(cond) else cond)
+                return "  ".join(parts)
+            if src.kind == EK.RULE_OR and decision == "visual":
+                return "  ".join(parts)
             if (src.kind in (EK.RULE_OR, EK.RULE_ANDOR) or
                     (src.kind in PROCESS_KINDS and n_out > 1)) and n_out > 0:
                 parts.append(f"{c.probability * 100:g}%")

@@ -57,5 +57,35 @@ def montagem() -> Model:
     return m
 
 
+def triagem_atributos() -> Model:
+    """Pedidos com atributos (tipo, peso): regra OU por condição e regra OU apenas visual."""
+    m = Model(name="Triagem de pedidos por atributos", author=AUTHOR,
+              description="Pedidos leves do tipo 1 seguem para a embalagem leve; os demais para "
+                          "a pesada. A escolha da doca é só documentada (menor fila).")
+    m.settings.duration, m.settings.replications = 480, 5
+    ped = m.add_element(EK.ENTITY, 60, 200, "Pedido", interarrival="EXPO(4)")
+    ped.params["attributes"] = [{"name": "tipo", "value": "DISC(1; 0,6; 2; 0,4)"},
+                                {"name": "peso", "value": "NORM(12; 3)"}]
+    tri = m.add_element(EK.FUNCTION, 220, 200, "Triar", duration="UNIF(1; 2)")
+    triador = m.add_element(EK.RESOURCE, 220, 320, "Triador", capacity=1)
+    ou = m.add_element(EK.RULE_OR, 370, 200)
+    ou.params["decision"] = "condition"
+    leve = m.add_element(EK.FUNCTION, 530, 100, "Embalar leve", duration="TRIA(2; 3; 4)")
+    pes = m.add_element(EK.FUNCTION, 530, 300, "Embalar pesado", duration="GAMM(6; 2)")
+    emb = m.add_element(EK.RESOURCE, 530, 420, "Embalador", capacity=2)
+    doca = m.add_element(EK.RULE_OR, 690, 200)
+    doca.params.update(decision="visual", criterion="menor fila")
+    d1 = m.add_element(EK.EXIT, 850, 120, "Doca 1")
+    d2 = m.add_element(EK.EXIT, 850, 280, "Doca 2")
+    for a, b in ((ped, tri), (tri, ou), (leve, doca), (pes, doca), (doca, d1), (doca, d2)):
+        m.add_connection(CK.FLOW, a.id, b.id)
+    m.add_connection(CK.FLOW, ou.id, leve.id).condition = "tipo == 1 e peso < 15"
+    m.add_connection(CK.FLOW, ou.id, pes.id).condition = "senão"
+    m.add_connection(CK.RESOURCE, triador.id, tri.id)
+    m.add_connection(CK.RESOURCE, emb.id, pes.id)
+    return m
+
+
 ALL = {"Célula de usinagem com inspeção": usinagem_inspecao,
-       "Montagem com junção E": montagem}
+       "Montagem com junção E": montagem,
+       "Triagem de pedidos por atributos": triagem_atributos}

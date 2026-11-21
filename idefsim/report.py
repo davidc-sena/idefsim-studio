@@ -11,7 +11,10 @@ _PARAM_LABELS = {
     "max_arrivals": "Máx. de chegadas (0 = ilimitado)", "batch_size": "Entidades por chegada",
     "duration": "Tempo", "capacity": "Capacidade",
     "external_arrival": "Fluxo de entrada no sistema", "arrival_side": "Seta vem da",
+    "decision": "Decisão", "criterion": "Critério",
 }
+_DECISIONS = {"probability": "por probabilidade", "condition": "por atributo (condição)",
+              "visual": "apenas visual"}
 _VALUE_LABELS = {True: "Sim", False: "Não", "left": "esquerda", "right": "direita",
                  "top": "cima", "bottom": "baixo"}
 
@@ -48,13 +51,25 @@ def model_to_html(model: Model, diagram_svg: str | None = None) -> str:
         h.append(f"<h2>{KIND_LABELS[kind]} ({len(els)})</h2><table>"
                  "<tr><th>Nome</th><th>Parâmetros</th><th>Ligações</th><th>Descrição</th></tr>")
         for e in els:
+            def show(k, v):
+                if k == "attributes":
+                    return "Atributos: " + ("; ".join(
+                        f"{escape(a.get('name', ''))} = {escape(a.get('value', ''))}" for a in v)
+                        or "—")
+                if k == "decision":
+                    return f"Decisão: {_DECISIONS.get(v, v)}"
+                return f"{_PARAM_LABELS.get(k, k)}: {escape(str(_VALUE_LABELS.get(v, v)))}"
             params = "<br>".join(
-                f"{_PARAM_LABELS.get(k, k)}: {escape(str(_VALUE_LABELS.get(v, v)))}"
-                for k, v in e.params.items()
-                if not (k == "arrival_side" and not e.params.get("external_arrival")))
+                show(k, v) for k, v in e.params.items()
+                if not (k == "arrival_side" and not e.params.get("external_arrival"))
+                and not (k == "criterion" and not v))
             links = []
             for c in model.outgoing(e.id):
                 p = f" (p={c.probability:g})" if len(model.outgoing(e.id)) > 1 else ""
+                if model.decision_of(e.id) == "condition":
+                    p = f" (se {escape(c.condition or 'senão')})"
+                elif model.decision_of(e.id) == "visual":
+                    p = ""
                 links.append(f"→ {escape(model.elements[c.target].name)}{p}")
             for c in model.incoming(e.id):
                 links.append(f"← {escape(model.elements[c.source].name)}")

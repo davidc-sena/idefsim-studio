@@ -1,0 +1,224 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Triagem de pedidos por atributos",
+  "author": "Prof. David Custódio de Sena",
+  "version": "1.0",
+  "description": "Pedidos leves do tipo 1 seguem para a embalagem leve; os demais para a pesada. A escolha da doca é só documentada (menor fila).",
+  "settings": {
+    "time_unit": "min",
+    "duration": 480,
+    "warmup": 0.0,
+    "replications": 5,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "c04e0eb1f6",
+      "kind": "entity",
+      "name": "Pedido",
+      "x": 60,
+      "y": 200,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(4)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "tipo",
+            "value": "DISC(1; 0,6; 2; 0,4)"
+          },
+          {
+            "name": "peso",
+            "value": "NORM(12; 3)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "96c42a65d7",
+      "kind": "function",
+      "name": "Triar",
+      "x": 220,
+      "y": 200,
+      "description": "",
+      "params": {
+        "duration": "UNIF(1; 2)"
+      }
+    },
+    {
+      "id": "e644c68a95",
+      "kind": "resource",
+      "name": "Triador",
+      "x": 220,
+      "y": 320,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "e4c7b7fefd",
+      "kind": "rule_or",
+      "name": "X",
+      "x": 370,
+      "y": 200,
+      "description": "",
+      "params": {
+        "decision": "condition",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "a85b031dc9",
+      "kind": "function",
+      "name": "Embalar leve",
+      "x": 530,
+      "y": 100,
+      "description": "",
+      "params": {
+        "duration": "TRIA(2; 3; 4)"
+      }
+    },
+    {
+      "id": "5ca6c7eed2",
+      "kind": "function",
+      "name": "Embalar pesado",
+      "x": 530,
+      "y": 300,
+      "description": "",
+      "params": {
+        "duration": "GAMM(6; 2)"
+      }
+    },
+    {
+      "id": "d4a246e09c",
+      "kind": "resource",
+      "name": "Embalador",
+      "x": 530,
+      "y": 420,
+      "description": "",
+      "params": {
+        "capacity": 2
+      }
+    },
+    {
+      "id": "72d323a8ab",
+      "kind": "rule_or",
+      "name": "X",
+      "x": 690,
+      "y": 200,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "menor fila"
+      }
+    },
+    {
+      "id": "f4c5066281",
+      "kind": "exit",
+      "name": "Doca 1",
+      "x": 850,
+      "y": 120,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "1f464ab711",
+      "kind": "exit",
+      "name": "Doca 2",
+      "x": 850,
+      "y": 280,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "fde82b5227",
+      "kind": "flow",
+      "source": "c04e0eb1f6",
+      "target": "96c42a65d7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "deccd3e7cd",
+      "kind": "flow",
+      "source": "96c42a65d7",
+      "target": "e4c7b7fefd",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a7a5f2a8b5",
+      "kind": "flow",
+      "source": "a85b031dc9",
+      "target": "72d323a8ab",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2efab7b0a6",
+      "kind": "flow",
+      "source": "5ca6c7eed2",
+      "target": "72d323a8ab",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f12cb69f7c",
+      "kind": "flow",
+      "source": "72d323a8ab",
+      "target": "f4c5066281",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2f7f2e38c3",
+      "kind": "flow",
+      "source": "72d323a8ab",
+      "target": "1f464ab711",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "77d5e9734f",
+      "kind": "flow",
+      "source": "e4c7b7fefd",
+      "target": "a85b031dc9",
+      "label": "",
+      "probability": 1.0,
+      "condition": "tipo == 1 e peso < 15"
+    },
+    {
+      "id": "30e2feba31",
+      "kind": "flow",
+      "source": "e4c7b7fefd",
+      "target": "5ca6c7eed2",
+      "label": "",
+      "probability": 1.0,
+      "condition": "senão"
+    },
+    {
+      "id": "e522628314",
+      "kind": "resource",
+      "source": "e644c68a95",
+      "target": "96c42a65d7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cdba1492b6",
+      "kind": "resource",
+      "source": "d4a246e09c",
+      "target": "5ca6c7eed2",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

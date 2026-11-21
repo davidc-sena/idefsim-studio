@@ -168,3 +168,17 @@ def test_clean_export_and_print(app, tmp_path):
     assert win.scene.show_grid and len(win.scene.selectedItems()) == 1
     win.dirty = False
     win.close()
+
+
+def test_distribution_editor(app):
+    from idefsim.gui.dist_editor import DistributionEditor
+    got = []
+    ed = DistributionEditor("TRIA(3; 4,5; 6)", for_time=True, unit="min")
+    ed.changed.connect(got.append)
+    assert ed.code() == "TRIA" and [f.text() for f in ed.fields] == ["3", "4,5", "6"]
+    ed.combo.setCurrentIndex(ed.combo.findData("CONST"))     # CONSTANTE: só o valor médio
+    assert len(ed.fields) == 1 and got[-1] == "CONST(4,5)"
+    ed.combo.setCurrentIndex(ed.combo.findData("GAMM"))
+    assert got[-1] == "GAMM(4,5; 2)"
+    assert ed.combo.findData("POIS") == -1                    # contagem fora dos tempos
+    assert DistributionEditor("0", for_time=False).combo.findData("POIS") >= 0

@@ -72,11 +72,19 @@ DEFAULT_PARAMS: dict[ElementKind, dict] = {
     ElementKind.ENTITY: {"interarrival": "EXPO(10)", "first_arrival": "0",
                          "max_arrivals": 0, "batch_size": 1,
                          # fluxo de entrada no sistema (seta com dois traços antes da entidade)
-                         "external_arrival": True, "arrival_side": "left"},
+                         "external_arrival": True, "arrival_side": "left",
+                         # atributos: [{"name": "tipo", "value": "DISC(1; 0,5; 2; 0,5)"}, ...]
+                         "attributes": []},
     ElementKind.FUNCTION: {"duration": "TRIA(4, 5, 6)"},
+    # decisão da regra OU: "probability" | "condition" (atributo) | "visual" (não simula)
+    ElementKind.RULE_OR: {"decision": "probability", "criterion": ""},
     ElementKind.MOVEMENT: {"duration": "CONST(2)"},
     ElementKind.RESOURCE: {"capacity": 1},
 }
+
+DECISION_LABELS = {"probability": "Probabilidade",
+                   "condition": "Atributo da entidade (condição)",
+                   "visual": "Apenas visual (não simula)"}
 
 DEFAULT_NAMES: dict[ElementKind, str] = {
     ElementKind.ENTITY: "Entidade",
@@ -133,6 +141,7 @@ class Connection:
     # Pontas da seta: None = padrão do tipo de ligação (ver default_heads)
     head_start: bool | None = None
     head_end: bool | None = None
+    condition: str = ""  # regra OU por atributo: ex. "tipo == 1" ou "senão"
 
     @staticmethod
     def default_heads(kind: "ConnectionKind") -> tuple[bool, bool]:
@@ -153,6 +162,8 @@ class Connection:
             d["head_start"] = self.head_start
         if self.head_end is not None:
             d["head_end"] = self.head_end
+        if self.condition:
+            d["condition"] = self.condition
         return d
 
     @classmethod
@@ -162,7 +173,8 @@ class Connection:
         return cls(id=d["id"], kind=ConnectionKind(d["kind"]), source=d["source"],
                    target=d["target"], label=d.get("label", ""),
                    probability=float(d.get("probability", 1.0)),
-                   head_start=opt_bool(d.get("head_start")), head_end=opt_bool(d.get("head_end")))
+                   head_start=opt_bool(d.get("head_start")), head_end=opt_bool(d.get("head_end")),
+                   condition=str(d.get("condition", "")))
 
 
 @dataclass
@@ -205,16 +217,34 @@ class Model:
         if kind in RULE_KINDS:
             return base
         if kind == ElementKind.CONNECTOR:
-            used = {e.name for e in self.elements.values() if e.kind == kind}
-            for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-                if ch not in used:
-                    return ch
-            return "Z"
+            return self.next_connector_letter()
         n = sum(1 for e in self.elements.values() if e.kind == kind) + 1
         names = {e.name for e in self.elements.values()}
         while f"{base} {n}" in names:
             n += 1
         return f"{base} {n}"
+
+    def next_connector_letter(self) -> str:
+        """Letra da nova conexão: completa um par pendente (letra usada uma só vez) ou
+        usa a próxima letra livre (A, B, …, Z, AA, AB, …)."""
+        counts: dict[str, int] = {}
+        for e in self.by_kind(ElementKind.CONNECTOR):
+            key = e.name.strip().upper()
+            counts[key] = counts.get(key, 0) + 1
+
+        def letters():
+            abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            yield from abc
+            for a in abc:
+                for b in abc:
+                    yield a + b
+        for name in letters():
+            if counts.get(name) == 1:
+                return name
+        for name in letters():
+            if name not in counts:
+                return name
+        return "Z"  # pragma: no cover
 
     def add_element(self, kind: ElementKind, x: float = 0, y: float = 0,
                     name: str | None = None, **params) -> Element:
@@ -280,6 +310,21 @@ class Model:
 
     def resources_of(self, element_id: str) -> list[Element]:
         return [self.elements[c.source] for c in self.incoming(element_id, ConnectionKind.RESOURCE)]
+
+    def attribute_names(self) -> list[str]:
+        """Todos os atributos definidos nas entidades do modelo."""
+        seen: list[str] = []
+        for e in self.by_kind(ElementKind.ENTITY):
+            for a in e.params.get("attributes", []):
+                n = a.get("name", "").strip()
+                if n and n not in seen:
+                    seen.append(n)
+        return seen
+
+    def decision_of(self, element_id: str) -> str:
+        e = self.elements[element_id]
+        return e.params.get("decision", "probability") if e.kind == ElementKind.RULE_OR \
+            else "probability"
 
     def by_kind(self, kind: ElementKind) -> list[Element]:
         return [e for e in self.elements.values() if e.kind == kind]

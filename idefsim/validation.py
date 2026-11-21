@@ -5,6 +5,7 @@ from collections import Counter, deque
 from dataclasses import dataclass
 
 from . import distributions as dist
+from . import expressions as expr
 from .model import (ConnectionKind as CK, ElementKind as EK, KIND_LABELS,
                     PROCESS_KINDS, RULE_KINDS, Model)
 
@@ -64,7 +65,7 @@ def validate(model: Model) -> list[Issue]:
             for key, nm in (("interarrival", "intervalo entre chegadas"),
                             ("first_arrival", "primeira chegada")):
                 try:
-                    d = dist.parse(e.params.get(key, ""))
+                    d = dist.parse(e.params.get(key, ""), for_time=True)
                     if key == "interarrival" and d.mean() <= 0:
                         add(ERROR, f"{label}: o {nm} deve ter média positiva.", e.id)
                 except dist.DistributionError as ex:
@@ -74,7 +75,7 @@ def validate(model: Model) -> list[Issue]:
 
         if e.kind in PROCESS_KINDS:
             try:
-                dist.parse(e.params.get("duration", ""))
+                dist.parse(e.params.get("duration", ""), for_time=True)
             except dist.DistributionError as ex:
                 add(ERROR, f"{label}: tempo inválido — {ex}", e.id)
             if not ins:
@@ -97,12 +98,19 @@ def validate(model: Model) -> list[Issue]:
                 add(INFO, f"{label} tem apenas uma entrada e uma saída (não divide nem junta).", e.id)
             if e.kind in (EK.RULE_OR, EK.RULE_ANDOR) and len(ins) > 1 and len(outs) <= 1:
                 pass  # junção simples
-            if e.kind == EK.RULE_OR and len(outs) > 1:
+            decision = model.decision_of(e.id)
+            if e.kind == EK.RULE_OR and len(outs) > 1 and decision == "probability":
                 total = sum(c.probability for c in outs)
                 if total <= 0:
                     add(ERROR, f"{label}: as probabilidades de saída somam zero.", e.id)
                 elif abs(total - 1) > 1e-6:
                     add(WARNING, f"{label}: as probabilidades somam {total:g} e serão normalizadas.", e.id)
+            if e.kind == EK.RULE_OR and decision == "condition":
+                _check_conditions(model, e, label, outs, add)
+            if e.kind == EK.RULE_OR and decision == "visual" and len(outs) > 1:
+                crit = e.params.get("criterion", "").strip()
+                add(WARNING, f"{label} é apenas visual" + (f" (critério: {crit})" if crit else "")
+                    + "; na simulação as saídas são sorteadas com chances iguais.", e.id)
 
         if e.kind in PROCESS_KINDS and len(outs) > 1:
             total = sum(c.probability for c in outs)
@@ -129,6 +137,21 @@ def validate(model: Model) -> list[Issue]:
         if e.kind == EK.ENTITY and ins and e.params.get("external_arrival"):
             add(WARNING, f"{label} recebe fluxos do próprio modelo, mas tem a seta de entrada "
                          "externa; esse símbolo é para entidades vindas de fora do sistema.", e.id)
+
+        if e.kind == EK.ENTITY:
+            seen = set()
+            for a in e.params.get("attributes", []):
+                name = a.get("name", "").strip()
+                if not expr.valid_attribute_name(name):
+                    add(ERROR, f"{label}: nome de atributo inválido '{name}' (use letras sem "
+                               "acento, números e _ , começando por letra).", e.id)
+                elif name in seen:
+                    add(ERROR, f"{label}: atributo '{name}' repetido.", e.id)
+                seen.add(name)
+                try:
+                    dist.parse(a.get("value", ""), allow_negative=True)
+                except dist.DistributionError as ex:
+                    add(ERROR, f"{label}: valor do atributo '{name}' inválido — {ex}", e.id)
 
         if e.kind == EK.EXIT and outs:
             add(ERROR, f"{label} não pode ter fluxos de saída.", e.id)
@@ -169,6 +192,31 @@ def validate(model: Model) -> list[Issue]:
     order = {ERROR: 0, WARNING: 1, INFO: 2}
     issues.sort(key=lambda i: order[i.level])
     return issues
+
+
+def _check_conditions(model: Model, e, label: str, outs, add) -> None:
+    """Regra OU por atributo: cada saída tem uma condição; no máximo uma 'senão'."""
+    known = set(model.attribute_names())
+    defaults = 0
+    for c in outs:
+        target = model.elements[c.target].name
+        cond = (c.condition or "").strip()
+        if not cond or expr.is_default(cond):
+            defaults += 1
+            continue
+        try:
+            unknown = expr.names(cond) - known
+        except expr.ExpressionError as ex:
+            add(ERROR, f"{label}: condição da saída para '{target}' inválida — {ex}", e.id)
+            continue
+        if unknown:
+            add(WARNING, f"{label}: a condição '{cond}' usa atributo(s) não definido(s) em nenhuma "
+                         f"entidade: {', '.join(sorted(unknown))} (valem 0).", e.id)
+    if defaults > 1:
+        add(ERROR, f"{label}: mais de uma saída sem condição ('senão'); deixe apenas uma.", e.id)
+    if defaults == 0 and outs:
+        add(WARNING, f"{label}: nenhuma saída 'senão'; se nenhuma condição for verdadeira, a "
+                     "entidade segue pela última saída.", e.id)
 
 
 def has_errors(issues: list[Issue]) -> bool:

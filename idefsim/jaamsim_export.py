@@ -11,7 +11,10 @@ Entidade de transformação          Queue + Assemble (cria a nova entidade)
 Função                             Queue + EntityProcessor (ResourceList, Capacity, ServiceTime)
 Movimentação                       EntityConveyor (com Seize/Release se tiver recurso)
 Recurso                            Resource (Capacity)
-Regra OU (X)                       Branch + DiscreteDistribution
+Regra OU (X) – probabilidade       Branch + DiscreteDistribution
+Regra OU (X) – por atributo        Branch com Choice 'cond1 ? 1 : (cond2 ? 2 : padrão)'
+Regra OU (X) – apenas visual       Branch com chances iguais + Text com o critério (aviso)
+Atributos da entidade              AttributeDefinitionList + Assign ([Distribuição].Value)
 Regra E (&) – divisão              Duplicate
 Regra E (&) – junção               Queue por ramo + Combine
 Regra E (&) – junção → Entidade    Queue por ramo + Assemble (montagem)
@@ -30,13 +33,15 @@ from dataclasses import dataclass, field
 
 from . import APP_NAME, AUTHOR, EMAIL, INSTITUTION, __version__
 from . import distributions as dist
+from . import expressions as expr
 from .model import ConnectionKind as CK, ElementKind as EK, Model, PROCESS_KINDS
 
 UNIT_MAP = {"s": "s", "seg": "s", "segundo": "s", "segundos": "s",
             "min": "min", "minuto": "min", "minutos": "min",
             "h": "h", "hora": "h", "horas": "h",
             "d": "d", "dia": "d", "dias": "d"}
-SCALE = 1 / 60.0  # pixels do diagrama → metros no JaamSim
+SCALE = 1 / 20.0  # pixels do diagrama → metros no JaamSim (funções a ~8 m umas das outras)
+CELL = 1.4        # espaço mínimo (m) entre objetos auxiliares (filas, distribuições...)
 UNLIMITED = 1000000  # "capacidade infinita" de uma Função sem recurso
 _INVALID = re.compile(r"[^A-Za-z0-9_\-]+")
 
@@ -95,6 +100,12 @@ class _Exporter:
         rule_names = {EK.RULE_AND: "Regra_E", EK.RULE_OR: "Regra_OU", EK.RULE_ANDOR: "Regra_EOU"}
         self.names = {e.id: self.unique(rule_names.get(e.kind) or jaamsim_name(e.name))
                       for e in model.elements.values()}
+        # posições dos elementos do diagrama ficam reservadas (os auxiliares desviam delas)
+        self.anchor_names = set(self.names.values())
+        # posições exatas dos elementos (a entidade-protótipo fica 3 m à esquerda da chegada)
+        self.occupied = [((e.x - (60 if e.kind == EK.ENTITY else 0)) * SCALE, -e.y * SCALE)
+                         for e in model.elements.values()]
+        self.attr_names = model.attribute_names()
 
     # ----------------------------------------------------------- utilidades
     def unique(self, base: str) -> str:
@@ -115,8 +126,15 @@ class _Exporter:
             return
         self.lines.setdefault(kind, []).append(f"{obj} {keyword} {{ {value} }}")
 
+    def _free(self, X: float, Y: float) -> bool:
+        return all((X - a) ** 2 + (Y - b) ** 2 >= CELL * CELL for a, b in self.occupied)
+
     def pos(self, obj: str, x: float, y: float) -> None:
         X, Y = x * SCALE, -y * SCALE
+        if obj not in self.anchor_names:  # objeto auxiliar: desvia dos que já existem
+            while not self._free(X, Y):
+                X += CELL
+        self.occupied.append((X, Y))
         self.positions.append((X, Y))
         self.graphics.append(f"{obj} Position {{ {_num(X)}  {_num(Y)}  0.0  m }}")
 
@@ -131,44 +149,74 @@ class _Exporter:
         return self.seed
 
     def time_value(self, text: str, owner: str, x: float, y: float) -> str:
-        """Converte uma expressão de distribuição em valor ou objeto de distribuição do JaamSim."""
+        """Tempo: valor com unidade ou objeto de distribuição do JaamSim."""
+        return self.dist_value(text, f"{owner}_Tempo", x, y, time=True)
+
+    def dist_value(self, text: str, name: str, x: float, y: float, time: bool) -> str:
+        """Converte uma distribuição em valor constante ou objeto de distribuição do JaamSim.
+
+        Palavras-chave conferidas no código-fonte do JaamSim (ProbabilityDistributions).
+        """
         try:
-            d = dist.parse(text)
+            d = dist.parse(text, allow_negative=not time, for_time=time)
         except dist.DistributionError as ex:
-            self.warnings.append(f"{owner}: distribuição inválida ({ex}); usado 0.")
-            return f"0  {self.unit}"
-        u, a = self.unit, d.args
+            self.warnings.append(f"{name}: distribuição inválida ({ex}); usado 0.")
+            return f"0  {self.unit}" if time else "0"
+        u = self.unit if time else ""
+        t = lambda v: f"{_num(v)}  {u}".strip()  # noqa: E731  valor com a unidade
+        a = d.args
         if d.name == "CONST":
-            return f"{_num(a[0])}  {u}"
-        t = lambda v: f"{_num(v)}  {u}"  # noqa: E731  valor com unidade de tempo
+            return t(a[0])
+        spec = dist.SPECS[d.name]
+        cls = spec.jaamsim
         if d.name == "EXPO":
-            cls, kws = "ExponentialDistribution", [("Mean", t(a[0]))]
-        elif d.name == "NORM":  # truncada em zero, como no IDEF-SIM Studio
-            cls, kws = "NormalDistribution", [("Mean", t(a[0])), ("StandardDeviation", t(a[1])),
-                                              ("MinValue", t(0))]
+            kws = [("Mean", t(a[0]))]
+        elif d.name == "NORM":
+            kws = [("Mean", t(a[0])), ("StandardDeviation", t(a[1]))]
+            if time:  # truncada em zero, como no IDEF-SIM Studio
+                kws.append(("MinValue", t(0)))
         elif d.name == "TRIA":
-            cls, kws = "TriangularDistribution", [("MinValue", t(a[0])), ("Mode", t(a[1])),
-                                                  ("MaxValue", t(a[2]))]
+            kws = [("MinValue", t(a[0])), ("Mode", t(a[1])), ("MaxValue", t(a[2]))]
         elif d.name == "UNIF":
-            cls, kws = "UniformDistribution", [("MinValue", t(a[0])), ("MaxValue", t(a[1]))]
+            kws = [("MinValue", t(a[0])), ("MaxValue", t(a[1]))]
         elif d.name == "ERLA":
-            cls, kws = "ErlangDistribution", [("Mean", t(a[0])), ("Shape", str(int(a[1])))]
-        elif d.name == "WEIB":
-            cls, kws = "WeibullDistribution", [("Scale", t(a[0])), ("Shape", _num(a[1]))]
-        else:  # LOGN
+            kws = [("Mean", t(a[0])), ("Shape", str(int(a[1])))]
+        elif d.name == "GAMM":
+            kws = [("Mean", t(a[0])), ("Shape", _num(a[1]))]
+        elif d.name in ("WEIB", "LOGL"):
+            kws = [("Scale", t(a[0])), ("Shape", _num(a[1]))]
+        elif d.name == "BETA":  # intervalo [Location, Location + Scale]
+            kws = [("AlphaParam", _num(a[0])), ("BetaParam", _num(a[1])),
+                   ("Location", t(a[2])), ("Scale", t(a[3] - a[2]))]
+        elif d.name == "LOGN":
             # JaamSim usa os parâmetros da normal subjacente: amostra = Scale·exp(N(μ, σ))
             mean, sd = a
             s2 = math.log(1 + (sd * sd) / (mean * mean))
-            cls, kws = "LogNormalDistribution", [("Scale", f"1  {u}"),
-                                                 ("NormalMean", _num(math.log(mean) - s2 / 2)),
-                                                 ("NormalStandardDeviation", _num(math.sqrt(s2)))]
-        name = self.define(cls, self.unique(f"{owner}_Tempo"))
-        self.kw(cls, name, "UnitType", "TimeUnit")
-        self.kw(cls, name, "RandomSeed", str(self.next_seed()))
+            kws = [("Scale", t(1)), ("NormalMean", _num(math.log(mean) - s2 / 2)),
+                   ("NormalStandardDeviation", _num(math.sqrt(s2)))]
+        elif d.name in ("DISC", "CONT"):
+            vals = "  ".join(_num(v) for v in d.disc_values) + (f"  {u}" if u else "")
+            probs = "  ".join(_num(p) for p in d.disc_probs)
+            kws = [("ValueList", vals),
+                   ("ProbabilityList" if d.name == "DISC" else "CumulativeProbabilityList", probs)]
+        elif d.name == "POIS":
+            kws = [("Mean", _num(a[0]))]
+        elif d.name == "BINO":
+            kws = [("NumberOfTrials", str(int(a[0]))), ("Probability", _num(a[1]))]
+        elif d.name == "GEOM":
+            kws = [("Probability", _num(a[0]))]
+        elif d.name == "NBIN":
+            kws = [("SuccessfulTrials", str(int(a[0]))), ("Probability", _num(a[1]))]
+        else:  # DUNI
+            kws = [("MinValue", str(int(a[0]))), ("MaxValue", str(int(a[1])))]
+        obj = self.define(cls, self.unique(name))
+        if not spec.count:  # nas de contagem a unidade é fixa (palavra oculta no JaamSim)
+            self.kw(cls, obj, "UnitType", "TimeUnit" if time else "DimensionlessUnit")
+        self.kw(cls, obj, "RandomSeed", str(self.next_seed()))
         for k, v in kws:
-            self.kw(cls, name, k, v)
-        self.pos(name, x, y + 70)
-        return name
+            self.kw(cls, obj, k, v)
+        self.pos(obj, x, y + 60)
+        return obj
 
     def discrete(self, owner: str, probs: list[float], x: float, y: float) -> str:
         total = sum(max(0.0, p) for p in probs) or 1.0
@@ -226,6 +274,25 @@ class _Exporter:
             return self.sink_for(node)
         return self.sink_for(node)
 
+    def with_assign(self, entity_id: str, nxt: str) -> str:
+        """Se a entidade tem atributos, cria um Assign que os sorteia antes de ``nxt``."""
+        e = self.m.elements[entity_id]
+        attrs = [a for a in e.params.get("attributes", []) if a.get("name", "").strip()]
+        if not attrs:
+            return nxt
+        n = self.names[entity_id]
+        asg = self.define("Assign", self.unique(f"{n}_Atributos"))
+        items = []
+        for a in attrs:
+            nm = a["name"].strip()
+            v = self.dist_value(a.get("value", "0"), f"{n}_{nm}", e.x + 40, e.y + 40, time=False)
+            ref = f"[{v}].Value" if v in self.used else v
+            items.append("{ " + _q(f"this.obj.{nm} = {ref}") + " }")
+        self.kw("Assign", asg, "NextComponent", nxt)
+        self.kw("Assign", asg, "AttributeAssignmentList", "  ".join(items))
+        self.pos(asg, e.x + 40, e.y)
+        return asg
+
     def queue_of(self, node: str) -> str:
         """Nome (estável) da fila de espera de uma Função."""
         if node not in self.func_queues:
@@ -240,6 +307,24 @@ class _Exporter:
         if len(outs) == 1:
             return self.entry(outs[0].target, outs[0].id, _seen)
         return f"{self.names[node]}_Decisao"
+
+    def condition_choice(self, e, outs) -> str:
+        """Expressão do Choice: 'c1 ? 1 : (c2 ? 2 : padrão)'."""
+        default = None
+        conds = []
+        for i, c in enumerate(outs, start=1):
+            cond = (c.condition or "").strip()
+            if not cond or expr.is_default(cond):
+                default = default or i
+                continue
+            try:
+                conds.append((expr.to_jaamsim(cond), i))
+            except expr.ExpressionError as ex:
+                self.warnings.append(f"Condição inválida na regra '{e.name}': {ex}")
+        out = str(default or len(outs))
+        for js, i in reversed(conds):
+            out = f"{js} ? {i} : ({out})" if out.count("?") else f"{js} ? {i} : {out}"
+        return out
 
     def sink_for(self, node: str) -> str:
         name = f"{self.names[node]}_Saida"
@@ -277,10 +362,14 @@ class _Exporter:
             if k == EK.ENTITY:
                 self.define("SimEntity", n)
                 self.pos(n, e.x - 60, e.y)
+                if self.attr_names:  # todos os atributos do modelo (condições podem usá-los)
+                    self.kw("SimEntity", n, "AttributeDefinitionList",
+                            "  ".join(f"{{ {a}  0 }}" for a in self.attr_names))
                 if not ins:
                     g = self.define("EntityGenerator", self.unique(f"{n}_Chegada"))
                     p = e.params
-                    self.kw("EntityGenerator", g, "NextComponent", self.after(e.id))
+                    self.kw("EntityGenerator", g, "NextComponent",
+                            self.with_assign(e.id, self.after(e.id)))
                     first = str(p.get("first_arrival", "0")).strip()
                     if first not in ("0", "0.0", "CONST(0)"):
                         self.kw("EntityGenerator", g, "FirstArrivalTime",
@@ -303,7 +392,8 @@ class _Exporter:
                         q = self.define("Queue", f"{n}_Fila")
                         self.used.add(q)
                         a = self.define("Assemble", self.unique(f"{n}_Transformar"))
-                        self.kw("Assemble", a, "NextComponent", self.after(e.id))
+                        self.kw("Assemble", a, "NextComponent",
+                                self.with_assign(e.id, self.after(e.id)))
                         self.kw("Assemble", a, "WaitQueueList", q)
                         self.kw("Assemble", a, "PrototypeEntity", n)
                         self.pos(q, e.x - 30, e.y + 40)
@@ -371,7 +461,22 @@ class _Exporter:
                 self.used.add(b)
                 self.kw("Branch", b, "NextComponentList",
                         "  ".join(self.entry(c.target, c.id) for c in outs))
-                self.kw("Branch", b, "Choice", self.discrete(n, [c.probability for c in outs], e.x, e.y))
+                decision = m.decision_of(e.id)
+                if decision == "condition":
+                    self.kw("Branch", b, "Choice", _q(self.condition_choice(e, outs)))
+                elif decision == "visual":
+                    crit = e.params.get("criterion", "").strip() or "nao informado"
+                    self.kw("Branch", b, "Choice", self.discrete(n, [1.0] * len(outs), e.x, e.y))
+                    t = self.define("Text", self.unique(f"{n}_Criterio"))
+                    self.kw("Text", t, "Format", _q(f"Decisao: {crit} (implementar a regra)"))
+                    self.kw("Text", t, "TextHeight", "0.2  m")
+                    self.pos(t, e.x, e.y - 40)
+                    self.warnings.append(f"Regra OU '{n}' é apenas visual (critério: {crit}): "
+                                         "exportada com chances iguais; implemente a regra no "
+                                         f"Choice de {b}.")
+                else:
+                    self.kw("Branch", b, "Choice",
+                            self.discrete(n, [c.probability for c in outs], e.x, e.y))
                 self.pos(b, e.x, e.y)
 
             elif k == EK.RULE_AND:
@@ -385,7 +490,8 @@ class _Exporter:
                     target = self._assemble_target(e.id)
                     if target:  # montagem: as partes formam a nova entidade
                         a = self.define("Assemble", self.unique(f"{n}_Montagem"))
-                        self.kw("Assemble", a, "NextComponent", self.after(target))
+                        self.kw("Assemble", a, "NextComponent",
+                                self.with_assign(target, self.after(target)))
                         self.kw("Assemble", a, "WaitQueueList", "  ".join(qs))
                         self.kw("Assemble", a, "PrototypeEntity", self.names[target])
                         self.pos(a, e.x, e.y)

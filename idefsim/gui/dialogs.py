@@ -104,8 +104,9 @@ LEGEND = [
     (EK.MOVEMENT, "Movimentação", "Deslocamento da entidade entre funções (transporte)."),
     (EK.NOTE, "Informação explicativa", "Texto de apoio para esclarecer o modelo."),
     (EK.EXIT, "Ponto final do sistema", "Local onde a entidade deixa o sistema modelado."),
-    (EK.CONNECTOR, "Conexão com outra figura", "Liga partes do diagrama (ou outras páginas); "
-                                               "conectores com o mesmo nome estão ligados."),
+    (EK.CONNECTOR, "Conexão com outra figura", "Triângulo com uma letra: liga partes do diagrama "
+                                               "(ou outras páginas). A letra é atribuída "
+                                               "automaticamente aos pares (A, A, B, B…)."),
 ]
 
 
