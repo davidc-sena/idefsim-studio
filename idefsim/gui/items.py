@@ -218,12 +218,12 @@ class EdgeItem(QGraphicsItem):
             return
         color = shapes.SELECT if self.isSelected() else shapes.INK
         shapes.draw_link(painter, self.conn.kind, self.points, color, heads=self.conn.heads)
-        txt = self.label_text()
+        txt = self.label_text() if shapes.STYLE["edge_labels"] else ""
         if txt:
             k = len(self.points) // 2
             mid = (self.points[k - 1] + self.points[k]) / 2
             f = QFont(painter.font())
-            f.setPointSizeF(8)
+            shapes.set_font_size(f, 8)
             painter.setFont(f)
             r = painter.boundingRect(QRectF(mid.x() - 60, mid.y() - 18, 120, 14),
                                      Qt.AlignCenter, txt)

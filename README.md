@@ -20,6 +20,7 @@ simulação a eventos discretos.
 | **Simulação** (F5) | Motor de eventos discretos (SimPy) que executa o próprio diagrama, com replicações, aquecimento, média, desvio padrão e IC 95%. Os resultados exportam para CSV. |
 | **Gestão de modelos** | Arquivos `.idefsim` (JSON legível e versionável), metadados (autor, versão e descrição), arquivos recentes e modelos de exemplo. |
 | **Exportação para JaamSim** | Gera um modelo **básico** do [JaamSim](https://jaamsim.com) (`.cfg`) a partir do diagrama IDEF-SIM: chegadas, filas, recursos, tempos, regras de decisão, montagem e saídas, já posicionados como no diagrama. |
+| **Impressão e exportação limpa** | **Arquivo → Imprimir** (Ctrl+P, com pré-visualização) e **Exportar diagrama limpo** (PDF, PNG, SVG; Ctrl+Shift+E): sem grade nem marcas de edição, com opção de preto e branco, título/autor/data e rótulos das setas. A página (A4) fica deitada ou em pé conforme o formato do diagrama. |
 | **Documentação** | Exportação do diagrama em PNG ou SVG e do dicionário do modelo conceitual em HTML (com o diagrama embutido). |
 
 ## Instalação e execução

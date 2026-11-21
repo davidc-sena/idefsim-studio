@@ -20,6 +20,9 @@ SIZES: dict[EK, tuple[float, float]] = {
     EK.NOTE: (150, 56),
 }
 
+# Estilo de desenho; a saída "limpa" (impressão/exportação) altera temporariamente
+STYLE = {"mono": False, "edge_labels": True}
+
 FILL = {
     EK.ENTITY: QColor("#fff6d6"),
     EK.FUNCTION: QColor("#e3eefc"),
@@ -60,15 +63,24 @@ def node_path(kind: EK, r: QRectF) -> QPainterPath:
     return p
 
 
+def set_font_size(f: QFont, pt: float) -> None:
+    """Tamanho em pixels de desenho (escala com o diagrama em tela, impressora ou PDF).
+
+    Com pontos, o Qt aplicaria a resolução do dispositivo E a escala do desenho, e o texto
+    sairia gigante ao imprimir/exportar em alta resolução.
+    """
+    f.setPixelSize(max(1, round(pt * 96 / 72)))
+
+
 def _fit_font(painter: QPainter, text: str, rect: QRectF, base: float = 9.0, bold=False) -> None:
     f = QFont(painter.font())
-    f.setPointSizeF(base)
+    set_font_size(f, base)
     f.setBold(bold)
     painter.setFont(f)
     flags = Qt.AlignCenter | Qt.TextWordWrap
     while base > 6 and painter.boundingRect(rect, flags, text).height() > rect.height():
         base -= 0.5
-        f.setPointSizeF(base)
+        set_font_size(f, base)
         painter.setFont(f)
 
 
@@ -77,7 +89,7 @@ def paint_node(p: QPainter, kind: EK, r: QRectF, name: str, selected: bool = Fal
     p.setRenderHint(QPainter.Antialiasing)
     pen = QPen(SELECT if selected else INK, 2.2 if selected else 1.4)
     p.setPen(pen)
-    p.setBrush(QBrush(FILL.get(kind, QColor("white"))))
+    p.setBrush(QBrush(QColor("white") if STYLE["mono"] else FILL.get(kind, QColor("white"))))
     text_rect = r.adjusted(4, 2, -4, -2)
 
     if kind == EK.ENTITY:
@@ -91,7 +103,7 @@ def paint_node(p: QPainter, kind: EK, r: QRectF, name: str, selected: bool = Fal
     elif kind in RULE_SYMBOL:
         p.drawRect(r)
         f = QFont(p.font())
-        f.setPointSizeF(max(8.0, r.height() * 0.42))
+        set_font_size(f, max(8.0, r.height() * 0.42))
         f.setBold(True)
         p.setFont(f)
         p.drawText(r, Qt.AlignCenter, RULE_SYMBOL[kind])

@@ -137,3 +137,34 @@ def test_arrow_heads_from_properties(app):
     assert win.scene.model.connections[cid].heads == (False, True)
     win.dirty = False
     win.close()
+
+
+def test_clean_export_and_print(app, tmp_path):
+    from PySide6.QtCore import QRectF
+    from PySide6.QtGui import QPainter
+    from PySide6.QtPrintSupport import QPrinter
+    from idefsim.examples import usinagem_inspecao
+    from idefsim.gui import printing, shapes
+    win = MainWindow()
+    win._set_model(usinagem_inspecao(), None)
+    win.scene.select_element(next(iter(win.scene.model.elements)))
+    opts = printing.CleanOptions()
+    for ext in ("pdf", "png", "svg"):
+        out = tmp_path / f"limpo.{ext}"
+        printing.export_clean(win.scene, win.scene.model, str(out), opts)
+        assert out.stat().st_size > 1000
+    assert (tmp_path / "limpo.pdf").read_bytes().startswith(b"%PDF")
+    # impressão: renderiza numa impressora em modo PDF (sem diálogo)
+    pr = QPrinter(QPrinter.HighResolution)
+    pr.setOutputFormat(QPrinter.PdfFormat)
+    pr.setOutputFileName(str(tmp_path / "impresso.pdf"))
+    p = QPainter(pr)
+    page = pr.pageLayout().paintRectPixels(pr.resolution())
+    printing.render(win.scene, win.scene.model, p, QRectF(0, 0, page.width(), page.height()), opts)
+    p.end()
+    assert (tmp_path / "impresso.pdf").stat().st_size > 1000
+    # o editor volta ao estado normal: cores, grade e seleção
+    assert shapes.STYLE == {"mono": False, "edge_labels": True}
+    assert win.scene.show_grid and len(win.scene.selectedItems()) == 1
+    win.dirty = False
+    win.close()

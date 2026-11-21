@@ -7,7 +7,7 @@ from pathlib import Path
 from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QRectF, QSettings, QSize, Qt
 from PySide6.QtGui import QAction, QActionGroup, QImage, QKeySequence, QPainter
 from PySide6.QtSvg import QSvgGenerator
-from PySide6.QtWidgets import (QApplication, QDockWidget, QFileDialog, QGraphicsView,
+from PySide6.QtWidgets import (QApplication, QDialog, QDockWidget, QFileDialog, QGraphicsView,
                                QListWidget, QListWidgetItem, QMainWindow, QMessageBox,
                                QProgressDialog, QToolBar)
 
@@ -19,7 +19,9 @@ from ..simulation import SimulationError, run_simulation
 from ..storage import FILE_EXTENSION, load_model, save_model
 from ..validation import ERROR, INFO, WARNING, validate
 from . import shapes
+from . import printing
 from .branding import AboutDialog
+from .printing import CleanOptions, CleanOptionsDialog
 from .dialogs import LegendDialog, ResultsDialog
 from .items import EdgeItem, NodeItem
 from .properties import PropertiesPanel
@@ -51,6 +53,7 @@ class MainWindow(QMainWindow):
         self.settings = QSettings("IDEF-SIM Studio", "IDEF-SIM Studio")
         self.path: Path | None = None
         self.dirty = False
+        self.clean_opts = CleanOptions()
         self.history: list[str] = []
         self.hist_keys: list[str] = []
         self.hist_idx = -1
@@ -117,6 +120,10 @@ class MainWindow(QMainWindow):
         self.a_html = self._act("Exportar documentação HTML…", self.export_html)
         self.a_jaamsim = self._act("Exportar modelo JaamSim (.cfg)…", self.export_jaamsim, "Ctrl+J",
                                    "Gera um modelo básico do JaamSim a partir do diagrama IDEF-SIM")
+        self.a_print = self._act("&Imprimir…", self.print_clean, S.Print,
+                                 "Imprime o diagrama limpo (sem grade nem marcas de edição)")
+        self.a_clean = self._act("Exportar diagrama &limpo (PDF, PNG, SVG)…", self.export_clean,
+                                 "Ctrl+Shift+E", "Diagrama sem grade nem marcas de edição")
         self.a_quit = self._act("&Sair", self.close, S.Quit)
         self.a_undo = self._act("&Desfazer", self.undo, S.Undo)
         self.a_redo = self._act("&Refazer", self.redo, S.Redo)
@@ -143,6 +150,8 @@ class MainWindow(QMainWindow):
         m.addSeparator()
         m.addActions([self.a_save, self.a_save_as])
         m.addSeparator()
+        m.addActions([self.a_print, self.a_clean])
+        m.addSeparator()
         m.addActions([self.a_png, self.a_svg, self.a_html])
         m.addSeparator()
         m.addAction(self.a_jaamsim)
@@ -164,7 +173,7 @@ class MainWindow(QMainWindow):
 
         tb = QToolBar("Principal")
         tb.setObjectName("main")
-        tb.addActions([self.a_new, self.a_open, self.a_save])
+        tb.addActions([self.a_new, self.a_open, self.a_save, self.a_print])
         tb.addSeparator()
         tb.addActions([self.a_undo, self.a_redo, self.a_del])
         tb.addSeparator()
@@ -460,6 +469,38 @@ class MainWindow(QMainWindow):
             svg = svg[svg.index("<svg"):]
         Path(path).write_text(model_to_html(self.scene.model, svg), encoding="utf-8")
         self.statusBar().showMessage(f"Documentação exportada para {path}", 4000)
+
+    def _ask_clean_options(self, title: str) -> bool:
+        if not self.scene.model.elements:
+            QMessageBox.information(self, title, "O diagrama está vazio.")
+            return False
+        dlg = CleanOptionsDialog(title, self.clean_opts, self)
+        if dlg.exec() != QDialog.Accepted:
+            return False
+        self.clean_opts = dlg.options()
+        return True
+
+    def print_clean(self):
+        if self._ask_clean_options("Imprimir"):
+            printing.print_clean(self.scene, self.scene.model, self.clean_opts, self)
+
+    def export_clean(self):
+        if not self._ask_clean_options("Exportar diagrama limpo"):
+            return
+        default = str(Path(self._last_dir()) / f"{self.scene.model.name}.pdf")
+        path, flt = QFileDialog.getSaveFileName(
+            self, "Exportar diagrama limpo", default,
+            "PDF (*.pdf);;Imagem PNG (*.png);;Imagem vetorial SVG (*.svg)")
+        if not path:
+            return
+        if Path(path).suffix.lower() not in printing.EXPORTERS:  # usa o formato do filtro
+            path += ".png" if "PNG" in flt else ".svg" if "SVG" in flt else ".pdf"
+        try:
+            printing.export_clean(self.scene, self.scene.model, path, self.clean_opts)
+        except (OSError, ValueError) as ex:
+            QMessageBox.critical(self, "Exportar diagrama limpo", str(ex))
+            return
+        self.statusBar().showMessage(f"Diagrama limpo exportado para {path}", 5000)
 
     def export_jaamsim(self):
         issues = self.validate()
