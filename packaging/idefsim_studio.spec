@@ -55,7 +55,7 @@ if sys.platform == "darwin":
         icon=ICON,
         bundle_identifier="io.github.idefsim-studio",
         info_plist={
-            "CFBundleShortVersionString": "0.2.0",
+            "CFBundleShortVersionString": "0.3.0",
             "NSHighResolutionCapable": True,
             "CFBundleDocumentTypes": [{
                 "CFBundleTypeName": "Modelo IDEF-SIM",

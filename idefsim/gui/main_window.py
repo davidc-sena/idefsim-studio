@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (QApplication, QDockWidget, QFileDialog, QGraphics
 
 from ..examples import ALL as EXAMPLES
 from ..model import CONNECTION_LABELS, KIND_LABELS, ConnectionKind as CK, ElementKind as EK, Model
+from ..jaamsim_export import export_jaamsim, jaamsim_name
 from ..report import model_to_html
 from ..simulation import SimulationError, run_simulation
 from ..storage import FILE_EXTENSION, load_model, save_model
@@ -114,6 +115,8 @@ class MainWindow(QMainWindow):
         self.a_png = self._act("Exportar imagem PNG…", lambda: self.export_image("png"))
         self.a_svg = self._act("Exportar imagem SVG…", lambda: self.export_image("svg"))
         self.a_html = self._act("Exportar documentação HTML…", self.export_html)
+        self.a_jaamsim = self._act("Exportar modelo JaamSim (.cfg)…", self.export_jaamsim, "Ctrl+J",
+                                   "Gera um modelo básico do JaamSim a partir do diagrama IDEF-SIM")
         self.a_quit = self._act("&Sair", self.close, S.Quit)
         self.a_undo = self._act("&Desfazer", self.undo, S.Undo)
         self.a_redo = self._act("&Refazer", self.redo, S.Redo)
@@ -142,6 +145,8 @@ class MainWindow(QMainWindow):
         m.addSeparator()
         m.addActions([self.a_png, self.a_svg, self.a_html])
         m.addSeparator()
+        m.addAction(self.a_jaamsim)
+        m.addSeparator()
         m.addAction(self.a_quit)
         m = mb.addMenu("&Editar")
         m.addActions([self.a_undo, self.a_redo])
@@ -164,6 +169,8 @@ class MainWindow(QMainWindow):
         tb.addActions([self.a_undo, self.a_redo, self.a_del])
         tb.addSeparator()
         tb.addActions([self.a_fit, self.a_validate, self.a_run])
+        tb.addSeparator()
+        tb.addAction(self._act("Exportar JaamSim", self.export_jaamsim))
         self.addToolBar(tb)
 
     def _build_palette(self):
@@ -453,6 +460,37 @@ class MainWindow(QMainWindow):
             svg = svg[svg.index("<svg"):]
         Path(path).write_text(model_to_html(self.scene.model, svg), encoding="utf-8")
         self.statusBar().showMessage(f"Documentação exportada para {path}", 4000)
+
+    def export_jaamsim(self):
+        issues = self.validate()
+        if any(i.level == ERROR for i in issues):
+            QMessageBox.warning(self, "Exportar para JaamSim",
+                                "Corrija os erros indicados no painel de Validação antes de "
+                                "gerar o modelo do JaamSim.")
+            return
+        default = str(Path(self._last_dir()) / f"{jaamsim_name(self.scene.model.name)}.cfg")
+        path, _ = QFileDialog.getSaveFileName(self, "Exportar modelo JaamSim", default,
+                                              "Modelo JaamSim (*.cfg)")
+        if not path:
+            return
+        if not path.lower().endswith(".cfg"):
+            path += ".cfg"
+        result = export_jaamsim(self.scene.model)
+        try:
+            Path(path).write_text(result.text, encoding="ascii")
+        except OSError as ex:
+            QMessageBox.critical(self, "Exportar para JaamSim", str(ex))
+            return
+        msg = (f"<p>Modelo JaamSim gerado com <b>{result.object_count} objetos</b>:<br>"
+               f"<code>{path}</code></p>"
+               "<p>Abra-o no JaamSim em <i>File → Open</i>. É um modelo <b>básico</b>: confira "
+               "tempos, regras e a disposição dos objetos antes de usá-lo em estudos.</p>")
+        if result.warnings:
+            msg += "<p><b>Avisos da conversão:</b></p><ul>" + "".join(
+                f"<li>{w}</li>" for w in result.warnings) + "</ul>"
+        box = QMessageBox(QMessageBox.Information, "Exportar para JaamSim", msg, parent=self)
+        box.setTextFormat(Qt.RichText)
+        box.exec()
 
     # --------------------------------------------------- validação/simulação
     def _live_validate(self):

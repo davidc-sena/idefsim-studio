@@ -19,6 +19,7 @@ simulação a eventos discretos.
 | **Validação** (F7) | Erros e avisos em tempo real: elementos sem fluxo, distribuições inválidas, conectores sem par, probabilidades, elementos inalcançáveis… Clique em uma mensagem para ir ao elemento. |
 | **Simulação** (F5) | Motor de eventos discretos (SimPy) que executa o próprio diagrama, com replicações, aquecimento, média, desvio padrão e IC 95%. Os resultados exportam para CSV. |
 | **Gestão de modelos** | Arquivos `.idefsim` (JSON legível e versionável), metadados (autor, versão e descrição), arquivos recentes e modelos de exemplo. |
+| **Exportação para JaamSim** | Gera um modelo **básico** do [JaamSim](https://jaamsim.com) (`.cfg`) a partir do diagrama IDEF-SIM: chegadas, filas, recursos, tempos, regras de decisão, montagem e saídas, já posicionados como no diagrama. |
 | **Documentação** | Exportação do diagrama em PNG ou SVG e do dicionário do modelo conceitual em HTML (com o diagrama embutido). |
 
 ## Instalação e execução
@@ -146,6 +147,36 @@ inspetor = next(e for e in m.elements.values() if e.name == "Inspetor")
 inspetor.params["capacity"] = 2          # cenário: 2 inspetores
 print(run_simulation(m).to_csv())
 ```
+
+## Exportação para o JaamSim
+
+Em **Arquivo → Exportar modelo JaamSim (.cfg)…** (Ctrl+J), o diagrama IDEF-SIM vira um
+modelo de simulação do JaamSim, pronto para abrir em *File → Open*. A conversão segue a
+correspondência abaixo (sintaxe conferida no código-fonte e nos exemplos oficiais do JaamSim):
+
+| IDEF-SIM | JaamSim |
+|---|---|
+| Entidade com chegada externa | `SimEntity` + `EntityGenerator` |
+| Entidade de transformação | `Queue` + `Assemble` (cria a nova entidade) |
+| Função com recursos | `Queue` + `Seize` → `EntityDelay` → `Release` |
+| Função sem recursos | `EntityDelay` (capacidade infinita) |
+| Movimentação | `EntityConveyor` (com `Seize`/`Release` se tiver recurso) |
+| Recurso | `Resource` (`Capacity`) |
+| Regra OU (X) | `Branch` + `DiscreteDistribution` |
+| Regra E (&): divisão / junção | `Duplicate` / `Queue` por ramo + `Combine` |
+| Regra E (&) seguida de Entidade | `Queue` por ramo + `Assemble` (montagem) |
+| Regra E/OU (O) | `Duplicate` + `Branch` por ramo (segue ou descarta) |
+| Ponto final | `EntitySink` |
+| Conexão | ligação direta ao conector de mesmo nome |
+| Controle / Informação explicativa | `Text` |
+
+Também são convertidos as distribuições (`EXPO`, `NORM`, `TRIA`, `UNIF`, `LOGN`, `ERLA`,
+`WEIB`), a duração, o aquecimento, o número de replicações e a semente. O arquivo sai em
+ASCII (sem acentos nos nomes) para abrir corretamente em qualquer sistema. Exemplos prontos
+em [`examples/jaamsim/`](examples/jaamsim/).
+
+> É um modelo **básico**, ponto de partida para o modelo computacional: confira os tempos, as
+> regras e a disposição dos objetos no JaamSim antes de usá-lo em estudos.
 
 ## Créditos
 

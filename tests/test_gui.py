@@ -104,3 +104,18 @@ def test_splash_and_about(app):
     dlg = branding.AboutDialog()
     assert dlg.width() > branding.SPLASH_W
     dlg.close()
+
+
+def test_export_jaamsim_from_gui(app, tmp_path, monkeypatch):
+    from PySide6.QtWidgets import QFileDialog, QMessageBox
+    from idefsim.examples import usinagem_inspecao
+    win = MainWindow()
+    win._set_model(usinagem_inspecao(), None)
+    out = tmp_path / "modelo"
+    monkeypatch.setattr(QFileDialog, "getSaveFileName", lambda *a, **k: (str(out), ""))
+    monkeypatch.setattr(QMessageBox, "exec", lambda self: 0)
+    win.export_jaamsim()
+    text = (tmp_path / "modelo.cfg").read_text(encoding="ascii")
+    assert "Define EntityGenerator { Peca_Chegada }" in text
+    win.dirty = False
+    win.close()
