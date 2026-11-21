@@ -11,7 +11,6 @@ from PySide6.QtWidgets import (QApplication, QDockWidget, QFileDialog, QGraphics
                                QListWidget, QListWidgetItem, QMainWindow, QMessageBox,
                                QProgressDialog, QToolBar)
 
-from .. import __version__
 from ..examples import ALL as EXAMPLES
 from ..model import CONNECTION_LABELS, KIND_LABELS, ConnectionKind as CK, ElementKind as EK, Model
 from ..report import model_to_html
@@ -19,6 +18,7 @@ from ..simulation import SimulationError, run_simulation
 from ..storage import FILE_EXTENSION, load_model, save_model
 from ..validation import ERROR, INFO, WARNING, validate
 from . import shapes
+from .branding import AboutDialog
 from .dialogs import LegendDialog, ResultsDialog
 from .items import EdgeItem, NodeItem
 from .properties import PropertiesPanel
@@ -523,10 +523,4 @@ class MainWindow(QMainWindow):
                 self.view.centerOn(self._diagram_rect().center())
 
     def about(self):
-        QMessageBox.about(self, "Sobre o IDEF-SIM Studio",
-                          f"<h3>IDEF-SIM Studio {__version__}</h3>"
-                          "<p>Ferramenta para criar, documentar, validar e simular modelos "
-                          "conceituais na técnica IDEF-SIM para simulação a eventos discretos.</p>"
-                          "<p>Referência: LEAL, F.; ALMEIDA, D. A.; MONTEVECHI, J. A. B. "
-                          "<i>Uma proposta de técnica de modelagem conceitual para a simulação "
-                          "através de elementos do IDEF</i>. SBPO, 2008.</p>")
+        AboutDialog(self).exec()

@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/logo.png" alt="IDEF-SIM Studio" width="560"></p>
+
 # IDEF-SIM Studio
 
 Programa desktop para **criar, documentar, validar e simular** modelos conceituais
@@ -65,7 +67,9 @@ pyinstaller --noconfirm packaging/idefsim_studio.spec
 # resultado em dist/
 ```
 
-O ícone (`idefsim/resources/icon.png`) é gerado por `python packaging/make_icon.py`.
+O ícone (`idefsim/resources/icon.png`) e o logo (`docs/logo.png`) são gerados por
+`python packaging/make_icon.py` a partir de `idefsim/gui/branding.py`. Para abrir o programa
+sem a janela de abertura, use `python main.py --sem-abertura`.
 
 ### Testes
 
@@ -142,6 +146,15 @@ inspetor = next(e for e in m.elements.values() if e.name == "Inspetor")
 inspetor.params["capacity"] = 2          # cenário: 2 inspetores
 print(run_simulation(m).to_csv())
 ```
+
+## Créditos
+
+Desenvolvido por **Prof. David Custódio de Sena** — UFERSA — <sena@ufersa.edu.br>
+
+* Notação IDEF-SIM: LEAL, F.; ALMEIDA, D. A.; MONTEVECHI, J. A. B. *Uma proposta de técnica
+  de modelagem conceitual para a simulação através de elementos do IDEF*. SBPO, 2008.
+* Fonte [Inter](https://github.com/rsms/inter) © The Inter Project Authors, sob a
+  SIL Open Font License 1.1 (`idefsim/resources/fonts/OFL.txt`).
 
 ## Próximos passos sugeridos
 

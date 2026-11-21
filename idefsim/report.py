@@ -66,5 +66,8 @@ def model_to_html(model: Model, diagram_svg: str | None = None) -> str:
             h.append(f"<tr><td>{escape(e.name)}</td><td>{params or '—'}</td>"
                      f"<td>{'<br>'.join(links) or '—'}</td><td>{escape(e.description) or '—'}</td></tr>")
         h.append("</table>")
+    from . import APP_NAME, AUTHOR, EMAIL, INSTITUTION, __version__
+    h.append(f"<hr><p style='color:#777;font-size:9pt'>Gerado com {APP_NAME} {__version__} — "
+             f"{escape(AUTHOR)}, {escape(INSTITUTION)} ({escape(EMAIL)}).</p>")
     h.append("</html>")
     return "\n".join(h)

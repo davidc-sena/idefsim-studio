@@ -91,3 +91,16 @@ def test_entry_tool_sets_side(app):
     assert not win.scene.model.elements[e.id].params["external_arrival"]
     win.dirty = False
     win.close()
+
+
+def test_splash_and_about(app):
+    from idefsim import AUTHOR, EMAIL, INSTITUTION
+    from idefsim.gui import branding
+    assert branding.load_fonts()
+    pm = branding.splash_pixmap(1)
+    assert pm.width() == branding.SPLASH_W and not pm.isNull()
+    assert (AUTHOR, INSTITUTION, EMAIL) == ("Prof. David Custódio de Sena", "UFERSA",
+                                            "sena@ufersa.edu.br")
+    dlg = branding.AboutDialog()
+    assert dlg.width() > branding.SPLASH_W
+    dlg.close()

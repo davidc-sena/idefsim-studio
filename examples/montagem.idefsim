@@ -2,7 +2,7 @@
   "format": "idefsim-studio",
   "format_version": 1,
   "name": "Montagem com junção E",
-  "author": "IDEF-SIM Studio",
+  "author": "Prof. David Custódio de Sena",
   "version": "1.0",
   "description": "",
   "settings": {
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "bb610c5221",
+      "id": "d14d0a6eb9",
       "kind": "entity",
       "name": "Base",
       "x": 60,
@@ -30,7 +30,7 @@
       }
     },
     {
-      "id": "a438b016bb",
+      "id": "8595b0c440",
       "kind": "entity",
       "name": "Tampa",
       "x": 60,
@@ -46,7 +46,7 @@
       }
     },
     {
-      "id": "a2b3043f4f",
+      "id": "cd48ee46f7",
       "kind": "function",
       "name": "Preparar base",
       "x": 220,
@@ -57,7 +57,7 @@
       }
     },
     {
-      "id": "7a6f01314a",
+      "id": "6fbf3637e9",
       "kind": "function",
       "name": "Preparar tampa",
       "x": 220,
@@ -68,7 +68,7 @@
       }
     },
     {
-      "id": "aa9be64224",
+      "id": "1099599503",
       "kind": "rule_and",
       "name": "&",
       "x": 380,
@@ -77,7 +77,7 @@
       "params": {}
     },
     {
-      "id": "6ac883898b",
+      "id": "62b236d3d9",
       "kind": "entity",
       "name": "Produto",
       "x": 480,
@@ -93,7 +93,7 @@
       }
     },
     {
-      "id": "3687baadfe",
+      "id": "57f2e46acb",
       "kind": "function",
       "name": "Montar",
       "x": 620,
@@ -104,7 +104,7 @@
       }
     },
     {
-      "id": "cb5399a1e2",
+      "id": "2c650006fc",
       "kind": "resource",
       "name": "Montador",
       "x": 620,
@@ -115,7 +115,7 @@
       }
     },
     {
-      "id": "e7b0389635",
+      "id": "aafe0e3078",
       "kind": "exit",
       "name": "Armazém",
       "x": 780,
@@ -126,66 +126,66 @@
   ],
   "connections": [
     {
-      "id": "2dd4f1ce5f",
+      "id": "278e0ffda0",
       "kind": "flow",
-      "source": "bb610c5221",
-      "target": "a2b3043f4f",
+      "source": "d14d0a6eb9",
+      "target": "cd48ee46f7",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5531873366",
+      "id": "a814e94a69",
       "kind": "flow",
-      "source": "a438b016bb",
-      "target": "7a6f01314a",
+      "source": "8595b0c440",
+      "target": "6fbf3637e9",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2ce8ed15f3",
+      "id": "ee8db8b576",
       "kind": "flow",
-      "source": "a2b3043f4f",
-      "target": "aa9be64224",
+      "source": "cd48ee46f7",
+      "target": "1099599503",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "b44fb1fb02",
+      "id": "0c4930e642",
       "kind": "flow",
-      "source": "7a6f01314a",
-      "target": "aa9be64224",
+      "source": "6fbf3637e9",
+      "target": "1099599503",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "3a7536479c",
+      "id": "28b5232f3b",
       "kind": "flow",
-      "source": "aa9be64224",
-      "target": "6ac883898b",
+      "source": "1099599503",
+      "target": "62b236d3d9",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "d5b67e4639",
+      "id": "fca785f155",
       "kind": "flow",
-      "source": "6ac883898b",
-      "target": "3687baadfe",
+      "source": "62b236d3d9",
+      "target": "57f2e46acb",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "d74f0b715b",
+      "id": "a91254e35b",
       "kind": "flow",
-      "source": "3687baadfe",
-      "target": "e7b0389635",
+      "source": "57f2e46acb",
+      "target": "aafe0e3078",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "8e2901fc0c",
+      "id": "a0ef332c04",
       "kind": "resource",
-      "source": "cb5399a1e2",
-      "target": "3687baadfe",
+      "source": "2c650006fc",
+      "target": "57f2e46acb",
       "label": "",
       "probability": 1.0
     }
