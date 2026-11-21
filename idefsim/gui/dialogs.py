@@ -91,8 +91,9 @@ LEGEND = [
                             "inspeção, espera)."),
     (CK.FLOW, "Fluxo da entidade", "Direção do movimento da entidade entre elementos."),
     ("entry", "Fluxo de entrada no sistema", "Seta com dois traços que chega à entidade: ela vem "
-                                             "de fora do sistema modelado. Use a ferramenta da "
-                                             "paleta clicando sobre a entidade."),
+                                             "de fora do sistema modelado. Toda entidade nova já "
+                                             "tem a seta; ligue/desligue e escolha o lado nas "
+                                             "Propriedades da entidade."),
     (EK.RESOURCE, "Recurso", "Elemento usado para executar a função (máquina, operador). "
                              "Fica abaixo da função, ligado por seta de baixo para cima."),
     (EK.CONTROL, "Controle", "Regra que governa a função (plano, ordem, política). "

@@ -114,25 +114,6 @@ class DiagramScene(QGraphicsScene):
         self.modelChanged.emit("Conectar elementos", "")
         return c
 
-    def set_entry_arrow(self, eid: str, pos: QPointF | None = None) -> bool:
-        """Coloca o fluxo de entrada no sistema na entidade, do lado mais próximo de ``pos``."""
-        e = self.model.elements[eid]
-        if e.kind != EK.ENTITY:
-            self.message.emit("O fluxo de entrada no sistema é colocado sobre uma Entidade.")
-            return False
-        side = e.params.get("arrival_side", "left")
-        if pos is not None:
-            dx, dy = pos.x() - e.x, pos.y() - e.y
-            if abs(dx) >= abs(dy):
-                side = "left" if dx <= 0 else "right"
-            else:
-                side = "top" if dy < 0 else "bottom"
-        e.params["external_arrival"] = True
-        e.params["arrival_side"] = side
-        self.nodes[eid].refresh()
-        self.modelChanged.emit("Fluxo de entrada no sistema", "")
-        return True
-
     def delete_selected(self) -> None:
         sel = self.selectedItems()
         if not sel:
@@ -177,16 +158,6 @@ class DiagramScene(QGraphicsScene):
         pos = ev.scenePos()
         if self.tool == "add":
             self.add_element(self.tool_kind, pos)
-            if not ev.modifiers() & Qt.ShiftModifier:
-                self.set_tool("select")
-                self.toolFinished.emit()
-            return
-        if self.tool == "entry":
-            node = self._node_at(pos)
-            if node is None or node.element.kind != EK.ENTITY:
-                self.message.emit("Clique sobre uma Entidade, do lado de onde ela chega ao sistema.")
-                return
-            self.set_entry_arrow(node.element.id, pos)
             if not ev.modifiers() & Qt.ShiftModifier:
                 self.set_tool("select")
                 self.toolFinished.emit()

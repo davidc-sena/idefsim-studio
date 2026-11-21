@@ -76,19 +76,23 @@ def test_arrowhead_visible_when_rule_touches_function(app):
     win.close()
 
 
-def test_entry_tool_sets_side(app):
-    from PySide6.QtCore import QPointF
+def test_entry_arrow_only_in_properties(app):
+    """O fluxo de entrada não é botão da paleta: liga-se nas Propriedades da entidade."""
+    from PySide6.QtWidgets import QCheckBox
     from idefsim.model import Model
     m = Model()
     e = m.add_element(EK.ENTITY, 0, 0)
-    e.params["external_arrival"] = False
     win = MainWindow()
     win._set_model(m, None)
-    assert win.scene.set_entry_arrow(e.id, QPointF(0, -20))   # clique acima
-    p = win.scene.model.elements[e.id].params
-    assert p["external_arrival"] and p["arrival_side"] == "top"
-    win.undo()
+    assert "entry" not in win.tool_actions
+    assert e.params["external_arrival"]                      # entidade nova já tem a seta
+    win.scene.select_element(e.id)
+    box = next(b for b in win.props.widget().findChildren(QCheckBox)
+               if b.text() == "Fluxo de entrada no sistema")
+    box.setChecked(False)
     assert not win.scene.model.elements[e.id].params["external_arrival"]
+    win.undo()
+    assert win.scene.model.elements[e.id].params["external_arrival"]
     win.dirty = False
     win.close()
 

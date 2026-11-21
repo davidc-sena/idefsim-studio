@@ -211,8 +211,6 @@ class MainWindow(QMainWindow):
                 EK.EXIT: "X", EK.CONNECTOR: "K", EK.NOTE: "N"}
         for kind in EK:
             add(kind.value, KIND_LABELS[kind], shapes.element_icon(kind), "add", kind, keys[kind])
-            if kind == EK.ENTITY:
-                add("entry", "Fluxo de entrada no sistema", shapes.entry_icon(), "entry", None, "Shift+E")
         tb.addSeparator()
         lkeys = {CK.FLOW: "L", CK.RESOURCE: "Shift+R", CK.CONTROL: "Shift+C", CK.NOTE: "Shift+N"}
         for ck in CK:

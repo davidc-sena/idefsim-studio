@@ -93,7 +93,7 @@ python -m pytest
 | Símbolo | Atalho | Interpretação na simulação |
 |---|---|---|
 | Entidade (círculo) | E | Sem fluxo de entrada é uma **fonte de chegadas** (intervalo, primeira chegada, lote, máximo). Com fluxo de entrada é uma **transformação**: a entidade passa a ser deste tipo. Pode ter **atributos** (ex.: `tipo`, `peso`), cada um com um valor fixo ou uma distribuição, sorteados na chegada ou na transformação. |
-| Fluxo de entrada no sistema (seta com dois traços **antes** da entidade) | Shift+E | Indica que a entidade chega de fora do sistema. Clique sobre a entidade do lado de onde ela chega; o lado e a presença da seta também podem ser alterados nas Propriedades. Entidades que recebem fluxo do próprio modelo (transformação) não têm essa seta. |
+| Fluxo de entrada no sistema (seta com dois traços **antes** da entidade) | — | Indica que a entidade chega de fora do sistema. Toda entidade nova já tem a seta; nas Propriedades da entidade ligue/desligue (*Chegada externa*) e escolha o lado (*Seta vem da*). Entidades que recebem fluxo do próprio modelo (transformação) não têm essa seta. |
 | Função (retângulo) | F | Captura 1 unidade de cada recurso ligado, processa durante o tempo definido e libera os recursos. Sem recurso, capacidade infinita. |
 | Recurso | R | Capacidade (n.º de unidades). Fica **abaixo** da função; a *Ligação de recurso* sobe e entra pela base da função. |
 | Controle | C | Documental. Fica **acima** da função; a *Ligação de controle* entra pelo topo da função. |
