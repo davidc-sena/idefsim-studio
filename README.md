@@ -4,6 +4,8 @@ Programa desktop para **criar, documentar, validar e simular** modelos conceitua
 na técnica **IDEF-SIM** (Leal, Almeida & Montevechi, 2008), usada na
 simulação a eventos discretos.
 
+**⬇️ Baixar:** [versão mais recente para Windows, macOS e Linux](https://github.com/davidc-sena/idefsim-studio/releases/latest)
+
 ![Janela principal](docs/screenshot.png)
 
 ## Funcionalidades
@@ -20,6 +22,7 @@ simulação a eventos discretos.
 ## Instalação e execução
 
 ```bash
+git clone https://github.com/davidc-sena/idefsim-studio.git
 cd idefsim-studio
 python -m venv .venv
 # Windows: .venv\Scripts\activate    Linux/macOS: source .venv/bin/activate
@@ -29,13 +32,13 @@ python main.py                       # ou: python main.py examples/usinagem_insp
 
 ### Executáveis prontos (Windows, macOS, Linux)
 
-O workflow `.github/workflows/idefsim-studio.yml` compila automaticamente os executáveis
+O workflow `.github/workflows/build.yml` compila automaticamente os executáveis
 em máquinas Windows, macOS e Linux do GitHub Actions:
 
-* **A cada push** que altere `idefsim-studio/`, os pacotes ficam em *Actions* → execução → *Artifacts*.
+* **A cada push**, os pacotes ficam em *Actions* → execução → *Artifacts*.
 * **Ao enviar uma tag de versão** (`git tag idefsim-v0.2.0 && git push origin idefsim-v0.2.0`),
   é criado automaticamente um **Release público** com os quatro executáveis anexados.
-* Downloads da versão mais recente: <https://github.com/davidc-sena/matsim-example-project/releases>
+* Downloads da versão mais recente: <https://github.com/davidc-sena/idefsim-studio/releases/latest>
 * Também é possível rodar manualmente em *Actions* → *IDEF-SIM Studio - executáveis* → *Run workflow*.
 
 | Sistema | Arquivo | Como instalar |
