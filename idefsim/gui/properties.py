@@ -236,5 +236,19 @@ class PropertiesPanel(QScrollArea):
             self.elementRenamed.emit(c.source)
             self.edited.emit("Rótulo", f"{c.id}.label")
         self._line("Rótulo", c.label, set_label)
+
+        # pontas da seta: escolhidas para cada ligação
+        start, end = c.heads
+        for label, attr, value in (("Início", "head_start", start), ("Fim", "head_end", end)):
+            box = QComboBox()
+            box.addItems(["Sem ponta", "Com ponta"])
+            box.setCurrentIndex(1 if value else 0)
+
+            def apply(i, attr=attr):
+                setattr(c, attr, bool(i))
+                self.elementRenamed.emit(c.source)
+                self.edited.emit("Pontas da seta", f"{c.id}.{attr}")
+            box.currentIndexChanged.connect(apply)
+            self.form.addRow(f"{label} da seta", box)
         if c.kind == CK.FLOW and len(model.outgoing(c.source)) > 1 or s.kind == EK.RULE_ANDOR:
             self._prob_row(model, c, "probabilidade")

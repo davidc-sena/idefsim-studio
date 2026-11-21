@@ -208,18 +208,24 @@ LINK_STYLE = {
 }
 
 
-def draw_link(p: QPainter, kind: CK, pts, color: QColor = INK, scale: float = 1.0) -> None:
-    """Desenha uma ligação passando pelos pontos ``pts`` (polilinha)."""
-    import math
+def draw_link(p: QPainter, kind: CK, pts, color: QColor = INK, scale: float = 1.0,
+              heads: tuple[bool, bool] | None = None) -> None:
+    """Desenha uma ligação passando pelos pontos ``pts`` (polilinha).
+
+    ``heads`` = (ponta no início, ponta no fim); por omissão, o padrão do tipo de ligação.
+    """
+    from ..model import Connection
+    start, end = heads if heads is not None else Connection.default_heads(kind)
     style, width = LINK_STYLE[kind]
     p.setPen(QPen(color, width, style, Qt.RoundCap, Qt.RoundJoin))
     p.setBrush(Qt.NoBrush)
     p.drawPolyline(QPolygonF(list(pts)))
     p.setPen(QPen(color, width, Qt.SolidLine))
     hs = 10 * scale
-    a, b = pts[0], pts[-1]
-    if kind != CK.NOTE:  # recurso também tem uma só ponta, apontando para a função
-        _arrow_head(p, b, pts[-2], hs)
+    if end:
+        _arrow_head(p, pts[-1], pts[-2], hs)
+    if start:
+        _arrow_head(p, pts[0], pts[1], hs)
 
 
 ENTRY_LENGTH = 46  # comprimento da seta de entrada no sistema

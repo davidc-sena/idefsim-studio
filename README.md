@@ -83,7 +83,8 @@ python -m pytest
 
 1. Escolha um símbolo na paleta (ou use o atalho) e clique no diagrama. **Shift** mantém a ferramenta ativa; **Esc** ou o botão direito volta a *Selecionar*.
 2. Para conectar dois elementos, escolha a ligação (*Fluxo*, *Recurso*, *Controle* ou *Nota*), clique na origem e depois no destino.
-3. Edite os parâmetros no painel **Propriedades**. Sem nada selecionado, o painel mostra as propriedades do modelo (duração, aquecimento, replicações, unidade de tempo).
+3. Edite os parâmetros no painel **Propriedades**. Ao selecionar uma seta, escolha se ela tem
+   ponta no **início** e no **fim** (*Sem ponta* / *Com ponta*). Sem nada selecionado, o painel mostra as propriedades do modelo (duração, aquecimento, replicações, unidade de tempo).
 4. **F7** valida o modelo e **F5** executa a simulação.
 
 ### Símbolos e semântica de simulação
@@ -158,8 +159,7 @@ correspondência abaixo (sintaxe conferida no código-fonte e nos exemplos ofici
 |---|---|
 | Entidade com chegada externa | `SimEntity` + `EntityGenerator` |
 | Entidade de transformação | `Queue` + `Assemble` (cria a nova entidade) |
-| Função com recursos | `Queue` + `Seize` → `EntityDelay` → `Release` |
-| Função sem recursos | `EntityDelay` (capacidade infinita) |
+| Função | `Queue` + `EntityProcessor` (`ResourceList`, `Capacity`, `ServiceTime`) |
 | Movimentação | `EntityConveyor` (com `Seize`/`Release` se tiver recurso) |
 | Recurso | `Resource` (`Capacity`) |
 | Regra OU (X) | `Branch` + `DiscreteDistribution` |

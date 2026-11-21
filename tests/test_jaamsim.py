@@ -17,6 +17,8 @@ KEYWORDS = {
     "EntityGenerator": {"NextComponent", "FirstArrivalTime", "InterArrivalTime",
                         "EntitiesPerArrival", "PrototypeEntity", "MaxNumber", "BaseName"},
     "Queue": set(),
+    "EntityProcessor": {"NextComponent", "WaitQueue", "ResourceList", "NumberOfUnits",
+                        "Capacity", "ServiceTime"},
     "Seize": {"NextComponent", "WaitQueue", "ResourceList", "NumberOfUnits"},
     "Release": {"NextComponent", "ResourceList", "NumberOfUnits"},
     "Resource": {"Capacity"},
@@ -47,7 +49,7 @@ GRAPHICS = {"Position", "Points"}
 REFS = {"NextComponent": "flow", "NextComponentList": "flow", "TargetComponentList": "flow",
         "WaitQueue": "Queue", "WaitQueueList": "Queue", "ResourceList": "Resource",
         "PrototypeEntity": "SimEntity"}
-FLOW = {"EntityGenerator", "Seize", "Release", "EntityDelay", "EntityConveyor", "Branch",
+FLOW = {"EntityGenerator", "EntityProcessor", "Seize", "Release", "EntityDelay", "EntityConveyor", "Branch",
         "Duplicate", "Combine", "Assemble", "EntitySink", "Queue"}
 INVALID = set(" \t\n{}'\"[]#.")
 
@@ -93,7 +95,8 @@ def check(cfg: str):
                     nexts.setdefault(q, []).append(obj)
             if key in ("NextComponent", "NextComponentList", "TargetComponentList"):
                 nexts.setdefault(obj, []).extend(val.split())
-        if key in ("Duration", "TravelTime", "InterArrivalTime", "FirstArrivalTime", "Choice"):
+        if key in ("Duration", "TravelTime", "InterArrivalTime", "FirstArrivalTime", "Choice",
+                   "ServiceTime"):
             tok = val.split()
             assert tok[0] in types or re.match(r"^-?[\d.]+(e-?\d+)?$", tok[0]), f"{obj} {key}: {val}"
         if key == "ProbabilityList":
@@ -127,10 +130,17 @@ def test_examples_generate_valid_cfg():
 def test_machining_mapping():
     types, kws = check(export_jaamsim(usinagem_inspecao()).text)
     d = {(o, k): v for o, k, v in kws}
-    assert d[("Usinar_Seize", "ResourceList")] == "Torno"
-    assert d[("Regra_OU_Branch", "NextComponentList")] == "Expedicao  Retrabalhar"
+    assert types["Usinar"] == "EntityProcessor"
+    assert d[("Usinar", "WaitQueue")] == "Usinar_Fila"
+    assert d[("Usinar", "ResourceList")] == "Torno"
+    assert d[("Usinar", "Capacity")] == "1"
+    assert d[("Usinar", "ServiceTime")] == "Usinar_Tempo"
+    assert d[("Peca_Chegada", "NextComponent")] == "Usinar_Fila"   # entra pela fila
+    assert "EntityDelay" not in types.values()
+    assert d[("Regra_OU_Branch", "NextComponentList")] == "Expedicao  Retrabalhar_Fila"
     assert d[("Regra_OU_Prob", "ProbabilityList")] == "0.9  0.1"
-    assert d[("Retrabalhar", "NextComponent")] == "Inspecionar_Seize"   # laço de retrabalho
+    assert d[("Retrabalhar", "NextComponent")] == "Inspecionar_Fila"    # laço de retrabalho
+    assert d[("Retrabalhar", "Capacity")] == "1000000"                  # sem recurso: ilimitada
     assert types["Transportar"] == "EntityConveyor"
     assert d[("Simulation", "RunDuration")] == "480  min"
     assert d[("Simulation", "InitializationDuration")] == "60  min"
@@ -180,6 +190,7 @@ def test_all_elements_and_distributions():
               "Text", "Branch"):
         assert t in kinds, t
     assert d[("Simulation", "RunDuration")].endswith(" h")
+    assert d[("Triagem", "Capacity")] == "2"          # menor capacidade dos recursos
     assert d[("Pedido_No_1_Chegada", "EntitiesPerArrival")] == "2"
     assert d[("Pedido_No_1_Chegada", "MaxNumber")] == "50"
     assert "Embalar" in res.text and "Beco_sem_saida_Saida" in types   # sink automático

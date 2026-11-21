@@ -113,3 +113,15 @@ def test_legacy_entry_connection_is_converted():
     m2 = Model.from_dict(d)
     c = next(iter(m2.connections.values()))
     assert c.kind == CK.FLOW and m2.elements[e.id].params["external_arrival"] is True
+
+
+def test_arrow_heads_saved_and_defaults():
+    m = usinagem_inspecao()
+    ctrl = next(c for c in m.connections.values() if c.kind == CK.CONTROL)
+    note = next(c for c in m.connections.values() if c.kind == CK.NOTE)
+    assert ctrl.heads == (False, True) and note.heads == (False, False)   # padrões
+    ctrl.head_end = False
+    ctrl.head_start = True
+    m2 = Model.from_dict(m.to_dict())
+    assert m2.connections[ctrl.id].heads == (True, False)
+    assert "head_end" not in m2.connections[note.id].to_dict()  # padrão não é gravado

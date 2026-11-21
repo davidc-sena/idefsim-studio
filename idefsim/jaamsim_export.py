@@ -8,8 +8,7 @@ IDEF-SIM                           JaamSim
 =================================  ==================================================
 Entidade com chegada externa       SimEntity + EntityGenerator
 Entidade de transformação          Queue + Assemble (cria a nova entidade)
-Função com recursos                Queue + Seize → EntityDelay → Release
-Função sem recursos                EntityDelay (capacidade infinita)
+Função                             Queue + EntityProcessor (ResourceList, Capacity, ServiceTime)
 Movimentação                       EntityConveyor (com Seize/Release se tiver recurso)
 Recurso                            Resource (Capacity)
 Regra OU (X)                       Branch + DiscreteDistribution
@@ -38,6 +37,7 @@ UNIT_MAP = {"s": "s", "seg": "s", "segundo": "s", "segundos": "s",
             "h": "h", "hora": "h", "horas": "h",
             "d": "d", "dia": "d", "dias": "d"}
 SCALE = 1 / 60.0  # pixels do diagrama → metros no JaamSim
+UNLIMITED = 1000000  # "capacidade infinita" de uma Função sem recurso
 _INVALID = re.compile(r"[^A-Za-z0-9_\-]+")
 
 
@@ -84,6 +84,8 @@ class _Exporter:
                                  "foi usada 'min'.")
         self.defs: dict[str, list[str]] = {}       # tipo → nomes (ordem de definição)
         self.early: list[str] = []                  # UnitType: logo após os Define
+        self.func_queues: dict[str, str] = {}
+        self.notes: list[str] = []                  # informações (não são problemas)
         self.lines: dict[str, list[str]] = {}      # tipo → linhas de palavras-chave
         self.graphics: list[str] = []
         self.used: set[str] = set()
@@ -197,7 +199,9 @@ class _Exporter:
         e = self.m.elements[node]
         k, n = e.kind, self.names[node]
         ins, outs = self.m.incoming(node), self.m.outgoing(node)
-        if k in PROCESS_KINDS:
+        if k == EK.FUNCTION:
+            return self.queue_of(node)          # o EntityProcessor puxa da sua fila
+        if k == EK.MOVEMENT:
             return f"{n}_Seize" if self.m.resources_of(node) else n
         if k == EK.EXIT:
             return n
@@ -221,6 +225,12 @@ class _Exporter:
                     return self.entry(other.id, None, _seen)
             return self.sink_for(node)
         return self.sink_for(node)
+
+    def queue_of(self, node: str) -> str:
+        """Nome (estável) da fila de espera de uma Função."""
+        if node not in self.func_queues:
+            self.func_queues[node] = self.unique(f"{self.names[node]}_Fila")
+        return self.func_queues[node]
 
     def after(self, node: str, _seen=None) -> str:
         """Componente seguinte ao processamento de ``node``."""
@@ -302,7 +312,29 @@ class _Exporter:
                     elif len(outs) > 1:
                         self.decision(e.id)
 
-            elif k in PROCESS_KINDS:
+            elif k == EK.FUNCTION:
+                # Função → Queue + EntityProcessor (captura os recursos, processa e libera)
+                res = m.resources_of(e.id)
+                q = self.define("Queue", self.queue_of(e.id))
+                self.define("EntityProcessor", n)
+                self.kw("EntityProcessor", n, "NextComponent", self.after(e.id))
+                self.kw("EntityProcessor", n, "WaitQueue", q)
+                if res:
+                    self.kw("EntityProcessor", n, "ResourceList",
+                            "  ".join(self.names[x.id] for x in res))
+                    cap = min(int(x.params.get("capacity", 1)) for x in res)
+                else:
+                    cap = UNLIMITED
+                    self.notes.append(f"Funcao '{e.name}' sem recurso: capacidade ilimitada "
+                                      f"(Capacity {UNLIMITED}), como no IDEF-SIM Studio.")
+                self.kw("EntityProcessor", n, "Capacity", str(cap))
+                self.kw("EntityProcessor", n, "ServiceTime",
+                        self.time_value(e.params.get("duration", "0"), n, e.x, e.y))
+                self.pos(q, e.x - 50, e.y - 40)
+                self.pos(n, e.x, e.y)
+                self.decision(e.id)
+
+            elif k == EK.MOVEMENT:
                 res = m.resources_of(e.id)
                 dur = e.params.get("duration", "0")
                 nxt = self.after(e.id)
@@ -323,16 +355,10 @@ class _Exporter:
                     nxt_of_proc = r
                 else:
                     nxt_of_proc = nxt
-                if k == EK.FUNCTION:
-                    self.define("EntityDelay", n)
-                    self.kw("EntityDelay", n, "NextComponent", nxt_of_proc)
-                    self.kw("EntityDelay", n, "Duration", self.time_value(dur, n, e.x, e.y))
-                    self.points(n, e.x - 30, e.y, e.x + 30, e.y)
-                else:
-                    self.define("EntityConveyor", n)
-                    self.kw("EntityConveyor", n, "NextComponent", nxt_of_proc)
-                    self.kw("EntityConveyor", n, "TravelTime", self.time_value(dur, n, e.x, e.y))
-                    self.points(n, e.x - 30, e.y, e.x + 30, e.y)
+                self.define("EntityConveyor", n)
+                self.kw("EntityConveyor", n, "NextComponent", nxt_of_proc)
+                self.kw("EntityConveyor", n, "TravelTime", self.time_value(dur, n, e.x, e.y))
+                self.points(n, e.x - 30, e.y, e.x + 30, e.y)
                 self.decision(e.id)
 
             elif k == EK.RESOURCE:
@@ -419,7 +445,8 @@ class _Exporter:
     def render(self) -> ExportResult:
         self.build()
         m, s, u = self.m, self.m.settings, self.unit
-        order = ["SimEntity", "EntityGenerator", "Queue", "Seize", "EntityDelay", "EntityConveyor",
+        order = ["SimEntity", "EntityGenerator", "Queue", "EntityProcessor", "Seize", "EntityDelay",
+                 "EntityConveyor",
                  "Release", "Resource", "Branch", "Duplicate", "Combine", "Assemble", "EntitySink",
                  "ExponentialDistribution", "NormalDistribution", "TriangularDistribution",
                  "UniformDistribution", "LogNormalDistribution", "ErlangDistribution",
@@ -438,6 +465,9 @@ class _Exporter:
         if self.warnings:
             out.append("#\n# Avisos da conversão:")
             out += [f"#  - {w}" for w in self.warnings]
+        if self.notes:
+            out.append("#\n# Notas:")
+            out += [f"#  - {w}" for w in self.notes]
         out += ["", "RecordEdits", ""]
         for k in kinds:
             out.append(f"Define {k} {{ {'  '.join(self.defs[k])} }}")

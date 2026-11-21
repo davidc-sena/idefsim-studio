@@ -217,7 +217,7 @@ class EdgeItem(QGraphicsItem):
         if self._path().length() < 2:
             return
         color = shapes.SELECT if self.isSelected() else shapes.INK
-        shapes.draw_link(painter, self.conn.kind, self.points, color)
+        shapes.draw_link(painter, self.conn.kind, self.points, color, heads=self.conn.heads)
         txt = self.label_text()
         if txt:
             k = len(self.points) // 2

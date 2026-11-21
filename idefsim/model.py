@@ -130,17 +130,39 @@ class Connection:
     target: str
     label: str = ""
     probability: float = 1.0  # usado em regras OU / E-OU e em ramificações
+    # Pontas da seta: None = padrão do tipo de ligação (ver default_heads)
+    head_start: bool | None = None
+    head_end: bool | None = None
+
+    @staticmethod
+    def default_heads(kind: "ConnectionKind") -> tuple[bool, bool]:
+        """(ponta no início, ponta no fim) usadas quando o usuário não escolheu."""
+        return False, kind != ConnectionKind.NOTE
+
+    @property
+    def heads(self) -> tuple[bool, bool]:
+        ds, de = self.default_heads(self.kind)
+        return (ds if self.head_start is None else self.head_start,
+                de if self.head_end is None else self.head_end)
 
     def to_dict(self) -> dict:
-        return {"id": self.id, "kind": self.kind.value, "source": self.source,
-                "target": self.target, "label": self.label,
-                "probability": self.probability}
+        d = {"id": self.id, "kind": self.kind.value, "source": self.source,
+             "target": self.target, "label": self.label,
+             "probability": self.probability}
+        if self.head_start is not None:
+            d["head_start"] = self.head_start
+        if self.head_end is not None:
+            d["head_end"] = self.head_end
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> "Connection":
+        def opt_bool(v):
+            return None if v is None else bool(v)
         return cls(id=d["id"], kind=ConnectionKind(d["kind"]), source=d["source"],
                    target=d["target"], label=d.get("label", ""),
-                   probability=float(d.get("probability", 1.0)))
+                   probability=float(d.get("probability", 1.0)),
+                   head_start=opt_bool(d.get("head_start")), head_end=opt_bool(d.get("head_end")))
 
 
 @dataclass

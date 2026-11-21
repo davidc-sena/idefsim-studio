@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "idefsim-studio"
-version = "0.3.0"
+version = "0.4.0"
 description = "Editor e simulador de modelos conceituais IDEF-SIM para simulação a eventos discretos"
 requires-python = ">=3.10"
 authors = [{ name = "David Custódio de Sena", email = "sena@ufersa.edu.br" }]

@@ -119,3 +119,21 @@ def test_export_jaamsim_from_gui(app, tmp_path, monkeypatch):
     assert "Define EntityGenerator { Peca_Chegada }" in text
     win.dirty = False
     win.close()
+
+
+def test_arrow_heads_from_properties(app):
+    from PySide6.QtWidgets import QComboBox
+    from idefsim.examples import usinagem_inspecao
+    win = MainWindow()
+    win._set_model(usinagem_inspecao(), None)
+    cid = next(c.id for c in win.scene.model.connections.values() if c.kind == CK.CONTROL)
+    win.scene.clearSelection()
+    win.scene.edges[cid].setSelected(True)
+    boxes = win.props.widget().findChildren(QComboBox)
+    assert len(boxes) == 2 and [b.currentText() for b in boxes] == ["Sem ponta", "Com ponta"]
+    boxes[1].setCurrentIndex(0)                       # fim: sem ponta
+    assert win.scene.model.connections[cid].heads == (False, False)
+    win.undo()
+    assert win.scene.model.connections[cid].heads == (False, True)
+    win.dirty = False
+    win.close()
