@@ -320,3 +320,24 @@ def test_queue_function_is_waitqueue_of_next_processor():
     assert "Aguardar_torno" not in types
     assert dict(((o, k), v) for o, k, v in kws)[("Peca_Chegada", "NextComponent")] == "Fim"
     assert any("Aguardar torno" in w for w in res.warnings)
+
+
+def test_functions_without_queue_function_keep_their_own_queue():
+    """Só a função precedida por uma função-fila usa essa fila; as demais ganham a sua."""
+    m, q, x = _q_model()
+    tornear = next(e for e in m.elements.values() if e.name == "Tornear")
+    for c in list(m.outgoing(tornear.id)):
+        del m.connections[c.id]
+    polir = m.add_element(EK.FUNCTION, 480, 0, "Polir", duration="EXPO(3)")
+    m.add_connection(CK.FLOW, tornear.id, polir.id)
+    m.add_connection(CK.FLOW, polir.id, x.id)
+    types, kws = check(export_jaamsim(m).text)
+    d = {(o, k): v for o, k, v in kws}
+    assert d[("Tornear", "WaitQueue")] == "Aguardar_torno"
+    assert d[("Polir", "WaitQueue")] == "Polir_Fila" and types["Polir_Fila"] == "Queue"
+    assert d[("Tornear", "NextComponent")] == "Polir_Fila"
+    # exemplo sem função-fila: toda função com tempo tem a sua fila
+    types, kws = check(export_jaamsim(usinagem_inspecao()).text)
+    d = {(o, k): v for o, k, v in kws}
+    for f in ("Usinar", "Inspecionar", "Retrabalhar"):
+        assert d[(f, "WaitQueue")] == f"{f}_Fila"
