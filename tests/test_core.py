@@ -166,6 +166,8 @@ def test_simulation_routes_by_attribute():
         c.condition = "tipo == 99" if "leve" in m.elements[c.target].name else "senão"
     rows = {(r.obj, r.metric): r.mean for r in run_simulation(m).rows()}
     assert rows.get(("Embalar leve", "Atendimentos concluídos"), 0) == 0
+    # com saída 'senão', nenhuma decisão fica "sem condição verdadeira"
+    assert ("Sistema", "Global", "Decisões OU sem condição verdadeira") not in rows
 
 
 def test_connector_letters_pair_automatically():

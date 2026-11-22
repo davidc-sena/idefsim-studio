@@ -124,10 +124,13 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/idefsim-v') || (github.event_name == 'workflow_dispatch' && inputs.versao != '')
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           path: pacotes
           merge-multiple: true
+      - name: Incluir o manual em PDF
+        run: cp docs/manual/Manual_IDEF-SIM_Studio.pdf pacotes/
 
       - name: Criar Release com os executáveis
         env:
@@ -149,6 +152,7 @@ jobs:
           | macOS com chip Apple (M1–M4) | \`IDEF-SIM-Studio-macos-arm64.dmg\` |
           | macOS Intel | \`IDEF-SIM-Studio-macos-x64.dmg\` |
           | Linux 64 bits (Ubuntu 22.04+ e similares) | \`IDEF-SIM-Studio-linux-x64.tar.gz\` |
+          | **Manual de uso** | \`Manual_IDEF-SIM_Studio.pdf\` |
 
           ### Como instalar
 

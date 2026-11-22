@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "2a42aec9f3",
+      "id": "6a99a743dc",
       "kind": "entity",
       "name": "Base",
       "x": 60,
@@ -31,7 +31,7 @@
       }
     },
     {
-      "id": "553c610b8d",
+      "id": "0c62cfcdae",
       "kind": "entity",
       "name": "Tampa",
       "x": 60,
@@ -48,7 +48,7 @@
       }
     },
     {
-      "id": "22de5b6f4e",
+      "id": "9a7cb7830c",
       "kind": "function",
       "name": "Preparar base",
       "x": 220,
@@ -60,7 +60,7 @@
       }
     },
     {
-      "id": "ccd63e1b24",
+      "id": "f82ebcf96d",
       "kind": "function",
       "name": "Preparar tampa",
       "x": 220,
@@ -72,7 +72,7 @@
       }
     },
     {
-      "id": "ca17067663",
+      "id": "9b78377701",
       "kind": "function",
       "name": "Aguardar base",
       "x": 390,
@@ -84,7 +84,7 @@
       }
     },
     {
-      "id": "e1f5ba2335",
+      "id": "133b1e57bd",
       "kind": "function",
       "name": "Aguardar tampa",
       "x": 390,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "id": "87cbc0fd48",
+      "id": "cb7db8503a",
       "kind": "rule_and",
       "name": "&",
       "x": 530,
@@ -105,7 +105,7 @@
       "params": {}
     },
     {
-      "id": "087c9fc75c",
+      "id": "4f383cacf8",
       "kind": "entity",
       "name": "Produto",
       "x": 630,
@@ -122,7 +122,7 @@
       }
     },
     {
-      "id": "98b50e0c91",
+      "id": "463d3a3622",
       "kind": "function",
       "name": "Montar",
       "x": 770,
@@ -134,7 +134,7 @@
       }
     },
     {
-      "id": "662baac12d",
+      "id": "05e17a1f54",
       "kind": "resource",
       "name": "Montador",
       "x": 770,
@@ -145,7 +145,7 @@
       }
     },
     {
-      "id": "dd05c8560b",
+      "id": "93799c3eeb",
       "kind": "exit",
       "name": "Armazém",
       "x": 930,
@@ -156,82 +156,82 @@
   ],
   "connections": [
     {
-      "id": "91225cd40d",
+      "id": "5acfc24ac4",
       "kind": "flow",
-      "source": "2a42aec9f3",
-      "target": "22de5b6f4e",
+      "source": "6a99a743dc",
+      "target": "9a7cb7830c",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5947d129b7",
+      "id": "26c39b9e7d",
       "kind": "flow",
-      "source": "553c610b8d",
-      "target": "ccd63e1b24",
+      "source": "0c62cfcdae",
+      "target": "f82ebcf96d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "0c09f86caa",
+      "id": "5b235ee694",
       "kind": "flow",
-      "source": "22de5b6f4e",
-      "target": "ca17067663",
+      "source": "9a7cb7830c",
+      "target": "9b78377701",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "196939e7e2",
+      "id": "ead702d348",
       "kind": "flow",
-      "source": "ccd63e1b24",
-      "target": "e1f5ba2335",
+      "source": "f82ebcf96d",
+      "target": "133b1e57bd",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "b3e9e51a58",
+      "id": "69d1c0750a",
       "kind": "flow",
-      "source": "ca17067663",
-      "target": "87cbc0fd48",
+      "source": "9b78377701",
+      "target": "cb7db8503a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "559c252457",
+      "id": "1b95e4d910",
       "kind": "flow",
-      "source": "e1f5ba2335",
-      "target": "87cbc0fd48",
+      "source": "133b1e57bd",
+      "target": "cb7db8503a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "406c6c4d0f",
+      "id": "3c5fc9000e",
       "kind": "flow",
-      "source": "87cbc0fd48",
-      "target": "087c9fc75c",
+      "source": "cb7db8503a",
+      "target": "4f383cacf8",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "375bb35b53",
+      "id": "a442d91df6",
       "kind": "flow",
-      "source": "087c9fc75c",
-      "target": "98b50e0c91",
+      "source": "4f383cacf8",
+      "target": "463d3a3622",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ff59f7d652",
+      "id": "f67da829da",
       "kind": "flow",
-      "source": "98b50e0c91",
-      "target": "dd05c8560b",
+      "source": "463d3a3622",
+      "target": "93799c3eeb",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "f2036724a9",
+      "id": "423dcdad3d",
       "kind": "resource",
-      "source": "662baac12d",
-      "target": "98b50e0c91",
+      "source": "05e17a1f54",
+      "target": "463d3a3622",
       "label": "",
       "probability": 1.0
     }

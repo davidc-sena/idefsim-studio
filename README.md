@@ -7,6 +7,8 @@ na técnica **IDEF-SIM** (Leal, Almeida & Montevechi, 2008), usada na
 simulação a eventos discretos.
 
 **⬇️ Baixar:** [versão mais recente para Windows, macOS e Linux](https://github.com/davidc-sena/idefsim-studio/releases/latest)
+· **📘 [Manual de uso (PDF)](https://github.com/davidc-sena/idefsim-studio/releases/latest/download/Manual_IDEF-SIM_Studio.pdf)**
+· [versão HTML](docs/manual/manual.html) · no programa: **Ajuda → Manual de uso**
 
 ![Janela principal](docs/screenshot.png)
 

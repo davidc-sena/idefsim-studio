@@ -266,7 +266,8 @@ class _Replication:
                 default = default or c
             elif expr.evaluate(cond, tok.attrs):
                 return c
-        self.unmatched += 1
+        if default is None:  # nenhuma condição verdadeira e sem saída 'senão'
+            self.unmatched += 1
         return default or outs[-1]
 
     def _travel(self, tok: Token, node: str, via):

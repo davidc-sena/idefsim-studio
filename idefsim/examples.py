@@ -94,10 +94,93 @@ def triagem_atributos() -> Model:
     return m
 
 
+def oficina_bombas() -> Model:
+    """Exemplo do manual: usa todos os símbolos e funções do IDEF-SIM Studio."""
+    m = Model(name="Oficina de manutenção de bombas", author=AUTHOR, version="1.0",
+              description="Bombas com defeito chegam à oficina, esperam e são inspecionadas. "
+                          "As simples e não urgentes têm reparo simples; as demais aguardam um kit "
+                          "de peças, que é montado na bomba (reparo complexo). Todas são testadas "
+                          "(15% passam por retrabalho e voltam ao teste), recebem laudo e limpeza em paralelo, são "
+                          "transportadas à expedição e saem por uma das docas; 30% dos clientes "
+                          "recebem pesquisa de satisfação.")
+    s = m.settings
+    s.time_unit, s.duration, s.warmup, s.replications, s.seed = "min", 2400, 240, 10, 2026
+    add, flow = m.add_element, lambda a, b: m.add_connection(CK.FLOW, a.id, b.id)
+    # --- chegada, fila e inspeção
+    bomba = add(EK.ENTITY, 60, 200, "Bomba com defeito", interarrival="EXPO(30)")
+    bomba.params["attributes"] = [{"name": "tipo", "value": "DISC(1; 0,6; 2; 0,4)"},
+                                  {"name": "urgente", "value": "DISC(0; 0,8; 1; 0,2)"}]
+    q_insp = add(EK.FUNCTION, 220, 200, "Aguardar inspeção", is_queue=True)
+    insp = add(EK.FUNCTION, 390, 200, "Inspecionar", duration="TRIA(10; 15; 25)")
+    tecnico = add(EK.RESOURCE, 390, 320, "Técnico", capacity=2)
+    proc = add(EK.CONTROL, 390, 80, "Procedimento de inspeção")
+    # --- decisão por atributo
+    ou_tipo = add(EK.RULE_OR, 540, 200)
+    ou_tipo.params["decision"] = "condition"
+    simples = add(EK.FUNCTION, 700, 90, "Reparo simples", duration="UNIF(20; 40)")
+    q_bomba = add(EK.FUNCTION, 700, 330, "Aguardar kit", is_queue=True)
+    # --- kit de peças e montagem (junção E com nova entidade)
+    kit = add(EK.ENTITY, 540, 520, "Kit de peças", interarrival="EXPO(55)", arrival_side="bottom")
+    q_kit = add(EK.FUNCTION, 700, 520, "Aguardar bomba", is_queue=True)
+    junta = add(EK.RULE_AND, 850, 425)
+    montada = add(EK.ENTITY, 950, 425, "Bomba com kit")
+    complexo = add(EK.FUNCTION, 1090, 425, "Reparo complexo", duration="GAMM(60; 3)")
+    mecanico = add(EK.RESOURCE, 1090, 545, "Mecânico", capacity=2)
+    nota = add(EK.NOTE, 300, 520, "Kits vêm do almoxarifado central")
+    # --- teste e retrabalho
+    teste = add(EK.FUNCTION, 1250, 200, "Testar", duration="NORM(10; 2)")
+    bancada = add(EK.RESOURCE, 1250, 320, "Bancada de teste", capacity=1)
+    ou_teste = add(EK.RULE_OR, 1400, 200)
+    retrab = add(EK.FUNCTION, 1400, 340, "Retrabalhar", duration="UNIF(10; 20)")
+    # --- laudo e limpeza em paralelo (divisão e junção E)
+    divide = add(EK.RULE_AND, 1540, 200)
+    laudo = add(EK.FUNCTION, 1680, 90, "Emitir laudo", duration="CONST(5)")
+    limpar = add(EK.FUNCTION, 1680, 310, "Limpar e pintar", duration="TRIA(10; 15; 20)")
+    reune = add(EK.RULE_AND, 1820, 200)
+    transp = add(EK.MOVEMENT, 1970, 200, "Transportar à expedição", duration="UNIF(3; 6)")
+    empilh = add(EK.RESOURCE, 1970, 320, "Empilhadeira", capacity=1)
+    con_a1 = add(EK.CONNECTOR, 2110, 200)
+    # --- expedição (continua na linha de baixo pela conexão A)
+    con_a2 = add(EK.CONNECTOR, 1250, 700)
+    eou = add(EK.RULE_ANDOR, 1400, 700)
+    doca = add(EK.RULE_OR, 1540, 640)
+    doca.params.update(decision="visual", criterion="doca livre")
+    doca1 = add(EK.EXIT, 1700, 580, "Doca 1")
+    doca2 = add(EK.EXIT, 1700, 700, "Doca 2")
+    pesquisa = add(EK.FUNCTION, 1540, 800, "Enviar pesquisa", duration="CONST(2)")
+    contato = add(EK.EXIT, 1700, 800, "Cliente contatado")
+    for a, b in ((bomba, q_insp), (q_insp, insp), (insp, ou_tipo), (q_bomba, junta), (kit, q_kit),
+                 (q_kit, junta), (junta, montada), (montada, complexo), (simples, teste),
+                 (complexo, teste), (teste, ou_teste), (divide, laudo), (divide, limpar),
+                 (laudo, reune), (limpar, reune), (reune, transp), (transp, con_a1),
+                 (con_a2, eou), (doca, doca1), (doca, doca2), (pesquisa, contato)):
+        flow(a, b)
+    flow(ou_tipo, simples).condition = "tipo == 1 e urgente == 0"
+    flow(ou_tipo, q_bomba).condition = "senão"
+    flow(ou_teste, divide).probability = 0.85
+    flow(ou_teste, retrab).probability = 0.15
+    flow(retrab, teste)
+    flow(eou, doca).probability = 1.0
+    flow(eou, pesquisa).probability = 0.3
+    for r, f in ((tecnico, insp), (mecanico, complexo), (bancada, teste),
+                 (empilh, transp)):
+        m.add_connection(CK.RESOURCE, r.id, f.id)
+    m.add_connection(CK.CONTROL, proc.id, insp.id)
+    m.add_connection(CK.NOTE, nota.id, kit.id).head_end = True   # ponta escolhida na seta
+    return m
+
+
 def examples_dir() -> Path:
     """Pasta 'examples' (no código-fonte ou dentro do executável)."""
     base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
     return base / "examples"
+
+
+def manual_path() -> Path | None:
+    """Manual de uso (HTML) no código-fonte ou dentro do executável."""
+    base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
+    p = base / "docs" / "manual" / "manual.html"
+    return p if p.exists() else None
 
 
 def jaamsim_examples() -> dict[str, list[Path]]:
@@ -110,4 +193,5 @@ def jaamsim_examples() -> dict[str, list[Path]]:
 
 ALL = {"Célula de usinagem com inspeção": usinagem_inspecao,
        "Montagem com junção E": montagem,
-       "Triagem de pedidos por atributos": triagem_atributos}
+       "Triagem de pedidos por atributos": triagem_atributos,
+       "Oficina de manutenção de bombas (manual)": oficina_bombas}

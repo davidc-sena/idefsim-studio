@@ -246,8 +246,10 @@ class PropertiesPanel(QScrollArea):
                                   set_param("criterion", "Critério"),
                                   "Texto mostrado no diagrama, ex.: menor fila, turno, prioridade.")
                 crit.setPlaceholderText("ex.: menor fila")
-                self.form.addRow(QLabel("<i>Apenas documenta a decisão: na simulação as saídas "
-                                        "são sorteadas com chances iguais.</i>"))
+                note = QLabel("<i>Apenas documenta a decisão: na simulação as saídas "
+                              "são sorteadas com chances iguais.</i>")
+                note.setWordWrap(True)
+                self.form.addRow(note)
 
         self._text("Descrição", e.description, set_desc)
         outs = model.outgoing(e.id)

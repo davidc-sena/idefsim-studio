@@ -142,7 +142,7 @@ def paint_splash(p: QPainter, status: str | None = "Carregando…") -> None:
     # rodapé
     p.setPen(MUTED)
     p.setFont(font(8.5))
-    left = status if status else f"© {YEAR} {AUTHOR}"
+    left = status if status else f"© {YEAR} · {INSTITUTION}"   # curto: não encosta no texto à direita
     p.drawText(QRectF(x0, H - 44, W - x0 - 24, 44), Qt.AlignLeft | Qt.AlignVCenter, left)
     p.drawText(QRectF(x0, H - 44, W - x0 - 24, 44), Qt.AlignRight | Qt.AlignVCenter,
                "Notação: Leal, Almeida e Montevechi (2008)")

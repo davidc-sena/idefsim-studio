@@ -1,0 +1,676 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Oficina de manutenção de bombas",
+  "author": "Prof. David Custódio de Sena",
+  "version": "1.0",
+  "description": "Bombas com defeito chegam à oficina, esperam e são inspecionadas. As simples e não urgentes têm reparo simples; as demais aguardam um kit de peças, que é montado na bomba (reparo complexo). Todas são testadas (15% passam por retrabalho e voltam ao teste), recebem laudo e limpeza em paralelo, são transportadas à expedição e saem por uma das docas; 30% dos clientes recebem pesquisa de satisfação.",
+  "settings": {
+    "time_unit": "min",
+    "duration": 2400,
+    "warmup": 240,
+    "replications": 10,
+    "seed": 2026
+  },
+  "elements": [
+    {
+      "id": "eb1f1b70d4",
+      "kind": "entity",
+      "name": "Bomba com defeito",
+      "x": 60,
+      "y": 200,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(30)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "tipo",
+            "value": "DISC(1; 0,6; 2; 0,4)"
+          },
+          {
+            "name": "urgente",
+            "value": "DISC(0; 0,8; 1; 0,2)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bb0eaf025f",
+      "kind": "function",
+      "name": "Aguardar inspeção",
+      "x": 220,
+      "y": 200,
+      "description": "",
+      "params": {
+        "duration": "TRIA(4, 5, 6)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "fafe26bb6a",
+      "kind": "function",
+      "name": "Inspecionar",
+      "x": 390,
+      "y": 200,
+      "description": "",
+      "params": {
+        "duration": "TRIA(10; 15; 25)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "b59c7eadb5",
+      "kind": "resource",
+      "name": "Técnico",
+      "x": 390,
+      "y": 320,
+      "description": "",
+      "params": {
+        "capacity": 2
+      }
+    },
+    {
+      "id": "b27af546ae",
+      "kind": "control",
+      "name": "Procedimento de inspeção",
+      "x": 390,
+      "y": 80,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "d4112701bb",
+      "kind": "rule_or",
+      "name": "X",
+      "x": 540,
+      "y": 200,
+      "description": "",
+      "params": {
+        "decision": "condition",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "a5de090046",
+      "kind": "function",
+      "name": "Reparo simples",
+      "x": 700,
+      "y": 90,
+      "description": "",
+      "params": {
+        "duration": "UNIF(20; 40)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "615ca8ebad",
+      "kind": "function",
+      "name": "Aguardar kit",
+      "x": 700,
+      "y": 330,
+      "description": "",
+      "params": {
+        "duration": "TRIA(4, 5, 6)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "86c12214c4",
+      "kind": "entity",
+      "name": "Kit de peças",
+      "x": 540,
+      "y": 520,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(55)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "bottom",
+        "attributes": []
+      }
+    },
+    {
+      "id": "d80f3c364d",
+      "kind": "function",
+      "name": "Aguardar bomba",
+      "x": 700,
+      "y": 520,
+      "description": "",
+      "params": {
+        "duration": "TRIA(4, 5, 6)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "740a7a9805",
+      "kind": "rule_and",
+      "name": "&",
+      "x": 850,
+      "y": 425,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "729a0e2d2a",
+      "kind": "entity",
+      "name": "Bomba com kit",
+      "x": 950,
+      "y": 425,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": false,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "ae8a420229",
+      "kind": "function",
+      "name": "Reparo complexo",
+      "x": 1090,
+      "y": 425,
+      "description": "",
+      "params": {
+        "duration": "GAMM(60; 3)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "24ce794a3f",
+      "kind": "resource",
+      "name": "Mecânico",
+      "x": 1090,
+      "y": 545,
+      "description": "",
+      "params": {
+        "capacity": 2
+      }
+    },
+    {
+      "id": "936351ca1a",
+      "kind": "note",
+      "name": "Kits vêm do almoxarifado central",
+      "x": 300,
+      "y": 520,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "19d5727700",
+      "kind": "function",
+      "name": "Testar",
+      "x": 1250,
+      "y": 200,
+      "description": "",
+      "params": {
+        "duration": "NORM(10; 2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "ab4b824bd5",
+      "kind": "resource",
+      "name": "Bancada de teste",
+      "x": 1250,
+      "y": 320,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "00573976db",
+      "kind": "rule_or",
+      "name": "X",
+      "x": 1400,
+      "y": 200,
+      "description": "",
+      "params": {
+        "decision": "probability",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "dc5555d164",
+      "kind": "function",
+      "name": "Retrabalhar",
+      "x": 1400,
+      "y": 340,
+      "description": "",
+      "params": {
+        "duration": "UNIF(10; 20)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "d637fb4852",
+      "kind": "rule_and",
+      "name": "&",
+      "x": 1540,
+      "y": 200,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "145a6b09f3",
+      "kind": "function",
+      "name": "Emitir laudo",
+      "x": 1680,
+      "y": 90,
+      "description": "",
+      "params": {
+        "duration": "CONST(5)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "d8a08cf45c",
+      "kind": "function",
+      "name": "Limpar e pintar",
+      "x": 1680,
+      "y": 310,
+      "description": "",
+      "params": {
+        "duration": "TRIA(10; 15; 20)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "8f4a2c08bf",
+      "kind": "rule_and",
+      "name": "&",
+      "x": 1820,
+      "y": 200,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "801230b41a",
+      "kind": "movement",
+      "name": "Transportar à expedição",
+      "x": 1970,
+      "y": 200,
+      "description": "",
+      "params": {
+        "duration": "UNIF(3; 6)"
+      }
+    },
+    {
+      "id": "0b6ef103cb",
+      "kind": "resource",
+      "name": "Empilhadeira",
+      "x": 1970,
+      "y": 320,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "d9fe6e9dd8",
+      "kind": "connector",
+      "name": "A",
+      "x": 2110,
+      "y": 200,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "205882ced3",
+      "kind": "connector",
+      "name": "A",
+      "x": 1250,
+      "y": 700,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "67183657c3",
+      "kind": "rule_andor",
+      "name": "O",
+      "x": 1400,
+      "y": 700,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "c7a0ab386c",
+      "kind": "rule_or",
+      "name": "X",
+      "x": 1540,
+      "y": 640,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "doca livre"
+      }
+    },
+    {
+      "id": "eb2c26a524",
+      "kind": "exit",
+      "name": "Doca 1",
+      "x": 1700,
+      "y": 580,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "c7baa9d086",
+      "kind": "exit",
+      "name": "Doca 2",
+      "x": 1700,
+      "y": 700,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "6b010c75ab",
+      "kind": "function",
+      "name": "Enviar pesquisa",
+      "x": 1540,
+      "y": 800,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "39ef2769ec",
+      "kind": "exit",
+      "name": "Cliente contatado",
+      "x": 1700,
+      "y": 800,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "8d78bf28f0",
+      "kind": "flow",
+      "source": "eb1f1b70d4",
+      "target": "bb0eaf025f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cf74544a7a",
+      "kind": "flow",
+      "source": "bb0eaf025f",
+      "target": "fafe26bb6a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2511fd7fa7",
+      "kind": "flow",
+      "source": "fafe26bb6a",
+      "target": "d4112701bb",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cfcb3444d2",
+      "kind": "flow",
+      "source": "615ca8ebad",
+      "target": "740a7a9805",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cf4e676410",
+      "kind": "flow",
+      "source": "86c12214c4",
+      "target": "d80f3c364d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b459554cc5",
+      "kind": "flow",
+      "source": "d80f3c364d",
+      "target": "740a7a9805",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "870ba55fd9",
+      "kind": "flow",
+      "source": "740a7a9805",
+      "target": "729a0e2d2a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ff09068d3b",
+      "kind": "flow",
+      "source": "729a0e2d2a",
+      "target": "ae8a420229",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "610c86536d",
+      "kind": "flow",
+      "source": "a5de090046",
+      "target": "19d5727700",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "76a4e9bcf3",
+      "kind": "flow",
+      "source": "ae8a420229",
+      "target": "19d5727700",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "0caa828bef",
+      "kind": "flow",
+      "source": "19d5727700",
+      "target": "00573976db",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e63e049041",
+      "kind": "flow",
+      "source": "d637fb4852",
+      "target": "145a6b09f3",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f725bbecf3",
+      "kind": "flow",
+      "source": "d637fb4852",
+      "target": "d8a08cf45c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "869db4b236",
+      "kind": "flow",
+      "source": "145a6b09f3",
+      "target": "8f4a2c08bf",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "dee776d58b",
+      "kind": "flow",
+      "source": "d8a08cf45c",
+      "target": "8f4a2c08bf",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3d5b330613",
+      "kind": "flow",
+      "source": "8f4a2c08bf",
+      "target": "801230b41a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e7d2293cd6",
+      "kind": "flow",
+      "source": "801230b41a",
+      "target": "d9fe6e9dd8",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3e04b3d448",
+      "kind": "flow",
+      "source": "205882ced3",
+      "target": "67183657c3",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7843c71b97",
+      "kind": "flow",
+      "source": "c7a0ab386c",
+      "target": "eb2c26a524",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "17ac5f8994",
+      "kind": "flow",
+      "source": "c7a0ab386c",
+      "target": "c7baa9d086",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a49d6cc2d2",
+      "kind": "flow",
+      "source": "6b010c75ab",
+      "target": "39ef2769ec",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a62ac038a4",
+      "kind": "flow",
+      "source": "d4112701bb",
+      "target": "a5de090046",
+      "label": "",
+      "probability": 1.0,
+      "condition": "tipo == 1 e urgente == 0"
+    },
+    {
+      "id": "b6e287eb5d",
+      "kind": "flow",
+      "source": "d4112701bb",
+      "target": "615ca8ebad",
+      "label": "",
+      "probability": 1.0,
+      "condition": "senão"
+    },
+    {
+      "id": "6458a56dae",
+      "kind": "flow",
+      "source": "00573976db",
+      "target": "d637fb4852",
+      "label": "",
+      "probability": 0.85
+    },
+    {
+      "id": "618cc3b9d1",
+      "kind": "flow",
+      "source": "00573976db",
+      "target": "dc5555d164",
+      "label": "",
+      "probability": 0.15
+    },
+    {
+      "id": "e16d8a83e0",
+      "kind": "flow",
+      "source": "dc5555d164",
+      "target": "19d5727700",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2b5011a3d3",
+      "kind": "flow",
+      "source": "67183657c3",
+      "target": "c7a0ab386c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "08e83a7f79",
+      "kind": "flow",
+      "source": "67183657c3",
+      "target": "6b010c75ab",
+      "label": "",
+      "probability": 0.3
+    },
+    {
+      "id": "4bbdf8d7c2",
+      "kind": "resource",
+      "source": "b59c7eadb5",
+      "target": "fafe26bb6a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "63626e107a",
+      "kind": "resource",
+      "source": "24ce794a3f",
+      "target": "ae8a420229",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6764f7dc20",
+      "kind": "resource",
+      "source": "ab4b824bd5",
+      "target": "19d5727700",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "c8dbb458a7",
+      "kind": "resource",
+      "source": "0b6ef103cb",
+      "target": "801230b41a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a91d9656f5",
+      "kind": "control",
+      "source": "b27af546ae",
+      "target": "fafe26bb6a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "57ec2b0be9",
+      "kind": "note",
+      "source": "936351ca1a",
+      "target": "86c12214c4",
+      "label": "",
+      "probability": 1.0,
+      "head_end": true
+    }
+  ]
+}

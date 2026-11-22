@@ -225,3 +225,25 @@ def test_import_jaamsim_from_gui(app, tmp_path, monkeypatch):
     assert any("Exemplos do JaamSim" in a.text() for a in win.menuBar().findChildren(type(win.a_new)))
     win.dirty = False
     win.close()
+
+
+def test_manual_and_complete_example(app, monkeypatch):
+    from PySide6.QtGui import QDesktopServices
+    from idefsim.examples import manual_path, oficina_bombas
+    from idefsim.model import ElementKind as EK2
+    from idefsim.validation import has_errors, validate
+    p = manual_path()
+    assert p is not None and (p.parent / "Manual_IDEF-SIM_Studio.pdf").exists()
+    opened = []
+    monkeypatch.setattr(QDesktopServices, "openUrl", lambda url: opened.append(url) or True)
+    win = MainWindow()
+    win.open_manual()
+    assert opened and opened[0].toLocalFile().endswith("manual.html")
+    # o exemplo do manual usa todos os símbolos e funções
+    m = oficina_bombas()
+    assert not has_errors(validate(m))
+    assert {e.kind for e in m.elements.values()} == set(EK2)
+    assert {m.decision_of(e.id) for e in m.by_kind(EK2.RULE_OR)} == {"probability", "condition", "visual"}
+    assert any(m.is_queue(e.id) for e in m.elements.values())
+    win.dirty = False
+    win.close()

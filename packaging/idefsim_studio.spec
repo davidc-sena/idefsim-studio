@@ -31,7 +31,8 @@ a = Analysis(
     [str(ROOT / "main.py")],
     pathex=[str(ROOT)],
     datas=[(str(ROOT / "idefsim" / "resources"), "idefsim/resources"),
-           (str(ROOT / "examples"), "examples")],
+           (str(ROOT / "examples"), "examples"),
+           (str(ROOT / "docs" / "manual"), "docs/manual")],
     hiddenimports=["PySide6.QtSvg"],
     excludes=QT_EXCLUDES + ["tkinter", "pytest"],
     noarchive=False,
@@ -55,7 +56,7 @@ if sys.platform == "darwin":
         icon=ICON,
         bundle_identifier="io.github.idefsim-studio",
         info_plist={
-            "CFBundleShortVersionString": "0.9.0",
+            "CFBundleShortVersionString": "1.0.0",
             "NSHighResolutionCapable": True,
             "CFBundleDocumentTypes": [{
                 "CFBundleTypeName": "Modelo IDEF-SIM",

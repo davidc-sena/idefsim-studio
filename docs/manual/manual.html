@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDEF-SIM Studio — Manual de uso</title>
+<style>
+@font-face { font-family: Inter; src: url(../../idefsim/resources/fonts/Inter-Regular.otf); font-weight: 400; }
+@font-face { font-family: Inter; src: url(../../idefsim/resources/fonts/Inter-Medium.otf); font-weight: 500; }
+@font-face { font-family: Inter; src: url(../../idefsim/resources/fonts/Inter-SemiBold.otf); font-weight: 600; }
+@font-face { font-family: Inter; src: url(../../idefsim/resources/fonts/Inter-Bold.otf); font-weight: 700; }
+:root { --ink:#1d2433; --muted:#5b6475; --blue:#1b4f9c; --line:#dde3ec; --soft:#f3f6fb; --amber:#fff6d6; }
+* { box-sizing: border-box; }
+body { font-family: Inter, "Segoe UI", Arial, sans-serif; color: var(--ink); line-height: 1.55;
+       font-size: 10.5pt; margin: 0 auto; max-width: 900px; padding: 24px 28px 60px; background: #fff; }
+h1 { font-size: 22pt; margin: 0 0 6px; letter-spacing: -0.3px; }
+h2 { font-size: 16pt; color: var(--blue); border-bottom: 2px solid var(--blue); padding-bottom: 4px;
+     margin-top: 34px; break-after: avoid; }
+h3 { font-size: 12.5pt; margin: 22px 0 6px; break-after: avoid; }
+h4 { font-size: 11pt; margin: 16px 0 4px; color: var(--muted); break-after: avoid; }
+p, li { orphans: 3; widows: 3; }
+a { color: var(--blue); }
+code, kbd, pre { font-family: "DejaVu Sans Mono", Consolas, monospace; font-size: 9pt; }
+code { background: var(--soft); padding: 1px 4px; border-radius: 3px; }
+kbd { border: 1px solid #b8c0cc; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px;
+      background: #fafbfc; font-size: 8.5pt; }
+pre { background: #0f1b2d; color: #e3eaf6; padding: 12px 14px; border-radius: 6px; overflow-x: auto;
+      font-size: 8.3pt; line-height: 1.45; break-inside: avoid; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 9.5pt; break-inside: auto; }
+th, td { border: 1px solid var(--line); padding: 5px 8px; text-align: left; vertical-align: top; }
+th { background: var(--soft); font-weight: 600; }
+tr { break-inside: avoid; }
+td.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+figure { margin: 14px 0 18px; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; border: 1px solid var(--line); border-radius: 4px; }
+figure.small img { max-width: 360px; }
+figure.mid img { max-width: 560px; }
+figure.side { float: right; width: 150px; margin: 0 0 6px 16px; }
+figure.side img { max-height: 290px; width: auto; }
+.clear { clear: both; }
+figcaption { font-size: 9pt; color: var(--muted); margin-top: 6px; }
+.note, .tip, .warn { border-left: 4px solid var(--blue); background: var(--soft); padding: 8px 12px;
+                     margin: 12px 0; border-radius: 0 6px 6px 0; break-inside: avoid; }
+.tip { border-color: #2e7d32; background: #eef7ef; }
+.warn { border-color: #b26a00; background: #fff5e6; }
+.note b:first-child, .tip b:first-child, .warn b:first-child { display: block; margin-bottom: 2px; }
+.cover { text-align: center; padding: 30px 0 10px; break-after: page; }
+.cover img { max-width: 520px; width: 100%; }
+.cover .sub { color: var(--muted); font-size: 12pt; margin-top: 10px; }
+.toc { columns: 2; column-gap: 32px; font-size: 10pt; }
+.toc a { text-decoration: none; color: var(--ink); }
+.toc li { margin: 2px 0; break-inside: avoid; }
+.steps { counter-reset: s; list-style: none; padding-left: 0; }
+.steps > li { counter-increment: s; position: relative; padding-left: 36px; margin: 10px 0; }
+.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 24px; height: 24px;
+       border-radius: 50%; background: var(--blue); color: #fff; font-weight: 600; font-size: 9pt;
+       display: flex; align-items: center; justify-content: center; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+.chip { display: inline-block; background: var(--amber); border: 1px solid #ecd58b; border-radius: 10px;
+        padding: 0 8px; font-size: 8.5pt; }
+.pagebreak { break-before: page; }
+@media print { body { padding: 0; max-width: none; } a { color: var(--ink); text-decoration: none; } }
+@media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } .toc { columns: 1; } body { padding: 16px; } }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <img src="img/abertura.png" alt="Janela de abertura do IDEF-SIM Studio">
+  <h1 style="margin-top:28px">Manual de uso</h1>
+  <div class="sub">IDEF-SIM Studio 1.0.0 — modelagem conceitual IDEF-SIM e simulação a eventos discretos</div>
+  <div class="sub">Prof. David Custódio de Sena · UFERSA · sena@ufersa.edu.br</div>
+</section>
+
+<h2 id="sumario">Sumário</h2>
+<ol class="toc">
+  <li><a href="#intro">O que é o IDEF-SIM Studio</a></li>
+  <li><a href="#instalar">Instalação</a></li>
+  <li><a href="#tela">Conhecendo a janela</a></li>
+  <li><a href="#exemplo">Exemplo completo, passo a passo</a></li>
+  <li><a href="#simbolos">Símbolos IDEF-SIM (referência)</a></li>
+  <li><a href="#tempos">Tempos e distribuições</a></li>
+  <li><a href="#atributos">Atributos e condições</a></li>
+  <li><a href="#regras">Regras E, OU e E/OU</a></li>
+  <li><a href="#filas">Funções que representam filas</a></li>
+  <li><a href="#setas">Ligações e setas</a></li>
+  <li><a href="#validar">Validação</a></li>
+  <li><a href="#simular">Simulação e resultados</a></li>
+  <li><a href="#saidas">Imprimir e exportar</a></li>
+  <li><a href="#jaamsim">JaamSim: exportar e importar</a></li>
+  <li><a href="#arquivos">Arquivos e exemplos</a></li>
+  <li><a href="#atalhos">Atalhos de teclado</a></li>
+  <li><a href="#duvidas">Dúvidas frequentes</a></li>
+  <li><a href="#creditos">Créditos e referências</a></li>
+</ol>
+
+<h2 id="intro">1. O que é o IDEF-SIM Studio</h2>
+<p>O IDEF-SIM Studio é um programa para <b>criar, documentar, validar e simular modelos conceituais</b>
+na técnica <b>IDEF-SIM</b> (Leal, Almeida e Montevechi, 2008), usada em projetos de simulação a eventos
+discretos para descrever o sistema antes de construir o modelo computacional.</p>
+<p>Com ele você:</p>
+<ul>
+  <li>desenha o diagrama IDEF-SIM com os símbolos da técnica;</li>
+  <li>informa os dados de cada elemento: chegadas, tempos, capacidades, atributos e regras de decisão;</li>
+  <li>verifica a consistência do modelo (<b>Validação</b>);</li>
+  <li>simula o modelo com replicações e intervalo de confiança, para conferir a lógica e ter uma primeira estimativa;</li>
+  <li>imprime e exporta o diagrama e gera a documentação do modelo;</li>
+  <li>gera um <b>modelo básico do JaamSim</b> a partir do diagrama e <b>importa modelos do JaamSim</b> como diagramas IDEF-SIM.</li>
+</ul>
+<div class="note"><b>Modelo conceitual primeiro</b>A simulação interna serve para testar a lógica do modelo
+conceitual. Para estudos completos (animação, turnos, paradas e lógicas complexas), exporte para o
+JaamSim e continue lá.</div>
+
+<h2 id="instalar">2. Instalação</h2>
+<p>Baixe o arquivo do seu sistema na página de versões:
+<a href="https://github.com/davidc-sena/idefsim-studio/releases/latest">github.com/davidc-sena/idefsim-studio/releases/latest</a>.</p>
+<table>
+  <tr><th>Sistema</th><th>Arquivo</th><th>Como instalar</th></tr>
+  <tr><td>Windows 10/11 (64 bits)</td><td><code>IDEF-SIM-Studio-windows-x64.zip</code></td>
+      <td>Extraia a pasta e execute <code>IDEF-SIM Studio.exe</code>.</td></tr>
+  <tr><td>Mac com chip Apple (M1–M4)</td><td><code>IDEF-SIM-Studio-macos-arm64.dmg</code></td>
+      <td>Abra o <code>.dmg</code> e arraste o app para <i>Aplicativos</i>.</td></tr>
+  <tr><td>Mac Intel</td><td><code>IDEF-SIM-Studio-macos-x64.dmg</code></td><td>Igual ao anterior.</td></tr>
+  <tr><td>Linux 64 bits</td><td><code>IDEF-SIM-Studio-linux-x64.tar.gz</code></td>
+      <td><code>tar -xzf</code> no arquivo e execute <code>IDEF-SIM Studio/IDEF-SIM Studio</code>.</td></tr>
+</table>
+<div class="warn"><b>Aviso de segurança na primeira execução</b>O programa não tem assinatura digital paga.
+No <b>Windows</b>, clique em <i>Mais informações → Executar assim mesmo</i>. No <b>Mac</b>, clique com o botão
+direito no app → <i>Abrir</i> → <i>Abrir</i>.</div>
+
+<h2 id="tela" class="pagebreak">3. Conhecendo a janela</h2>
+<figure><img src="img/janela.png" alt="Janela principal com o exemplo da oficina">
+<figcaption>Figura 1 — Janela principal com o exemplo completo aberto.</figcaption></figure>
+<figure class="side"><img src="img/paleta.png" alt="Paleta de símbolos"><figcaption>Figura 2 — Paleta.</figcaption></figure>
+<ol>
+  <li><b>Menus e barra de ferramentas</b> (topo): arquivos, edição, validação, simulação, impressão e JaamSim.</li>
+  <li><b>Paleta</b> (esquerda): os símbolos IDEF-SIM e os tipos de ligação.</li>
+  <li><b>Diagrama</b> (centro): a área de desenho, com grade.</li>
+  <li><b>Propriedades</b> (direita): os dados do elemento selecionado ou, sem seleção, do modelo.</li>
+  <li><b>Validação</b> (abaixo): erros, avisos e informações do modelo, atualizados a cada alteração.</li>
+</ol>
+<p><b>Como desenhar:</b> clique num símbolo da paleta e depois no diagrama. Com <kbd>Shift</kbd>, a
+ferramenta continua ativa para inserir vários. <kbd>Esc</kbd> ou o botão direito voltam a <i>Selecionar</i>.</p>
+<p><b>Como ligar:</b> escolha a ligação na paleta, clique na origem e depois no destino.</p>
+<p><b>Zoom:</b> <kbd>Ctrl</kbd> + roda do mouse, ou <i>Exibir → Ajustar à janela</i> (<kbd>Ctrl</kbd>+<kbd>0</kbd>).</p>
+<div class="clear"></div>
+
+<h2 id="exemplo" class="pagebreak">4. Exemplo completo, passo a passo</h2>
+<p>O exemplo <b>Oficina de manutenção de bombas</b> usa todos os símbolos e funções do programa. Abra-o em
+<i>Arquivo → Abrir exemplo → Oficina de manutenção de bombas (manual)</i>, ou construa-o seguindo os passos.</p>
+<figure><img src="img/exemplo_diagrama.png" alt="Diagrama IDEF-SIM da oficina">
+<figcaption>Figura 3 — Diagrama IDEF-SIM do exemplo.</figcaption></figure>
+
+<h3>O sistema</h3>
+<p>Bombas com defeito chegam à oficina e aguardam a inspeção, feita por dois técnicos segundo um procedimento.
+As bombas <b>do tipo 1 e não urgentes</b> recebem reparo simples. As demais esperam um <b>kit de peças</b>,
+que chega do almoxarifado. Bomba e kit são <b>montados</b> e a bomba com kit passa pelo reparo complexo, feito
+por dois mecânicos. Todas as bombas são testadas numa bancada: 15% vão para retrabalho e voltam ao teste.
+As aprovadas recebem <b>laudo e limpeza ao mesmo tempo</b> e são levadas à expedição por uma empilhadeira.
+Lá, saem por uma das duas docas (a que estiver livre), e 30% dos clientes também recebem uma pesquisa de
+satisfação.</p>
+
+<h3>Onde cada função aparece</h3>
+<table>
+  <tr><th>Função do programa</th><th>No exemplo</th><th>Capítulo</th></tr>
+  <tr><td>Entidade com chegada externa (lado configurável)</td><td>Bomba com defeito (esquerda); Kit de peças (por baixo)</td><td><a href="#simbolos">5</a></td></tr>
+  <tr><td>Atributos da entidade</td><td><code>tipo</code> e <code>urgente</code> da bomba</td><td><a href="#atributos">7</a></td></tr>
+  <tr><td>Entidade de transformação</td><td>Bomba com kit</td><td><a href="#simbolos">5</a></td></tr>
+  <tr><td>Distribuições de tempo</td><td>Exponencial, Triangular, Uniforme, Gama, Normal e Constante</td><td><a href="#tempos">6</a></td></tr>
+  <tr><td>Função que representa fila</td><td>Aguardar inspeção; Aguardar kit e Aguardar bomba (antes do &amp;)</td><td><a href="#filas">9</a></td></tr>
+  <tr><td>Recursos e Controle</td><td>Técnico, Mecânico, Bancada de teste, Empilhadeira; Procedimento de inspeção</td><td><a href="#simbolos">5</a></td></tr>
+  <tr><td>Movimentação</td><td>Transportar à expedição</td><td><a href="#simbolos">5</a></td></tr>
+  <tr><td>Regra OU por atributo</td><td><code>tipo == 1 e urgente == 0</code> / <code>senão</code></td><td><a href="#regras">8</a></td></tr>
+  <tr><td>Regra OU por probabilidade</td><td>85% aprovadas / 15% retrabalho</td><td><a href="#regras">8</a></td></tr>
+  <tr><td>Regra OU apenas visual</td><td>Escolha da doca: “doca livre”</td><td><a href="#regras">8</a></td></tr>
+  <tr><td>Regra E: montagem, divisão e combinação</td><td>Bomba + kit; Laudo ∥ Limpeza</td><td><a href="#regras">8</a></td></tr>
+  <tr><td>Regra E/OU</td><td>Expedir (100%) e Pesquisa (30%)</td><td><a href="#regras">8</a></td></tr>
+  <tr><td>Conexão com outra figura</td><td>A → A (continua o diagrama na linha de baixo)</td><td><a href="#simbolos">5</a></td></tr>
+  <tr><td>Informação explicativa e ponta de seta</td><td>Nota sobre o almoxarifado, ligada com ponta</td><td><a href="#setas">10</a></td></tr>
+  <tr><td>Validação, simulação, impressão, JaamSim</td><td>Capítulos 11 a 14</td><td><a href="#validar">11–14</a></td></tr>
+</table>
+
+<h3>Construindo o modelo</h3>
+<ol class="steps">
+  <li><b>Propriedades do modelo.</b> Sem nada selecionado, preencha nome, autor e descrição. Em
+      <i>Simulação</i>, use unidade <code>min</code>, duração 2400, aquecimento 240, 10 replicações e semente 2026.</li>
+  <li><b>Chegada das bombas.</b> Insira uma <i>Entidade</i> (<kbd>E</kbd>) chamada “Bomba com defeito”.
+      Ela já vem com o <i>fluxo de entrada no sistema</i> (seta com dois traços). Em <i>Intervalo entre
+      chegadas</i>, escolha <b>Exponencial</b> com média 30.</li>
+  <li><b>Atributos.</b> Ainda na entidade, clique em <i>+ Adicionar atributo</i> duas vezes:
+      <code>tipo</code> = <b>Discreta</b> (valores <code>1 2</code>, probabilidades <code>0,6 0,4</code>) e
+      <code>urgente</code> = <b>Discreta</b> (valores <code>0 1</code>, probabilidades <code>0,8 0,2</code>).</li>
+  <li><b>Fila e inspeção.</b> Insira a Função “Aguardar inspeção” e marque <i>Representa uma fila</i>.
+      Depois, a Função “Inspecionar” com tempo <b>Triangular</b> (10, 15, 25). Abaixo dela, o Recurso
+      “Técnico” com capacidade 2. Acima, o Controle “Procedimento de inspeção”. Ligue-os com <i>Ligação de
+      recurso</i> e <i>Ligação de controle</i>.</li>
+  <li><b>Decisão por atributo.</b> Insira uma <i>Regra OU</i> e, em <i>Decisão</i>, escolha <b>Atributo da
+      entidade (condição)</b>. Ligue-a a “Reparo simples” (<b>Uniforme</b> 20–40) com a condição
+      <code>tipo == 1 e urgente == 0</code>, e a “Aguardar kit” (função-fila) com <code>senão</code>.</li>
+  <li><b>Kit e montagem.</b> Insira a Entidade “Kit de peças” (Exponencial 55). Em <i>Seta vem da</i>,
+      escolha <b>Baixo</b>. Ligue-a à função-fila “Aguardar bomba”. Ligue as duas filas a uma <i>Regra E</i>
+      e a regra a uma nova Entidade, “Bomba com kit” (a <b>transformação</b>). Depois, “Reparo complexo”
+      (<b>Gama</b>, média 60, forma 3) com o Recurso “Mecânico” (capacidade 2).</li>
+  <li><b>Teste e retrabalho.</b> “Reparo simples” e “Reparo complexo” seguem para “Testar” (<b>Normal</b> 10;
+      2) com a “Bancada de teste”. Uma <i>Regra OU</i> por <b>probabilidade</b> envia 85% adiante e 15% para
+      “Retrabalhar” (Uniforme 10–20), que volta ao teste.</li>
+  <li><b>Atividades em paralelo.</b> Uma <i>Regra E</i> com duas saídas (divisão) leva a “Emitir laudo”
+      (<b>Constante</b> 5) e “Limpar e pintar” (Triangular 10, 15, 20). Outra <i>Regra E</i> junta os dois
+      ramos (combinação).</li>
+  <li><b>Transporte e conexão.</b> Insira a <i>Movimentação</i> “Transportar à expedição” (Uniforme 3–6),
+      com o Recurso “Empilhadeira”, e uma <i>Conexão</i>: ela recebe a letra <b>A</b> automaticamente. Insira a
+      segunda Conexão na linha de baixo: ela completa o par e também recebe <b>A</b>.</li>
+  <li><b>Expedição.</b> Da conexão, uma <i>Regra E/OU</i> segue para a expedição (100%) e para “Enviar
+      pesquisa” (30%). A expedição é uma <i>Regra OU</i> <b>apenas visual</b>, com critério “doca livre”, até os
+      Pontos finais “Doca 1” e “Doca 2”. A pesquisa termina em “Cliente contatado”.</li>
+  <li><b>Nota.</b> Insira uma <i>Informação explicativa</i> (“Kits vêm do almoxarifado central”) e ligue-a ao
+      Kit com <i>Ligação de nota</i>. Na seta, escolha <i>Fim da seta: Com ponta</i>.</li>
+  <li><b>Valide e simule.</b> <kbd>F7</kbd> mostra só um aviso, esperado: a escolha da doca é apenas
+      visual. <kbd>F5</kbd> simula (capítulo 12).</li>
+</ol>
+
+<h3>Resultados do exemplo</h3>
+<p>Com 2400 min de simulação, aquecimento de 240 min e 10 replicações, a simulação produziu, entre outros, os indicadores abaixo (média e meia-largura do
+intervalo de confiança de 95%):</p>
+<table><thead><tr><th>Categoria</th><th>Objeto</th><th>Indicador</th><th>Média</th><th>IC 95%</th></tr></thead><tbody><tr><td>Sistema</td><td>Global</td><td>Entidades que saíram</td><td class=n>86,50</td><td class=n>± 6,51</td></tr><tr><td>Sistema</td><td>Global</td><td>WIP médio</td><td class=n>11,32</td><td class=n>± 3,55</td></tr><tr><td>Sistema</td><td>Global</td><td>Tempo médio no sistema</td><td class=n>280,62</td><td class=n>± 76,61</td></tr><tr><td>Entidade</td><td>Bomba com defeito</td><td>Saídas</td><td class=n>43,70</td><td class=n>± 3,63</td></tr><tr><td>Entidade</td><td>Bomba com kit</td><td>Saídas</td><td class=n>42,80</td><td class=n>± 5,32</td></tr><tr><td>Fila</td><td>Aguardar inspeção</td><td>Tempo médio em fila</td><td class=n>0,68</td><td class=n>± 0,33</td></tr><tr><td>Fila</td><td>Aguardar inspeção</td><td>Fila máxima</td><td class=n>1,70</td><td class=n>± 0,68</td></tr><tr><td>Fila</td><td>Aguardar bomba</td><td>Tempo médio em fila</td><td class=n>283,72</td><td class=n>± 185,76</td></tr><tr><td>Fila</td><td>Aguardar bomba</td><td>Fila máxima</td><td class=n>11,50</td><td class=n>± 5,04</td></tr><tr><td>Fila</td><td>Aguardar kit</td><td>Tempo médio em fila</td><td class=n>93,96</td><td class=n>± 118,54</td></tr><tr><td>Fila</td><td>Aguardar kit</td><td>Fila máxima</td><td class=n>5,90</td><td class=n>± 5,03</td></tr><tr><td>Recurso</td><td>Técnico</td><td>Utilização (%)</td><td class=n>25,94</td><td class=n>± 2,05</td></tr><tr><td>Recurso</td><td>Mecânico</td><td>Utilização (%)</td><td class=n>45,79</td><td class=n>± 4,42</td></tr><tr><td>Recurso</td><td>Bancada de teste</td><td>Utilização (%)</td><td class=n>36,14</td><td class=n>± 2,11</td></tr><tr><td>Recurso</td><td>Empilhadeira</td><td>Utilização (%)</td><td class=n>13,89</td><td class=n>± 1,04</td></tr></tbody></table>
+<div class="tip"><b>Como ler</b>As filas <i>Aguardar kit</i> e <i>Aguardar bomba</i> mostram quanto uma parte
+espera pela outra na montagem. Os kits chegam, em média, a cada 55 min, e as bombas que precisam deles a
+cada ~58 min. Por isso essas esperas variam muito entre replicações, como mostra o intervalo de confiança
+largo: é um bom ponto de estudo para dimensionar o envio de kits.</div>
+
+<h2 id="simbolos" class="pagebreak">5. Símbolos IDEF-SIM (referência)</h2>
+<div class="grid2">
+<div>
+<table>
+  <tr><th>Símbolo</th><th>Uso</th></tr>
+  <tr><td><b>Entidade</b> (círculo)</td><td>O que flui pelo sistema. Sem fluxo de entrada, é uma <b>fonte de chegadas</b>;
+      com fluxo de entrada, é uma <b>transformação</b> (a entidade passa a ser deste tipo).</td></tr>
+  <tr><td><b>Fluxo de entrada no sistema</b></td><td>Seta com dois traços antes da entidade: ela vem de fora.
+      Toda entidade nova já tem essa seta; nas Propriedades, ligue ou desligue em <i>Chegada externa</i> e escolha o lado.</td></tr>
+  <tr><td><b>Função</b> (retângulo)</td><td>Ação sobre a entidade. Usa uma unidade de cada recurso ligado; sem
+      recurso, tem capacidade infinita. Pode <b>representar uma fila</b> (capítulo 9).</td></tr>
+  <tr><td><b>Recurso</b></td><td>Fica abaixo da função; a seta sobe e entra pela base. Tem capacidade.</td></tr>
+  <tr><td><b>Controle</b></td><td>Fica acima da função; a seta tracejada entra pelo topo. Só documenta.</td></tr>
+  <tr><td><b>Movimentação</b> (seta larga)</td><td>Transporte entre funções; pode usar recurso.</td></tr>
+  <tr><td><b>Regras &amp;, X, O</b></td><td>E, OU e E/OU (capítulo 8).</td></tr>
+  <tr><td><b>Ponto final</b></td><td>A entidade sai do sistema.</td></tr>
+  <tr><td><b>Conexão</b> (triângulo)</td><td>Liga partes do diagrama. A letra é automática: a nova conexão completa
+      o par pendente ou recebe a próxima letra (A, A, B, B…).</td></tr>
+  <tr><td><b>Informação explicativa</b></td><td>Nota de texto; não afeta a simulação.</td></tr>
+</table>
+</div>
+<figure><img src="img/legenda.png" alt="Legenda da notação"><figcaption>Figura 4 — <i>Ajuda → Notação IDEF-SIM</i> (<kbd>F1</kbd>).</figcaption></figure>
+</div>
+<div class="grid2">
+<figure><img src="img/prop_entidade.png" alt="Propriedades da entidade"><figcaption>Figura 5 — Propriedades da entidade, com atributos.</figcaption></figure>
+<div>
+<figure><img src="img/prop_funcao.png" alt="Propriedades da função"><figcaption>Figura 6 — Função: distribuição do tempo e recursos.</figcaption></figure>
+<figure><img src="img/prop_recurso.png" alt="Propriedades do recurso"><figcaption>Figura 7 — Recurso: capacidade e funções que o usam.</figcaption></figure>
+</div>
+</div>
+
+<h2 id="tempos">6. Tempos e distribuições</h2>
+<p>Todos os campos de tempo (intervalo entre chegadas, primeira chegada, processamento e deslocamento) têm um
+<b>menu de distribuições</b> e os <b>campos dos parâmetros</b>. Ao trocar de distribuição, os parâmetros já
+vêm preenchidos a partir da média atual. A unidade é a do modelo (ex.: <code>min</code>).</p>
+<div class="grid2">
+<table>
+  <tr><th>Distribuição</th><th>Parâmetros</th></tr>
+  <tr><td>Constante</td><td>Valor médio</td></tr>
+  <tr><td>Exponencial</td><td>Média</td></tr>
+  <tr><td>Normal</td><td>Média, desvio padrão (truncada em 0 nos tempos)</td></tr>
+  <tr><td>Triangular</td><td>Mínimo, moda, máximo</td></tr>
+  <tr><td>Uniforme</td><td>Mínimo, máximo</td></tr>
+  <tr><td>Log-normal</td><td>Média, desvio padrão</td></tr>
+  <tr><td>Erlang</td><td>Média, k (inteiro)</td></tr>
+  <tr><td>Gama</td><td>Média, forma</td></tr>
+  <tr><td>Weibull</td><td>Escala, forma</td></tr>
+  <tr><td>Log-logística</td><td>Escala, forma</td></tr>
+  <tr><td>Beta</td><td>Alfa, beta, mínimo, máximo</td></tr>
+  <tr><td>Discreta</td><td>Valores e probabilidades (somam 1)</td></tr>
+  <tr><td>Contínua empírica</td><td>Valores e probabilidades acumuladas (de 0 a 1)</td></tr>
+</table>
+<figure class="small"><img src="img/menu_distribuicoes.png" alt="Menu de distribuições"><figcaption>Figura 8 — Menu de distribuições.</figcaption></figure>
+</div>
+<p>Nos <b>atributos</b> também estão disponíveis as distribuições de contagem do JaamSim: <b>Poisson, Binomial,
+Geométrica, Binomial negativa e Uniforme discreta</b>. No JaamSim elas não aceitam unidade de tempo, por isso
+não aparecem nos campos de tempo.</p>
+<div class="note"><b>Formato no arquivo</b>A distribuição é gravada em texto, por exemplo
+<code>TRIA(10; 15; 25)</code> ou <code>NORM(5,5; 0,8)</code>. O <code>;</code> separa os parâmetros, o que
+permite usar vírgula decimal.</div>
+
+<h2 id="atributos">7. Atributos e condições</h2>
+<p>Atributos são características de cada entidade (tipo, peso, prioridade…). Em <i>Propriedades da entidade →
+Atributos</i>, dê um <b>nome</b> (letras sem acento, números e <code>_</code>) e um <b>valor</b>: fixo
+(<i>Constante</i>) ou sorteado por uma distribuição. Os valores são sorteados quando a entidade chega e, numa
+transformação, os atributos da nova entidade são acrescentados.</p>
+<p>As <b>condições</b> da regra OU usam os atributos:</p>
+<table>
+  <tr><th>Escreva</th><th>Significado</th></tr>
+  <tr><td><code>tipo == 1</code></td><td>tipo igual a 1 (também aceita <code>tipo = 1</code>)</td></tr>
+  <tr><td><code>peso &gt; 10 e tipo != 3</code></td><td>as duas condições (<code>e</code> ou <code>&amp;&amp;</code>)</td></tr>
+  <tr><td><code>prioridade &gt;= 2 ou urgente == 1</code></td><td>pelo menos uma (<code>ou</code> ou <code>||</code>)</td></tr>
+  <tr><td><code>não (defeito == 1)</code></td><td>negação</td></tr>
+  <tr><td><code>1 &lt;= tipo &lt; 3</code></td><td>intervalo; também aceita <code>+ - * /</code> e parênteses</td></tr>
+  <tr><td><code>senão</code></td><td>saída padrão, quando nenhuma condição é verdadeira</td></tr>
+</table>
+
+<h2 id="regras" class="pagebreak">8. Regras E, OU e E/OU</h2>
+<h3>Regra E (&amp;)</h3>
+<ul>
+  <li><b>Divisão</b> (uma entrada, várias saídas): a entidade segue por todos os ramos ao mesmo tempo
+      (no exemplo, laudo e limpeza).</li>
+  <li><b>Junção</b> (várias entradas): espera uma entidade de cada ramo. Se depois vier uma <b>Entidade</b>,
+      é uma <b>montagem</b>: as partes formam a nova entidade (no exemplo, “Bomba com kit”). Senão, é uma
+      <b>combinação</b> e segue a primeira entidade.</li>
+</ul>
+<h3>Regra OU (X)</h3>
+<p>A entidade segue por <b>uma</b> das saídas. Em <i>Decisão</i>, escolha:</p>
+<div class="grid2">
+<div>
+<ul>
+  <li><b>Probabilidade</b>: o percentual de cada saída, que aparece na seta.</li>
+  <li><b>Atributo da entidade (condição)</b>: uma condição por saída, que aparece na seta, e uma saída
+      <code>senão</code>. As condições são testadas em ordem, e vale a primeira verdadeira.</li>
+  <li><b>Apenas visual</b>: um critério em texto (ex.: “menor fila”, “doca livre”), escrito abaixo do X. Só
+      documenta: na simulação as saídas têm chances iguais, e a Validação avisa disso.</li>
+</ul>
+</div>
+<div>
+<figure><img src="img/prop_ou_condicao.png" alt="Regra OU por condição"><figcaption>Figura 9 — OU por atributo.</figcaption></figure>
+<figure><img src="img/prop_ou_visual.png" alt="Regra OU visual"><figcaption>Figura 10 — OU apenas visual.</figcaption></figure>
+</div>
+</div>
+<h3>Regra E/OU (O)</h3>
+<p>Cada saída é seguida de forma independente, com sua probabilidade; pelo menos uma é seguida. No exemplo,
+toda bomba é expedida (100%) e 30% geram também uma pesquisa.</p>
+
+<h2 id="filas">9. Funções que representam filas</h2>
+<p>Marque <i>Representa uma fila (sem tempo)</i> numa Função para representar uma espera. Ela fica sem tempo
+e sem recurso, ganha um símbolo de fila no canto e:</p>
+<ul>
+  <li><b>antes de uma Função</b> (ou de uma Movimentação com recurso), é a fila de espera daquele processo.
+      Nos resultados, aparece com a espera, a fila média e a fila máxima;</li>
+  <li><b>antes de uma junção E (&amp;)</b>, guarda as entidades daquele ramo à espera das dos outros ramos
+      (montagem ou combinação). Nos resultados, aparece a espera de cada parte.</li>
+</ul>
+<div class="grid2">
+<figure><img src="img/prop_fila.png" alt="Fila antes de função"><figcaption>Figura 11 — Fila antes de uma função.</figcaption></figure>
+<figure><img src="img/prop_fila_juncao.png" alt="Fila antes do E"><figcaption>Figura 12 — Fila antes da junção &amp;.</figcaption></figure>
+</div>
+<p>Funções sem fila desenhada antes delas continuam com espera própria: na exportação para o JaamSim, cada uma
+ganha a sua fila automaticamente.</p>
+
+<h2 id="setas">10. Ligações e setas</h2>
+<p>As ligações são <b>Fluxo da entidade</b>, <b>Ligação de recurso</b>, <b>Ligação de controle</b> e <b>Ligação
+de nota</b>. Ao selecionar uma seta, as Propriedades mostram origem, destino, um <b>rótulo</b> opcional e as
+<b>pontas</b>: <i>Início da seta</i> e <i>Fim da seta</i>, cada uma com <i>Sem ponta / Com ponta</i>. Saídas
+de regras mostram a probabilidade ou a condição.</p>
+<figure class="mid"><img src="img/prop_seta.png" alt="Propriedades da seta"><figcaption>Figura 13 — Pontas da seta.</figcaption></figure>
+
+<h2 id="validar">11. Validação</h2>
+<p>O painel <b>Validação</b> é atualizado a cada alteração (ou com <kbd>F7</kbd>). Clique numa mensagem para
+selecionar o elemento.</p>
+<ul>
+  <li><b>Erros</b> impedem simular e exportar para o JaamSim. Exemplos: entidade sem saída, distribuição
+      inválida, conexão sem par, condição inválida.</li>
+  <li><b>Avisos</b> indicam algo a revisar, como recurso acima da função, regra apenas visual ou fila que não
+      alimenta um processo.</li>
+  <li><b>Informações</b> são dicas de notação.</li>
+</ul>
+<figure><img src="img/validacao.png" alt="Painel de validação"><figcaption>Figura 14 — Validação do exemplo: apenas o aviso esperado.</figcaption></figure>
+
+<h2 id="simular" class="pagebreak">12. Simulação e resultados</h2>
+<p><i>Simulação → Executar</i> (<kbd>F5</kbd>) roda as replicações definidas nas propriedades do modelo. Durante
+o aquecimento, as estatísticas não são coletadas.</p>
+<figure><img src="img/resultados.png" alt="Janela de resultados"><figcaption>Figura 15 — Resultados do exemplo.</figcaption></figure>
+<table>
+  <tr><th>Categoria</th><th>Indicadores</th></tr>
+  <tr><td>Sistema</td><td>Saídas, throughput, WIP médio e final, tempo médio no sistema, entidades consumidas em junções.</td></tr>
+  <tr><td>Entidade</td><td>Criadas, saídas, tempo médio e máximo no sistema, por tipo.</td></tr>
+  <tr><td>Função / Movimentação</td><td>Atendimentos, tempo de processamento, espera, fila média e máxima.</td></tr>
+  <tr><td>Fila</td><td>Entidades que entraram, espera, fila média e máxima.</td></tr>
+  <tr><td>Recurso</td><td>Utilização (%) e ocupação média.</td></tr>
+  <tr><td>Saída</td><td>Entidades por ponto final.</td></tr>
+</table>
+<p>Cada indicador mostra média, desvio padrão, <b>intervalo de confiança de 95%</b> (t de Student) e mínimo–máximo
+entre replicações. Utilizações acima de 85% são destacadas. Use <i>Exportar CSV…</i> (abre no Excel) ou
+<i>Copiar</i>.</p>
+
+<h2 id="saidas">13. Imprimir e exportar</h2>
+<table>
+  <tr><th>Opção</th><th>O que gera</th></tr>
+  <tr><td><i>Arquivo → Imprimir…</i> (<kbd>Ctrl</kbd>+<kbd>P</kbd>)</td><td>Pré-visualização e impressão do diagrama limpo, ajustado à página.</td></tr>
+  <tr><td><i>Exportar diagrama limpo</i> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd>)</td><td>PDF (A4), PNG em alta resolução ou SVG vetorial.</td></tr>
+  <tr><td><i>Exportar imagem PNG/SVG</i></td><td>Imagem do diagrama como aparece no editor (com cores).</td></tr>
+  <tr><td><i>Exportar documentação HTML</i></td><td>Diagrama e dicionário do modelo: elementos, parâmetros, atributos, ligações e descrições.</td></tr>
+</table>
+<p>A saída <b>limpa</b> não tem grade, seleção nem marcas de edição, e tem três opções: preto e branco;
+título, autor e data; e rótulos das setas.</p>
+<div class="grid2">
+<figure class="small"><img src="img/opcoes_limpo.png" alt="Opções da saída limpa"><figcaption>Figura 16 — Opções.</figcaption></figure>
+<figure><img src="img/exemplo_limpo.png" alt="Diagrama limpo"><figcaption>Figura 17 — Saída limpa do exemplo.</figcaption></figure>
+</div>
+
+<h2 id="jaamsim" class="pagebreak">14. JaamSim: exportar e importar</h2>
+<h3>Exportar para o JaamSim</h3>
+<p><i>Arquivo → Exportar modelo JaamSim (.cfg)</i> (<kbd>Ctrl</kbd>+<kbd>J</kbd>) gera um modelo básico, pronto
+para abrir no JaamSim (<i>File → Open</i>), com os objetos posicionados como no diagrama.</p>
+<table>
+  <tr><th>IDEF-SIM</th><th>JaamSim</th></tr>
+  <tr><td>Entidade com chegada externa (+ atributos)</td><td><code>SimEntity</code> + <code>EntityGenerator</code> (+ <code>Assign</code>)</td></tr>
+  <tr><td>Função</td><td><code>Queue</code> + <code>EntityProcessor</code> (recursos, capacidade, tempo)</td></tr>
+  <tr><td>Função que representa fila</td><td><code>Queue</code> (fila do processo seguinte ou da junção)</td></tr>
+  <tr><td>Movimentação</td><td><code>EntityConveyor</code> (com <code>Seize</code>/<code>Release</code> se tiver recurso)</td></tr>
+  <tr><td>Recurso</td><td><code>Resource</code></td></tr>
+  <tr><td>Regra OU (probabilidade / atributo / visual)</td><td><code>Branch</code> com <code>DiscreteDistribution</code> / expressão / chances iguais + texto</td></tr>
+  <tr><td>Regra E (divisão / combinação / montagem)</td><td><code>Duplicate</code> / <code>Combine</code> / <code>Assemble</code></td></tr>
+  <tr><td>Regra E/OU</td><td><code>Duplicate</code> + <code>Branch</code> por ramo</td></tr>
+  <tr><td>Ponto final</td><td><code>EntitySink</code></td></tr>
+  <tr><td>Controle e nota</td><td><code>Text</code></td></tr>
+</table>
+<p>Trecho do arquivo gerado para o exemplo:</p>
+<pre>Bomba_com_defeito AttributeDefinitionList { { tipo  0 }  { urgente  0 } }
+Inspecionar NextComponent { Regra_OU_Branch }
+Inspecionar WaitQueue { Aguardar_inspecao }
+Inspecionar ResourceList { Tecnico }
+Inspecionar Capacity { 2 }
+Inspecionar ServiceTime { Inspecionar_Tempo }
+Regra_OU_Branch NextComponentList { Reparo_simples_Fila  Aguardar_kit }
+Regra_OU_Branch Choice { &#x27;this.obj.tipo == 1 &amp;&amp; this.obj.urgente == 0 ? 1 : 2&#x27; }
+Regra_E_Montagem NextComponent { Reparo_complexo_Fila }
+Regra_E_Montagem WaitQueueList { Aguardar_kit  Aguardar_bomba }
+Regra_E_Montagem PrototypeEntity { Bomba_com_kit }
+Bomba_com_defeito_Atributos NextComponent { Aguardar_inspecao }
+Bomba_com_defeito_Atributos AttributeAssignmentList { { &#x27;this.obj.tipo = [Bomba_com_defeito_tipo].Value&#x27; }  { &#x27;this.obj.urgente = [Bomba_com_defeito_urgente].Value&#x27; } }</pre>
+<div class="warn"><b>Modelo básico</b>O arquivo é o ponto de partida do modelo computacional: confira tempos,
+regras e a disposição dos objetos no JaamSim. Os avisos da conversão ficam no cabeçalho do arquivo.</div>
+<h3>Importar do JaamSim</h3>
+<p><i>Arquivo → Importar modelo JaamSim (.cfg)</i> (<kbd>Ctrl</kbd>+<kbd>I</kbd>) monta o diagrama IDEF-SIM a
+partir de um modelo do JaamSim: <code>Server</code> vira Função com Recurso, <code>Queue</code> vira
+função-fila, <code>Seize</code>…<code>Release</code> ligam o recurso ao processo entre eles, e
+<code>Branch</code>, <code>Duplicate</code>, <code>Combine</code> e <code>Assemble</code> viram regras. Os
+<b>82 exemplos oficiais do JaamSim</b> já convertidos estão em <i>Abrir exemplo → Exemplos do JaamSim</i>.
+O que não tem equivalente em IDEF-SIM, como paradas e limiares, é anotado na descrição do modelo.</p>
+
+<h2 id="arquivos">15. Arquivos e exemplos</h2>
+<ul>
+  <li>Os modelos são salvos em <code>.idefsim</code>, um texto JSON legível que pode ser versionado.</li>
+  <li><i>Arquivo → Abrir recentes</i> lista os últimos arquivos usados.</li>
+  <li><i>Abrir exemplo</i> traz a oficina deste manual, três exemplos didáticos e os 82 exemplos do JaamSim.
+      Os exemplos abrem como modelo novo, então o original não é alterado.</li>
+  <li>Desfazer e refazer: <kbd>Ctrl</kbd>+<kbd>Z</kbd> e <kbd>Ctrl</kbd>+<kbd>Y</kbd>.</li>
+</ul>
+<figure class="small"><img src="img/menu_arquivo.png" alt="Menu Arquivo"><figcaption>Figura 18 — Menu Arquivo.</figcaption></figure>
+
+<h2 id="atalhos">16. Atalhos de teclado</h2>
+<div class="grid2">
+<table>
+  <tr><th>Símbolo</th><th>Tecla</th></tr>
+  <tr><td>Selecionar</td><td><kbd>V</kbd></td></tr>
+  <tr><td>Entidade / Função / Recurso / Controle</td><td><kbd>E</kbd> <kbd>F</kbd> <kbd>R</kbd> <kbd>C</kbd></td></tr>
+  <tr><td>Movimentação</td><td><kbd>M</kbd></td></tr>
+  <tr><td>Regras E / OU / E-OU</td><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td></tr>
+  <tr><td>Ponto final / Conexão / Nota</td><td><kbd>X</kbd> <kbd>K</kbd> <kbd>N</kbd></td></tr>
+  <tr><td>Fluxo / Recurso / Controle / Nota (ligações)</td><td><kbd>L</kbd> <kbd>Shift</kbd>+<kbd>R</kbd> <kbd>Shift</kbd>+<kbd>C</kbd> <kbd>Shift</kbd>+<kbd>N</kbd></td></tr>
+</table>
+<table>
+  <tr><th>Ação</th><th>Tecla</th></tr>
+  <tr><td>Validar / Simular</td><td><kbd>F7</kbd> / <kbd>F5</kbd></td></tr>
+  <tr><td>Notação IDEF-SIM</td><td><kbd>F1</kbd></td></tr>
+  <tr><td>Imprimir / Exportar limpo</td><td><kbd>Ctrl</kbd>+<kbd>P</kbd> / <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></td></tr>
+  <tr><td>Exportar / Importar JaamSim</td><td><kbd>Ctrl</kbd>+<kbd>J</kbd> / <kbd>Ctrl</kbd>+<kbd>I</kbd></td></tr>
+  <tr><td>Duplicar / Excluir</td><td><kbd>Ctrl</kbd>+<kbd>D</kbd> / <kbd>Del</kbd></td></tr>
+  <tr><td>Propriedades do modelo</td><td><kbd>Ctrl</kbd>+<kbd>M</kbd></td></tr>
+  <tr><td>Ajustar à janela</td><td><kbd>Ctrl</kbd>+<kbd>0</kbd></td></tr>
+</table>
+</div>
+
+<h2 id="duvidas">17. Dúvidas frequentes</h2>
+<h4>A simulação não roda.</h4>
+<p>Há erros na Validação. Clique em cada erro para ir ao elemento e corrija.</p>
+<h4>A regra OU não respeita minhas condições.</h4>
+<p>Confira se os nomes dos atributos na condição são iguais aos das entidades, sem acentos. A Validação avisa
+sobre atributos que não existem. As condições são testadas em ordem, e vale a primeira verdadeira; deixe uma
+saída <code>senão</code>.</p>
+<h4>A fila não aparece nos resultados com espera.</h4>
+<p>A função-fila precisa ter uma única saída, para uma Função, uma Movimentação com recurso ou uma junção E.</p>
+<h4>O texto da impressão sai pequeno.</h4>
+<p>A impressão ajusta o diagrama à página. Para diagramas grandes, use <i>Exportar diagrama limpo → PDF</i> e
+imprima em A3, ou divida o diagrama com <b>Conexões</b>.</p>
+<h4>Abri o .cfg no JaamSim e algo não ficou como eu queria.</h4>
+<p>O arquivo é um modelo básico. Os avisos da conversão, no cabeçalho do arquivo, indicam o que revisar,
+como regras apenas visuais e a regra E/OU.</p>
+
+<h2 id="creditos">18. Créditos e referências</h2>
+<p><b>IDEF-SIM Studio</b>, desenvolvido por <b>Prof. David Custódio de Sena</b>, UFERSA — sena@ufersa.edu.br.</p>
+<ul>
+  <li>LEAL, F.; ALMEIDA, D. A.; MONTEVECHI, J. A. B. <i>Uma proposta de técnica de modelagem conceitual para a
+      simulação através de elementos do IDEF</i>. Simpósio Brasileiro de Pesquisa Operacional (SBPO), 2008.</li>
+  <li>JaamSim — <a href="https://jaamsim.com">jaamsim.com</a>; os exemplos oficiais convertidos são distribuídos
+      sob a Apache License 2.0 (© JaamSim Software Inc.).</li>
+  <li>Fonte Inter © The Inter Project Authors (SIL Open Font License 1.1).</li>
+</ul>
+<p>Código-fonte e versões: <a href="https://github.com/davidc-sena/idefsim-studio">github.com/davidc-sena/idefsim-studio</a>.</p>
+</body>
+</html>

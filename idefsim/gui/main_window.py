@@ -4,14 +4,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QRectF, QSettings, QSize, Qt
-from PySide6.QtGui import QAction, QActionGroup, QImage, QKeySequence, QPainter
+from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QRectF, QSettings, QSize, Qt, QUrl
+from PySide6.QtGui import QDesktopServices, QAction, QActionGroup, QImage, QKeySequence, QPainter
 from PySide6.QtSvg import QSvgGenerator
 from PySide6.QtWidgets import (QApplication, QDialog, QDockWidget, QFileDialog, QGraphicsView,
                                QListWidget, QListWidgetItem, QMainWindow, QMessageBox,
                                QProgressDialog, QToolBar)
 
-from ..examples import ALL as EXAMPLES, jaamsim_examples
+from ..examples import ALL as EXAMPLES, jaamsim_examples, manual_path
 from ..jaamsim_import import JaamSimImportError, import_jaamsim
 from ..model import CONNECTION_LABELS, KIND_LABELS, ConnectionKind as CK, ElementKind as EK, Model
 from ..jaamsim_export import export_jaamsim, jaamsim_name
@@ -140,6 +140,8 @@ class MainWindow(QMainWindow):
         self.a_run = self._act("&Executar simulação", self.run_sim, "F5")
         self.a_props = self._act("Propriedades do &modelo", self._show_model_props, "Ctrl+M")
         self.a_legend = self._act("Notação IDEF-SIM", lambda: LegendDialog(self).exec(), "F1")
+        self.a_manual = self._act("&Manual de uso", self.open_manual, "Shift+F1",
+                                  "Abre o manual de uso no navegador")
         self.a_about = self._act("Sobre", self.about)
 
     def _build_menus(self):
@@ -179,7 +181,9 @@ class MainWindow(QMainWindow):
         m = mb.addMenu("&Simulação")
         m.addAction(self.a_run)
         m = mb.addMenu("A&juda")
-        m.addActions([self.a_legend, self.a_about])
+        m.addActions([self.a_manual, self.a_legend])
+        m.addSeparator()
+        m.addAction(self.a_about)
         self._refresh_recent()
 
         tb = QToolBar("Principal")
@@ -647,6 +651,15 @@ class MainWindow(QMainWindow):
                 self.view.resetTransform()
                 self.view.scale(1.3, 1.3)
                 self.view.centerOn(self._diagram_rect().center())
+
+    def open_manual(self):
+        path = manual_path()
+        if path is None:
+            QMessageBox.information(self, "Manual de uso",
+                                    "O manual está em github.com/davidc-sena/idefsim-studio "
+                                    "(pasta docs/manual).")
+            return
+        QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
 
     def about(self):
         AboutDialog(self).exec()
