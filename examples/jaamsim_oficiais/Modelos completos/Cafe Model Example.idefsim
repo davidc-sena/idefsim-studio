@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "9e35b870e1",
+      "id": "af8de273af",
       "kind": "rule_or",
       "name": "Branch1",
       "x": 480,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "11fb203bcf",
+      "id": "37269113b5",
       "kind": "function",
       "name": "Eat Meal",
       "x": 1680,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "0b573a830c",
+      "id": "73130d4bfe",
       "kind": "function",
       "name": "Enter Cafe",
       "x": 280,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "id": "957e5c96e2",
+      "id": "13814e27e6",
       "kind": "function",
       "name": "Leave Cafe",
       "x": 2480,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "f00e98037f",
+      "id": "68bcc5a121",
       "kind": "function",
       "name": "Make Payment",
       "x": 2280,
@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "49a99a0e04",
+      "id": "be216b5c3b",
       "kind": "function",
       "name": "Move From Bar To Checkout",
       "x": 1280,
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "3e3ce06064",
+      "id": "b1d4825747",
       "kind": "function",
       "name": "Move From Tables To Checkout",
       "x": 1880,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "id": "c8447df3b4",
+      "id": "f2ed22f8d1",
       "kind": "function",
       "name": "Move To Sandwich Bar",
       "x": 680,
@@ -110,7 +110,7 @@
       }
     },
     {
-      "id": "7c0b097adb",
+      "id": "f61e9274af",
       "kind": "function",
       "name": "Move To Tables",
       "x": 680,
@@ -122,7 +122,7 @@
       }
     },
     {
-      "id": "9959aa4500",
+      "id": "1fe91361ce",
       "kind": "function",
       "name": "Order Meal",
       "x": 1480,
@@ -134,7 +134,7 @@
       }
     },
     {
-      "id": "b7395f0ee7",
+      "id": "c49faa0800",
       "kind": "function",
       "name": "Prepare Sandwich",
       "x": 1080,
@@ -146,7 +146,7 @@
       }
     },
     {
-      "id": "dc3bd7997b",
+      "id": "0e624b8710",
       "kind": "function",
       "name": "Sit Down At Table",
       "x": 1080,
@@ -158,7 +158,7 @@
       }
     },
     {
-      "id": "71c38e71ab",
+      "id": "4262a627bd",
       "kind": "entity",
       "name": "Proto Customer",
       "x": 80,
@@ -175,7 +175,7 @@
       }
     },
     {
-      "id": "3980962684",
+      "id": "8bc4544592",
       "kind": "exit",
       "name": "Customer Sink",
       "x": 2680,
@@ -184,7 +184,7 @@
       "params": {}
     },
     {
-      "id": "81409a55e5",
+      "id": "48690513de",
       "kind": "function",
       "name": "Checkout Queue",
       "x": 2080,
@@ -196,7 +196,7 @@
       }
     },
     {
-      "id": "a1e1ea3d63",
+      "id": "e6acbcff5a",
       "kind": "function",
       "name": "Sandwich Maker Queue",
       "x": 880,
@@ -208,7 +208,7 @@
       }
     },
     {
-      "id": "7ed977ca0f",
+      "id": "a86d4604c7",
       "kind": "function",
       "name": "Table Queue",
       "x": 880,
@@ -220,7 +220,7 @@
       }
     },
     {
-      "id": "31f609d46a",
+      "id": "5cda6da300",
       "kind": "function",
       "name": "Waitress Queue",
       "x": 1280,
@@ -232,7 +232,7 @@
       }
     },
     {
-      "id": "b22548b669",
+      "id": "ac40e9a03a",
       "kind": "resource",
       "name": "Checkouts",
       "x": 2280,
@@ -243,7 +243,7 @@
       }
     },
     {
-      "id": "232c6c089f",
+      "id": "d0c3f909a4",
       "kind": "resource",
       "name": "Sandwich Makers",
       "x": 1080,
@@ -254,7 +254,7 @@
       }
     },
     {
-      "id": "216dd690fd",
+      "id": "e74e1afb15",
       "kind": "resource",
       "name": "Tables",
       "x": 1080,
@@ -265,7 +265,7 @@
       }
     },
     {
-      "id": "3884fb6b60",
+      "id": "c909289097",
       "kind": "resource",
       "name": "Waitresses",
       "x": 1480,
@@ -278,178 +278,178 @@
   ],
   "connections": [
     {
-      "id": "e3b97875b7",
+      "id": "d07f3f197e",
       "kind": "flow",
-      "source": "9e35b870e1",
-      "target": "c8447df3b4",
+      "source": "af8de273af",
+      "target": "f2ed22f8d1",
       "label": "",
       "probability": 0.4
     },
     {
-      "id": "c881646f5c",
+      "id": "c9ec90839e",
       "kind": "flow",
-      "source": "9e35b870e1",
-      "target": "7c0b097adb",
+      "source": "af8de273af",
+      "target": "f61e9274af",
       "label": "",
       "probability": 0.6
     },
     {
-      "id": "e868d1d932",
+      "id": "7d6efd0b83",
       "kind": "flow",
-      "source": "11fb203bcf",
-      "target": "3e3ce06064",
+      "source": "37269113b5",
+      "target": "b1d4825747",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "10622a873f",
+      "id": "b1e5c9e61f",
       "kind": "flow",
-      "source": "0b573a830c",
-      "target": "9e35b870e1",
+      "source": "73130d4bfe",
+      "target": "af8de273af",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "f8da766ac3",
+      "id": "69c6ba8d37",
       "kind": "flow",
-      "source": "957e5c96e2",
-      "target": "3980962684",
+      "source": "13814e27e6",
+      "target": "8bc4544592",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "3591a7b2c8",
+      "id": "d93fc5ad55",
       "kind": "flow",
-      "source": "f00e98037f",
-      "target": "957e5c96e2",
+      "source": "68bcc5a121",
+      "target": "13814e27e6",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "68dcce1785",
+      "id": "1c04714548",
       "kind": "flow",
-      "source": "49a99a0e04",
-      "target": "81409a55e5",
+      "source": "be216b5c3b",
+      "target": "48690513de",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "64dab0c856",
+      "id": "3507f48d0d",
       "kind": "flow",
-      "source": "3e3ce06064",
-      "target": "81409a55e5",
+      "source": "b1d4825747",
+      "target": "48690513de",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "7442856ac6",
+      "id": "61c805255f",
       "kind": "flow",
-      "source": "c8447df3b4",
-      "target": "a1e1ea3d63",
+      "source": "f2ed22f8d1",
+      "target": "e6acbcff5a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5ac0b4f703",
+      "id": "6bd0fcc314",
       "kind": "flow",
-      "source": "7c0b097adb",
-      "target": "7ed977ca0f",
+      "source": "f61e9274af",
+      "target": "a86d4604c7",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5aa25d1b5a",
+      "id": "2080251d25",
       "kind": "flow",
-      "source": "9959aa4500",
-      "target": "11fb203bcf",
+      "source": "1fe91361ce",
+      "target": "37269113b5",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "9f57a6f5f0",
+      "id": "cf6dc3a72e",
       "kind": "flow",
-      "source": "b7395f0ee7",
-      "target": "49a99a0e04",
+      "source": "c49faa0800",
+      "target": "be216b5c3b",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "fb70cb3fb0",
+      "id": "f3c3a62135",
       "kind": "flow",
-      "source": "dc3bd7997b",
-      "target": "31f609d46a",
+      "source": "0e624b8710",
+      "target": "5cda6da300",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "42c419ffe9",
+      "id": "0f9bd49dfb",
       "kind": "flow",
-      "source": "71c38e71ab",
-      "target": "0b573a830c",
+      "source": "4262a627bd",
+      "target": "73130d4bfe",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "9ad8603ab0",
+      "id": "653bf73d31",
       "kind": "flow",
-      "source": "81409a55e5",
-      "target": "f00e98037f",
+      "source": "48690513de",
+      "target": "68bcc5a121",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2868e8ef10",
+      "id": "eff29cadba",
       "kind": "flow",
-      "source": "a1e1ea3d63",
-      "target": "b7395f0ee7",
+      "source": "e6acbcff5a",
+      "target": "c49faa0800",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "51925e2ae1",
+      "id": "5d4fcc4ded",
       "kind": "flow",
-      "source": "7ed977ca0f",
-      "target": "dc3bd7997b",
+      "source": "a86d4604c7",
+      "target": "0e624b8710",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "09c7bf5f09",
+      "id": "e6926c6b3e",
       "kind": "flow",
-      "source": "31f609d46a",
-      "target": "9959aa4500",
+      "source": "5cda6da300",
+      "target": "1fe91361ce",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "f722cbd6d3",
+      "id": "e8cc13832a",
       "kind": "resource",
-      "source": "b22548b669",
-      "target": "f00e98037f",
+      "source": "ac40e9a03a",
+      "target": "68bcc5a121",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "74817c0870",
+      "id": "933def2e84",
       "kind": "resource",
-      "source": "232c6c089f",
-      "target": "b7395f0ee7",
+      "source": "d0c3f909a4",
+      "target": "c49faa0800",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "27618950cf",
+      "id": "52cf6bb2ee",
       "kind": "resource",
-      "source": "216dd690fd",
-      "target": "dc3bd7997b",
+      "source": "e74e1afb15",
+      "target": "0e624b8710",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "1e63ede284",
+      "id": "aa7e9d1ce7",
       "kind": "resource",
-      "source": "3884fb6b60",
-      "target": "9959aa4500",
+      "source": "c909289097",
+      "target": "1fe91361ce",
       "label": "",
       "probability": 1.0
     }

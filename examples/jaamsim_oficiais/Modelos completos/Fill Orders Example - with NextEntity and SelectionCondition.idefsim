@@ -4,7 +4,7 @@
   "name": "Fill Orders Example - with NextEntity and SelectionCondition",
   "author": "",
   "version": "1.0",
-  "description": "Convertido do exemplo do JaamSim 'Fill Order Example - with NextEntity and SelectionCondition' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "description": "Convertido do exemplo do JaamSim 'Fill Order Example - with NextEntity and SelectionCondition' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.\n- Fluxos de retorno representados pelas conexões A.",
   "settings": {
     "time_unit": "s",
     "duration": 28800.0,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "9570bf598d",
+      "id": "14863c306e",
       "kind": "rule_or",
       "name": "Branch1",
       "x": 880,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "30be5ac006",
+      "id": "0e6c77ee09",
       "kind": "function",
       "name": "Entity Delay1",
       "x": 280,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "9e1902fe86",
+      "id": "53bda15d77",
       "kind": "function",
       "name": "Entity Delay2",
       "x": 880,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "id": "445401499d",
+      "id": "930806168d",
       "kind": "function",
       "name": "Entity Delay3",
       "x": 280,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "1b3db461f5",
+      "id": "3ccc1a098f",
       "kind": "function",
       "name": "Entity Delay4",
       "x": 1080,
@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "772132c552",
+      "id": "0c85f25319",
       "kind": "function",
       "name": "Entity Delay5",
       "x": 1080,
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "f7f5a8b83c",
+      "id": "2cb28a24c0",
       "kind": "function",
       "name": "Entity Delay6",
       "x": 680,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "id": "0953459660",
+      "id": "6ee794da7c",
       "kind": "entity",
       "name": "Sim Entity1",
       "x": 80,
@@ -128,7 +128,7 @@
       }
     },
     {
-      "id": "f2aa4b9c17",
+      "id": "22dbce2a21",
       "kind": "entity",
       "name": "Sim Entity2",
       "x": 80,
@@ -162,7 +162,7 @@
       }
     },
     {
-      "id": "ce2a16fe21",
+      "id": "20a12ffc2c",
       "kind": "exit",
       "name": "Entity Sink1",
       "x": 1080,
@@ -171,7 +171,7 @@
       "params": {}
     },
     {
-      "id": "206b5f2abb",
+      "id": "0f59931027",
       "kind": "exit",
       "name": "Entity Sink2",
       "x": 1280,
@@ -180,7 +180,7 @@
       "params": {}
     },
     {
-      "id": "5996df3a49",
+      "id": "ce185a902d",
       "kind": "function",
       "name": "Queue1",
       "x": 480,
@@ -192,7 +192,7 @@
       }
     },
     {
-      "id": "1c96ec270a",
+      "id": "2d641b8c79",
       "kind": "function",
       "name": "Queue2",
       "x": 480,
@@ -204,7 +204,7 @@
       }
     },
     {
-      "id": "948625c8ec",
+      "id": "5866f3e1ed",
       "kind": "function",
       "name": "Server1",
       "x": 680,
@@ -216,7 +216,7 @@
       }
     },
     {
-      "id": "6facc56db0",
+      "id": "0950ce1b43",
       "kind": "resource",
       "name": "Recurso Server1",
       "x": 680,
@@ -227,7 +227,7 @@
       }
     },
     {
-      "id": "e7c89a2494",
+      "id": "ff9876b547",
       "kind": "resource",
       "name": "Resource Unit1",
       "x": 680,
@@ -236,128 +236,154 @@
       "params": {
         "capacity": 1
       }
+    },
+    {
+      "id": "5baded16f7",
+      "kind": "connector",
+      "name": "A",
+      "x": 1190,
+      "y": 320,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "f7b9c55a06",
+      "kind": "connector",
+      "name": "A",
+      "x": 570,
+      "y": 390,
+      "description": "",
+      "params": {}
     }
   ],
   "connections": [
     {
-      "id": "28a4b6d091",
+      "id": "8bbec018ab",
       "kind": "resource",
-      "source": "6facc56db0",
-      "target": "948625c8ec",
+      "source": "0950ce1b43",
+      "target": "5866f3e1ed",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "43bc2993a6",
+      "id": "25d3227bcc",
       "kind": "flow",
-      "source": "9570bf598d",
-      "target": "772132c552",
+      "source": "14863c306e",
+      "target": "0c85f25319",
       "label": "",
       "probability": 1.0,
       "condition": "remaining <= 0"
     },
     {
-      "id": "63c34fe7a9",
+      "id": "b0ef9abe2e",
       "kind": "flow",
-      "source": "9570bf598d",
-      "target": "1b3db461f5",
+      "source": "14863c306e",
+      "target": "3ccc1a098f",
       "label": "",
       "probability": 1.0,
       "condition": "senão"
     },
     {
-      "id": "8a6583b878",
+      "id": "94eb5048eb",
       "kind": "flow",
-      "source": "30be5ac006",
-      "target": "5996df3a49",
+      "source": "0e6c77ee09",
+      "target": "ce185a902d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "1180403e1a",
+      "id": "0504de1f3f",
       "kind": "flow",
-      "source": "9e1902fe86",
-      "target": "ce2a16fe21",
+      "source": "53bda15d77",
+      "target": "20a12ffc2c",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "6fa740e6a3",
+      "id": "adad7c39ad",
       "kind": "flow",
-      "source": "445401499d",
-      "target": "1c96ec270a",
+      "source": "930806168d",
+      "target": "2d641b8c79",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "550c06ffa4",
+      "id": "fe20f09f2f",
       "kind": "flow",
-      "source": "1b3db461f5",
-      "target": "f7f5a8b83c",
+      "source": "0c85f25319",
+      "target": "0f59931027",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "12b26c4eda",
+      "id": "edb1c9eec8",
       "kind": "flow",
-      "source": "772132c552",
-      "target": "206b5f2abb",
+      "source": "2cb28a24c0",
+      "target": "14863c306e",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "b9b3279816",
+      "id": "0ef170b497",
       "kind": "flow",
-      "source": "f7f5a8b83c",
-      "target": "9570bf598d",
+      "source": "6ee794da7c",
+      "target": "0e6c77ee09",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "170567a0ea",
+      "id": "dc38413d91",
       "kind": "flow",
-      "source": "0953459660",
-      "target": "30be5ac006",
+      "source": "22dbce2a21",
+      "target": "930806168d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ca149d74cd",
+      "id": "af050bf593",
       "kind": "flow",
-      "source": "f2aa4b9c17",
-      "target": "445401499d",
+      "source": "2d641b8c79",
+      "target": "2cb28a24c0",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "9a7fbc2b37",
+      "id": "d683c8c871",
       "kind": "flow",
-      "source": "1c96ec270a",
-      "target": "f7f5a8b83c",
+      "source": "5866f3e1ed",
+      "target": "53bda15d77",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "7df6d67853",
+      "id": "09536a0c1e",
       "kind": "flow",
-      "source": "948625c8ec",
-      "target": "9e1902fe86",
+      "source": "ce185a902d",
+      "target": "5866f3e1ed",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "40bc5692b7",
-      "kind": "flow",
-      "source": "5996df3a49",
-      "target": "948625c8ec",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "8a69d9b7d3",
+      "id": "f81bba053a",
       "kind": "resource",
-      "source": "e7c89a2494",
-      "target": "f7f5a8b83c",
+      "source": "ff9876b547",
+      "target": "2cb28a24c0",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7a58e368ba",
+      "kind": "flow",
+      "source": "3ccc1a098f",
+      "target": "5baded16f7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "99cb2d39bd",
+      "kind": "flow",
+      "source": "f7b9c55a06",
+      "target": "2cb28a24c0",
       "label": "",
       "probability": 1.0
     }

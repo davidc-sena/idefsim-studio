@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "ecf2cc11b7",
+      "id": "02d1893917",
       "kind": "function",
       "name": "Entity Delay1",
       "x": 280,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "e51375b341",
+      "id": "c266e37eea",
       "kind": "function",
       "name": "Entity Delay2",
       "x": 880,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "09e0757658",
+      "id": "bf4fdf3bb5",
       "kind": "entity",
       "name": "Sim Entity1",
       "x": 80,
@@ -55,7 +55,7 @@
       }
     },
     {
-      "id": "984ef76cf8",
+      "id": "b1a00d5a85",
       "kind": "exit",
       "name": "Entity Sink1",
       "x": 1080,
@@ -64,7 +64,7 @@
       "params": {}
     },
     {
-      "id": "9c810169f9",
+      "id": "a0c926fc48",
       "kind": "function",
       "name": "Queue1",
       "x": 480,
@@ -76,7 +76,7 @@
       }
     },
     {
-      "id": "178981e61c",
+      "id": "088f64e9a6",
       "kind": "function",
       "name": "Server1",
       "x": 680,
@@ -88,7 +88,7 @@
       }
     },
     {
-      "id": "062333ab94",
+      "id": "d7bbc15392",
       "kind": "resource",
       "name": "Recurso Server1",
       "x": 680,
@@ -101,50 +101,50 @@
   ],
   "connections": [
     {
-      "id": "bdbbc8b1d0",
+      "id": "10984758a4",
       "kind": "resource",
-      "source": "062333ab94",
-      "target": "178981e61c",
+      "source": "d7bbc15392",
+      "target": "088f64e9a6",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "d88e5c4c3a",
+      "id": "c3ccd8db8a",
       "kind": "flow",
-      "source": "ecf2cc11b7",
-      "target": "9c810169f9",
+      "source": "02d1893917",
+      "target": "a0c926fc48",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "745cf8d5d0",
+      "id": "e0d08dafef",
       "kind": "flow",
-      "source": "e51375b341",
-      "target": "984ef76cf8",
+      "source": "c266e37eea",
+      "target": "b1a00d5a85",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "24d4433494",
+      "id": "80ca738002",
       "kind": "flow",
-      "source": "09e0757658",
-      "target": "ecf2cc11b7",
+      "source": "bf4fdf3bb5",
+      "target": "02d1893917",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "db20ab1c41",
+      "id": "10c601ecdf",
       "kind": "flow",
-      "source": "178981e61c",
-      "target": "e51375b341",
+      "source": "088f64e9a6",
+      "target": "c266e37eea",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "9d91ecfabb",
+      "id": "5926811243",
       "kind": "flow",
-      "source": "9c810169f9",
-      "target": "178981e61c",
+      "source": "a0c926fc48",
+      "target": "088f64e9a6",
       "label": "",
       "probability": 1.0
     }

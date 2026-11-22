@@ -13,7 +13,7 @@ from .. import expressions as expr
 from . import shapes
 
 GRID = 10
-MIN_SEGMENT = 14  # comprimento mínimo visível de uma seta (cabe a ponta)
+FLOW_GAP = 16      # trecho mínimo antes de dobrar (fluxo entra à esquerda e sai à direita)
 
 
 class NodeItem(QGraphicsItem):
@@ -137,6 +137,42 @@ class NodeItem(QGraphicsItem):
         t = min(hw / abs(dx) if dx else math.inf, hh / abs(dy) if dy else math.inf)
         return QPointF(c.x() + dx * t, c.y() + dy * t)
 
+    def flow_port(self, edge, side: str) -> QPointF:
+        """Ponto de encaixe do fluxo: entra pelo lado esquerdo ("in") e sai pelo direito ("out").
+        Várias setas no mesmo lado são distribuídas na altura, na ordem da outra ponta."""
+        if side == "in":
+            sibs = [e for e in self.edges if e.conn.kind == CK.FLOW and e.dst is self]
+            other = lambda e: e.src  # noqa: E731
+        else:
+            sibs = [e for e in self.edges if e.conn.kind == CK.FLOW and e.src is self]
+            other = lambda e: e.dst  # noqa: E731
+        sibs.sort(key=lambda e: (other(e).scenePos().y(), other(e).scenePos().x(), e.conn.id))
+        n = len(sibs)
+        i = sibs.index(edge) if edge in sibs else 0
+        r, k = self._rect, self.element.kind
+        if k in RULE_KINDS or k in shapes.CIRCULAR or k == EK.CONNECTOR:
+            n = 1  # símbolos pequenos: um ponto só; as setas se ramificam a partir dele
+        usable = r.height() * (0.34 if k == EK.MOVEMENT else 0.6)
+        dy = ((i + 1) / (n + 1) - 0.5) * usable if n > 1 else 0.0
+        if k in shapes.CIRCULAR:
+            rad = r.width() / 2
+            x = math.sqrt(max(rad * rad - dy * dy, 0.0))
+            x = -x if side == "in" else x
+        elif k == EK.CONNECTOR:  # na aresta inclinada do triângulo, à altura dy
+            frac = (r.bottom() - dy) / r.height()
+            half = frac * r.width() / 2
+            x = -half if side == "in" else half
+        elif k == EK.MOVEMENT and side == "out" and n <= 1:
+            x = r.right()                                   # ponta da seta larga
+        elif k == EK.MOVEMENT and side == "out":
+            x = r.right() - min(28.0, r.width() * 0.25)
+        else:
+            x = r.left() if side == "in" else r.right()
+        return self.scenePos() + QPointF(x, dy)
+
+    def scene_body(self) -> QRectF:
+        return self._rect.translated(self.scenePos())
+
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange:
             v = QPointF(value)
@@ -144,9 +180,12 @@ class NodeItem(QGraphicsItem):
         if change == QGraphicsItem.ItemPositionHasChanged:
             self.element.x, self.element.y = self.pos().x(), self.pos().y()
             todo = set(self.edges)
-            for ed in self.edges:  # a ordem dos encaixes na face da função pode mudar
+            for ed in self.edges:  # a ordem dos encaixes nas faces vizinhas pode mudar
                 if ed.conn.kind in SIDE_KINDS:
                     todo.update(e for e in ed.dst.edges if e.conn.kind == ed.conn.kind)
+                elif ed.conn.kind == CK.FLOW:
+                    for n in (ed.src, ed.dst):
+                        todo.update(e for e in n.edges if e.conn.kind == CK.FLOW)
             for ed in todo:
                 ed.adjust()
         return super().itemChange(change, value)
@@ -174,6 +213,19 @@ def _route_from_below(src: QRectF, body: QRectF, tx: float) -> list[QPointF]:
         return [s, QPointF(sx, y1), QPointF(x_out, y1), QPointF(x_out, ylow),
                 QPointF(tx, ylow), t]
     return [s, QPointF(sx, ylow), QPointF(tx, ylow), t]   # rótulo ao lado
+
+
+def route_flow(a: QPointF, b: QPointF, src: QRectF, dst: QRectF) -> list[QPointF]:
+    """Fluxo da entidade: sai pela direita (a) e entra pela esquerda (b), com trechos retos.
+    Se o destino estiver atrás da origem, contorna por baixo dos dois símbolos."""
+    if b.x() - a.x() >= FLOW_GAP:
+        if abs(a.y() - b.y()) < 0.5:
+            return [a, b]
+        mx = round((a.x() + b.x()) / 2 / 5) * 5
+        return [a, QPointF(mx, a.y()), QPointF(mx, b.y()), b]
+    ylow = max(src.bottom(), dst.bottom()) + 24
+    return [a, QPointF(a.x() + FLOW_GAP, a.y()), QPointF(a.x() + FLOW_GAP, ylow),
+            QPointF(b.x() - FLOW_GAP, ylow), QPointF(b.x() - FLOW_GAP, b.y()), b]
 
 
 def _flip(r: QRectF) -> QRectF:
@@ -236,19 +288,13 @@ class EdgeItem(QGraphicsItem):
                 pts = [QPointF(p.x(), -p.y()) for p in
                        _route_from_below(_flip(src), _flip(body), tx)]
             self.points = pts
-        else:
-            a = self.src.boundary_point(self.dst.scenePos())
-            b = self.dst.boundary_point(self.src.scenePos())
-            # Elementos muito próximos ou sobrepostos (ex.: regra encostada na função):
-            # garante um troço mínimo no sentido origem→destino para a ponta ficar visível.
-            cs, ct = self.src.scenePos(), self.dst.scenePos()
-            dx, dy = ct.x() - cs.x(), ct.y() - cs.y()
-            dist = math.hypot(dx, dy)
-            if dist > 0:
-                ux, uy = dx / dist, dy / dist
-                if (b.x() - a.x()) * ux + (b.y() - a.y()) * uy < MIN_SEGMENT:
-                    a = QPointF(b.x() - ux * MIN_SEGMENT, b.y() - uy * MIN_SEGMENT)
-            self.points = [a, b]
+        elif self.conn.kind == CK.FLOW:
+            a = self.src.flow_port(self, "out")
+            b = self.dst.flow_port(self, "in")
+            self.points = route_flow(a, b, self.src.scene_body(), self.dst.scene_body())
+        else:  # ligação de nota: reta entre as bordas
+            self.points = [self.src.boundary_point(self.dst.scenePos()),
+                           self.dst.boundary_point(self.src.scenePos())]
         self.update()
 
     def _path(self) -> QPainterPath:
@@ -272,8 +318,12 @@ class EdgeItem(QGraphicsItem):
         shapes.draw_link(painter, self.conn.kind, self.points, color, heads=self.conn.heads)
         txt = self.label_text() if shapes.STYLE["edge_labels"] else ""
         if txt:
-            k = len(self.points) // 2
-            mid = (self.points[k - 1] + self.points[k]) / 2
+            # rótulo no último trecho (junto ao destino); se for curto, no trecho mais longo
+            segs = list(zip(self.points[:-1], self.points[1:]))
+            seg = segs[-1]
+            if (seg[1] - seg[0]).manhattanLength() < 60:
+                seg = max(segs, key=lambda s: (s[1] - s[0]).manhattanLength())
+            mid = (seg[0] + seg[1]) / 2
             f = QFont(painter.font())
             shapes.set_font_size(f, 8)
             painter.setFont(f)

@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "eb2fe1c655",
+      "id": "77ac7179d5",
       "kind": "movement",
       "name": "Entity Conveyor1",
       "x": 280,
@@ -25,7 +25,7 @@
       }
     },
     {
-      "id": "284ec5e288",
+      "id": "799339026c",
       "kind": "entity",
       "name": "Sim Entity1",
       "x": 80,
@@ -42,7 +42,7 @@
       }
     },
     {
-      "id": "ce67923004",
+      "id": "e1af32134e",
       "kind": "exit",
       "name": "Entity Sink1",
       "x": 480,
@@ -53,18 +53,18 @@
   ],
   "connections": [
     {
-      "id": "30383ba590",
+      "id": "3d7aa89f3c",
       "kind": "flow",
-      "source": "eb2fe1c655",
-      "target": "ce67923004",
+      "source": "77ac7179d5",
+      "target": "e1af32134e",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "e162bebca3",
+      "id": "a116816a4f",
       "kind": "flow",
-      "source": "284ec5e288",
-      "target": "eb2fe1c655",
+      "source": "799339026c",
+      "target": "77ac7179d5",
       "label": "",
       "probability": 1.0
     }

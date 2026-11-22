@@ -34,6 +34,7 @@ from pathlib import Path
 
 from . import distributions as dist
 from . import expressions as expr
+from .flow_rules import fix_backward_flows
 from .gui_free_geometry import element_rect, overlaps
 from .model import ConnectionKind as CK, ElementKind as EK, Model
 
@@ -395,6 +396,9 @@ class _Importer:
         self._branches()
         self._settings()
         self._layout()
+        letters = fix_backward_flows(self.m)   # retornos do fluxo viram pares de conexões
+        if letters:
+            self.notes.append(f"Fluxos de retorno representados pelas conexões {', '.join(letters)}.")
         self.m.description = (
             f"Convertido do exemplo do JaamSim '{self.title}' (JaamSim: Apache License 2.0, "
             "© JaamSim Software Inc.). Modelo conceitual: confira tempos e regras."

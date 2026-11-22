@@ -5,6 +5,7 @@ from PySide6.QtCore import QLineF, QPointF, Qt, Signal
 from PySide6.QtGui import QColor, QPen
 from PySide6.QtWidgets import QGraphicsLineItem, QGraphicsScene
 
+from .. import flow_rules
 from ..model import ConnectionError_, ConnectionKind as CK, ElementKind as EK, Model
 from .items import GRID, EdgeItem, NodeItem
 
@@ -107,6 +108,14 @@ class DiagramScene(QGraphicsScene):
             if len(outs) > 1:  # distribui probabilidades igualmente
                 for o in outs:
                     o.probability = round(1 / len(outs), 4)
+            if flow_rules.is_backward(self.model, c):
+                # o fluxo entra pela esquerda e sai pela direita: seta de volta vira conexões
+                letter = flow_rules.replace_with_connectors(self.model, c)
+                self.rebuild()
+                self.message.emit(f"O destino fica atrás da origem: a seta foi trocada pelo par de "
+                                  f"conexões {letter} (o fluxo entra pela esquerda e sai pela direita).")
+                self.modelChanged.emit("Conectar elementos", "")
+                return c
         self._add_edge_item(c)
         self.refresh_all()
         self.clearSelection()

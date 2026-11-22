@@ -8,7 +8,7 @@ Convertidos: 82 · Não convertidos: 9
 |---|---|---|
 | Objetos básicos | DowntimeEntity Example - EntityConveyor | 1 |
 | Objetos básicos | DowntimeEntity Example - Server | 1 |
-| Objetos básicos | DowntimeEntity Example - with ResourceList | 1 |
+| Objetos básicos | DowntimeEntity Example - with ResourceList | 2 |
 | Objetos básicos | EntitlementSelector Example | 3 |
 | Objetos básicos | EntitySystem Example | 1 |
 | Objetos básicos | EventSchedule Example | 4 |
@@ -17,14 +17,14 @@ Convertidos: 82 · Não convertidos: 9
 | Objetos básicos | ExpressionThreshold Example - with CloseCondition | 2 |
 | Objetos básicos | ExpressionThreshold Example | 2 |
 | Objetos básicos | InputValue Example | 1 |
-| Objetos básicos | SignalThreshold and EntitySignal Example | 2 |
+| Objetos básicos | SignalThreshold and EntitySignal Example | 3 |
 | Objetos básicos | TimeSeries and TimeSeriesThreshold Example | 2 |
 | Objetos básicos | ValueSequence Example | 1 |
 | Biblioteca Big Lean | A1-1 Push vs Pull with Kanban-Office | 4 |
 | Biblioteca Big Lean | A1-2 Push vs Pull with Kanban-Mfg | 4 |
 | Biblioteca Big Lean | A10-1 Cross-Training-Server Farm | 33 |
-| Biblioteca Big Lean | A11-1 Load Leveling - Emergency Department | 2 |
-| Biblioteca Big Lean | A12-1 Rework-IDEF0 Process Mapping-Lending | 1 |
+| Biblioteca Big Lean | A11-1 Load Leveling - Emergency Department | 3 |
+| Biblioteca Big Lean | A12-1 Rework-IDEF0 Process Mapping-Lending | 2 |
 | Biblioteca Big Lean | A13-1 Quincunx Binomial Simulator | 2 |
 | Biblioteca Big Lean | A14-1 Distribution Sandbox | 2 |
 | Biblioteca Big Lean | A15-1 Series vs Parallel Approvals | 3 |
@@ -42,20 +42,20 @@ Convertidos: 82 · Não convertidos: 9
 | Biblioteca Big Lean | A9-1 Kanban Game-Making Robots | 2 |
 | Modelos completos | Cafe Model Example | 1 |
 | Modelos completos | Decision Loop Example | 2 |
-| Modelos completos | Factory Example - 1) with input file | 3 |
-| Modelos completos | Factory Example - 10) with maintenance | 4 |
-| Modelos completos | Factory Example - 2) with scenarios | 3 |
-| Modelos completos | Factory Example - 3) with delays | 1 |
-| Modelos completos | Factory Example - 4) with counts | 1 |
-| Modelos completos | Factory Example - 5) with bar gauges | 1 |
-| Modelos completos | Factory Example - 6) with graph | 1 |
-| Modelos completos | Factory Example - 7) with variable arrivals | 4 |
-| Modelos completos | Factory Example - 8) with max queue | 4 |
-| Modelos completos | Factory Example - 9) with shifts | 4 |
-| Modelos completos | Factory Example | 0 |
-| Modelos completos | Fill Orders Example - with NextEntity and SelectionCondition | 1 |
+| Modelos completos | Factory Example - 1) with input file | 4 |
+| Modelos completos | Factory Example - 10) with maintenance | 5 |
+| Modelos completos | Factory Example - 2) with scenarios | 4 |
+| Modelos completos | Factory Example - 3) with delays | 2 |
+| Modelos completos | Factory Example - 4) with counts | 2 |
+| Modelos completos | Factory Example - 5) with bar gauges | 2 |
+| Modelos completos | Factory Example - 6) with graph | 2 |
+| Modelos completos | Factory Example - 7) with variable arrivals | 5 |
+| Modelos completos | Factory Example - 8) with max queue | 5 |
+| Modelos completos | Factory Example - 9) with shifts | 5 |
+| Modelos completos | Factory Example | 1 |
+| Modelos completos | Fill Orders Example - with NextEntity and SelectionCondition | 2 |
 | Gráficos | BarGauge Example | 1 |
-| Modelos completos | Job Shop Example | 7 |
+| Modelos completos | Job Shop Example | 8 |
 | Modelos completos | Monthly Totals Example | 2 |
 | Distribuições | NonStatExponentialDist Example | 3 |
 | Fluxo de processo | AddTo, RemoveFrom, and EntityContainer Example | 4 |

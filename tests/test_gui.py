@@ -62,16 +62,23 @@ def test_load_example_and_export(app, tmp_path):
 
 
 def test_arrowhead_visible_when_rule_touches_function(app):
+    """Mesmo com a regra encostada na função, o fluxo chega pela esquerda com trecho visível."""
+    from idefsim.gui.items import FLOW_GAP
     from idefsim.model import Model
     m = Model()
     f = m.add_element(EK.FUNCTION, 0, 0)
     r = m.add_element(EK.RULE_OR, 80, 0)   # regra sobreposta à função
-    m.add_connection(CK.FLOW, f.id, r.id)
+    m.connections.clear()
+    from idefsim.model import Connection, new_id
+    c = Connection(new_id(), CK.FLOW, f.id, r.id)   # sem a conversão automática
+    m.connections[c.id] = c
     win = MainWindow()
     win._set_model(m, None)
-    ed = next(iter(win.scene.edges.values()))
-    a, b = ed.points
-    assert b.x() - a.x() >= 14 and ed.zValue() > win.scene.nodes[f.id].zValue()
+    ed = win.scene.edges[c.id]
+    last_a, last_b = ed.points[-2], ed.points[-1]
+    assert last_b.x() - last_a.x() >= FLOW_GAP - 0.01 and abs(last_a.y() - last_b.y()) < 0.01
+    assert ed.points[0].x() == win.scene.nodes[f.id].scene_body().right()  # sai pela direita
+    assert ed.zValue() > win.scene.nodes[f.id].zValue()
     win.dirty = False
     win.close()
 
@@ -245,5 +252,32 @@ def test_manual_and_complete_example(app, monkeypatch):
     assert {e.kind for e in m.elements.values()} == set(EK2)
     assert {m.decision_of(e.id) for e in m.by_kind(EK2.RULE_OR)} == {"probability", "condition", "visual"}
     assert any(m.is_queue(e.id) for e in m.elements.values())
+    win.dirty = False
+    win.close()
+
+
+def test_drawing_backward_flow_creates_connectors(app):
+    from PySide6.QtCore import QPoint, Qt
+    from PySide6.QtTest import QTest
+    from idefsim.model import Model
+    m = Model()
+    t = m.add_element(EK.FUNCTION, 100, 0, "Testar")
+    r = m.add_element(EK.FUNCTION, 300, 150, "Retrabalhar")
+    win = MainWindow()
+    win.resize(1200, 800)
+    win.show()
+    win._set_model(m, None)
+    win.view.resetTransform()
+    win.view.centerOn(200, 80)
+    win.scene.set_tool("link", CK.FLOW)
+    vp = win.view.viewport()
+    for x, y in ((300, 150), (100, 0)):         # de Retrabalhar para Testar (para trás)
+        QTest.mouseClick(vp, Qt.LeftButton, Qt.NoModifier, win.view.mapFromScene(QPoint(x, y)))
+    model = win.scene.model
+    cons = [e for e in model.elements.values() if e.kind == EK.CONNECTOR]
+    assert sorted(c.name for c in cons) == ["A", "A"]
+    assert not any(c.source == r.id and c.target == t.id for c in model.connections.values())
+    win.undo()                                    # desfaz numa etapa só
+    assert not [e for e in win.scene.model.elements.values() if e.kind == EK.CONNECTOR]
     win.dirty = False
     win.close()

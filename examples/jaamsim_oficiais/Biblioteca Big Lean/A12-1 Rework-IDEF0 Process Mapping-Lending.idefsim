@@ -4,7 +4,7 @@
   "name": "A12-1 Rework-IDEF0 Process Mapping-Lending",
   "author": "",
   "version": "1.0",
-  "description": "Convertido do exemplo do JaamSim 'A12-1 Rework-IDEF0 Process Mapping-Lending' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "description": "Convertido do exemplo do JaamSim 'A12-1 Rework-IDEF0 Process Mapping-Lending' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.\n- Fluxos de retorno representados pelas conexões A.",
   "settings": {
     "time_unit": "s",
     "duration": 28800.0,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "4079cf5a7d",
+      "id": "3d90ce06d7",
       "kind": "rule_or",
       "name": "Branch1",
       "x": 1680,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "3e9235c493",
+      "id": "8ef4184398",
       "kind": "entity",
       "name": "Sim Entity1",
       "x": 80,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "id": "78a4fe5476",
+      "id": "6dc046cb56",
       "kind": "exit",
       "name": "Entity Sink1",
       "x": 1880,
@@ -61,7 +61,7 @@
       "params": {}
     },
     {
-      "id": "f81a1221ea",
+      "id": "7fec1e1b35",
       "kind": "function",
       "name": "Queue01",
       "x": 280,
@@ -73,7 +73,7 @@
       }
     },
     {
-      "id": "b1fa6f4f37",
+      "id": "72c60deea5",
       "kind": "function",
       "name": "Queue1",
       "x": 480,
@@ -85,7 +85,7 @@
       }
     },
     {
-      "id": "d9c8039252",
+      "id": "62bea37cdb",
       "kind": "function",
       "name": "Queue2",
       "x": 880,
@@ -97,7 +97,7 @@
       }
     },
     {
-      "id": "817efaf0c3",
+      "id": "ccc0a7e518",
       "kind": "function",
       "name": "Queue3",
       "x": 1280,
@@ -109,7 +109,7 @@
       }
     },
     {
-      "id": "fb0100f4aa",
+      "id": "40e28629ae",
       "kind": "resource",
       "name": "Loan Processors",
       "x": 80,
@@ -120,7 +120,7 @@
       }
     },
     {
-      "id": "712180c0b3",
+      "id": "17323bf1d2",
       "kind": "function",
       "name": "Server1",
       "x": 680,
@@ -132,7 +132,7 @@
       }
     },
     {
-      "id": "4b9dcf0e91",
+      "id": "849700cb9c",
       "kind": "resource",
       "name": "Recurso Server1",
       "x": 680,
@@ -143,7 +143,7 @@
       }
     },
     {
-      "id": "f5e25ff9a9",
+      "id": "0ee9199117",
       "kind": "function",
       "name": "Server2",
       "x": 680,
@@ -155,7 +155,7 @@
       }
     },
     {
-      "id": "92c8eed139",
+      "id": "f9c54797fd",
       "kind": "resource",
       "name": "Recurso Server2",
       "x": 680,
@@ -166,7 +166,7 @@
       }
     },
     {
-      "id": "872024062e",
+      "id": "82d01c7865",
       "kind": "function",
       "name": "Server3",
       "x": 1080,
@@ -178,7 +178,7 @@
       }
     },
     {
-      "id": "c1e076bf9f",
+      "id": "340291abe8",
       "kind": "resource",
       "name": "Recurso Server3",
       "x": 1080,
@@ -189,7 +189,7 @@
       }
     },
     {
-      "id": "e6f75c2214",
+      "id": "5f8f5d3644",
       "kind": "function",
       "name": "Server4",
       "x": 1080,
@@ -201,7 +201,7 @@
       }
     },
     {
-      "id": "043d07b4ae",
+      "id": "3a70dd8918",
       "kind": "resource",
       "name": "Recurso Server4",
       "x": 1080,
@@ -212,7 +212,7 @@
       }
     },
     {
-      "id": "c379c7407f",
+      "id": "6d64da70ac",
       "kind": "function",
       "name": "Server5",
       "x": 1480,
@@ -224,7 +224,7 @@
       }
     },
     {
-      "id": "fbc6be6d63",
+      "id": "c82deacc24",
       "kind": "resource",
       "name": "Recurso Server5",
       "x": 1480,
@@ -235,7 +235,7 @@
       }
     },
     {
-      "id": "35424689a8",
+      "id": "08b643961b",
       "kind": "function",
       "name": "Server6",
       "x": 1480,
@@ -247,7 +247,7 @@
       }
     },
     {
-      "id": "a211a8cccf",
+      "id": "4ae279469b",
       "kind": "resource",
       "name": "Recurso Server6",
       "x": 1480,
@@ -256,182 +256,208 @@
       "params": {
         "capacity": 1
       }
+    },
+    {
+      "id": "9ee285d41a",
+      "kind": "connector",
+      "name": "A",
+      "x": 1740,
+      "y": 390,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "bc5f51cfef",
+      "kind": "connector",
+      "name": "A",
+      "x": 370,
+      "y": 170,
+      "description": "",
+      "params": {}
     }
   ],
   "connections": [
     {
-      "id": "27bf5419e6",
+      "id": "12b0519375",
       "kind": "resource",
-      "source": "4b9dcf0e91",
-      "target": "712180c0b3",
+      "source": "849700cb9c",
+      "target": "17323bf1d2",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "e936e1b9db",
+      "id": "eb4ea3d66f",
       "kind": "resource",
-      "source": "92c8eed139",
-      "target": "f5e25ff9a9",
+      "source": "f9c54797fd",
+      "target": "0ee9199117",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "39738f9a07",
+      "id": "577eea6e9d",
       "kind": "resource",
-      "source": "c1e076bf9f",
-      "target": "872024062e",
+      "source": "340291abe8",
+      "target": "82d01c7865",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "d35c52c7db",
+      "id": "10f338d7e4",
       "kind": "resource",
-      "source": "043d07b4ae",
-      "target": "e6f75c2214",
+      "source": "3a70dd8918",
+      "target": "5f8f5d3644",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5d9234335f",
+      "id": "81a314e435",
       "kind": "resource",
-      "source": "fbc6be6d63",
-      "target": "c379c7407f",
+      "source": "c82deacc24",
+      "target": "6d64da70ac",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "346774cfe2",
+      "id": "52f1cbc46f",
       "kind": "resource",
-      "source": "a211a8cccf",
-      "target": "35424689a8",
+      "source": "4ae279469b",
+      "target": "08b643961b",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5ed1ee1d30",
+      "id": "2b9240fd4e",
       "kind": "flow",
-      "source": "4079cf5a7d",
-      "target": "78a4fe5476",
+      "source": "3d90ce06d7",
+      "target": "6dc046cb56",
       "label": "",
       "probability": 0.85
     },
     {
-      "id": "01923e803f",
+      "id": "da8ed2bb15",
       "kind": "flow",
-      "source": "4079cf5a7d",
-      "target": "b1fa6f4f37",
+      "source": "8ef4184398",
+      "target": "7fec1e1b35",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ce1c9a8449",
+      "kind": "flow",
+      "source": "7fec1e1b35",
+      "target": "72c60deea5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "0e8450a065",
+      "kind": "flow",
+      "source": "17323bf1d2",
+      "target": "62bea37cdb",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a5a26be3c8",
+      "kind": "flow",
+      "source": "72c60deea5",
+      "target": "17323bf1d2",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d21f9fa076",
+      "kind": "flow",
+      "source": "0ee9199117",
+      "target": "62bea37cdb",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "dfc967d4a7",
+      "kind": "flow",
+      "source": "72c60deea5",
+      "target": "0ee9199117",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3beb85038e",
+      "kind": "flow",
+      "source": "82d01c7865",
+      "target": "ccc0a7e518",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "51afd91669",
+      "kind": "flow",
+      "source": "62bea37cdb",
+      "target": "82d01c7865",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ee49c162f4",
+      "kind": "flow",
+      "source": "5f8f5d3644",
+      "target": "ccc0a7e518",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "aac9e3d114",
+      "kind": "flow",
+      "source": "62bea37cdb",
+      "target": "5f8f5d3644",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a2ef5189c0",
+      "kind": "flow",
+      "source": "6d64da70ac",
+      "target": "3d90ce06d7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "78833f7db3",
+      "kind": "flow",
+      "source": "ccc0a7e518",
+      "target": "6d64da70ac",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a7cef57a88",
+      "kind": "flow",
+      "source": "08b643961b",
+      "target": "3d90ce06d7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "5b9508af9c",
+      "kind": "flow",
+      "source": "ccc0a7e518",
+      "target": "08b643961b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "40ae817bad",
+      "kind": "flow",
+      "source": "3d90ce06d7",
+      "target": "9ee285d41a",
       "label": "",
       "probability": 0.15
     },
     {
-      "id": "9b33ec3ca7",
+      "id": "f48e1a4467",
       "kind": "flow",
-      "source": "3e9235c493",
-      "target": "f81a1221ea",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "de05be0bf3",
-      "kind": "flow",
-      "source": "f81a1221ea",
-      "target": "b1fa6f4f37",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "2f4428f863",
-      "kind": "flow",
-      "source": "712180c0b3",
-      "target": "d9c8039252",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "33d6724e62",
-      "kind": "flow",
-      "source": "b1fa6f4f37",
-      "target": "712180c0b3",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "bcc6e04176",
-      "kind": "flow",
-      "source": "f5e25ff9a9",
-      "target": "d9c8039252",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "f1277fe7b1",
-      "kind": "flow",
-      "source": "b1fa6f4f37",
-      "target": "f5e25ff9a9",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "72ded8965a",
-      "kind": "flow",
-      "source": "872024062e",
-      "target": "817efaf0c3",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "a3fd59b369",
-      "kind": "flow",
-      "source": "d9c8039252",
-      "target": "872024062e",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "ab8c606f85",
-      "kind": "flow",
-      "source": "e6f75c2214",
-      "target": "817efaf0c3",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "f1723c85a3",
-      "kind": "flow",
-      "source": "d9c8039252",
-      "target": "e6f75c2214",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "3a34759cba",
-      "kind": "flow",
-      "source": "c379c7407f",
-      "target": "4079cf5a7d",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "5bdad5f757",
-      "kind": "flow",
-      "source": "817efaf0c3",
-      "target": "c379c7407f",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "bc330d83b1",
-      "kind": "flow",
-      "source": "35424689a8",
-      "target": "4079cf5a7d",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "7ac64957ac",
-      "kind": "flow",
-      "source": "817efaf0c3",
-      "target": "35424689a8",
+      "source": "bc5f51cfef",
+      "target": "72c60deea5",
       "label": "",
       "probability": 1.0
     }

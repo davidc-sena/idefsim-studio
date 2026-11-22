@@ -4,7 +4,7 @@
   "name": "Factory Example - 1) with input file",
   "author": "",
   "version": "1.0",
-  "description": "Convertido do exemplo do JaamSim 'Factory Example - 1) with input file' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- GenerateParts: InterArrivalTime 'GenerateDistribution' não tem equivalente direto; usado o valor 1.\n- InspectPart: ServiceTime 'InspectDistribution' não tem equivalente direto; usado o valor 1.\n- MachinePart: ServiceTime 'MachineDistribution' não tem equivalente direto; usado o valor 1.",
+  "description": "Convertido do exemplo do JaamSim 'Factory Example - 1) with input file' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- GenerateParts: InterArrivalTime 'GenerateDistribution' não tem equivalente direto; usado o valor 1.\n- InspectPart: ServiceTime 'InspectDistribution' não tem equivalente direto; usado o valor 1.\n- MachinePart: ServiceTime 'MachineDistribution' não tem equivalente direto; usado o valor 1.\n- Fluxos de retorno representados pelas conexões A.",
   "settings": {
     "time_unit": "min",
     "duration": 100000.0,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "a658d04e82",
+      "id": "eb33f80e0f",
       "kind": "rule_or",
       "name": "Passed Inspection",
       "x": 1080,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "53209af23f",
+      "id": "13d702d938",
       "kind": "entity",
       "name": "Part",
       "x": 80,
@@ -43,7 +43,7 @@
       }
     },
     {
-      "id": "7ee8f48afc",
+      "id": "54a46d3c4b",
       "kind": "exit",
       "name": "Good Part Finished",
       "x": 1280,
@@ -52,7 +52,7 @@
       "params": {}
     },
     {
-      "id": "d8a206240f",
+      "id": "7753442e0b",
       "kind": "function",
       "name": "Inspect Queue",
       "x": 680,
@@ -64,7 +64,7 @@
       }
     },
     {
-      "id": "6d186dffe5",
+      "id": "27a64a7ce5",
       "kind": "function",
       "name": "Machine Queue",
       "x": 280,
@@ -76,7 +76,7 @@
       }
     },
     {
-      "id": "518ef6ac14",
+      "id": "3c1ac4d062",
       "kind": "function",
       "name": "Inspect Part",
       "x": 880,
@@ -88,7 +88,7 @@
       }
     },
     {
-      "id": "d496794030",
+      "id": "0a7102e5d4",
       "kind": "resource",
       "name": "Recurso Inspect Part",
       "x": 880,
@@ -99,7 +99,7 @@
       }
     },
     {
-      "id": "e69e9f4a08",
+      "id": "e7d0d8a612",
       "kind": "function",
       "name": "Machine Part",
       "x": 480,
@@ -111,7 +111,7 @@
       }
     },
     {
-      "id": "dd80b1eadf",
+      "id": "50ec3ae664",
       "kind": "resource",
       "name": "Recurso Machine Part",
       "x": 480,
@@ -120,78 +120,104 @@
       "params": {
         "capacity": 1
       }
+    },
+    {
+      "id": "8e6f2ab418",
+      "kind": "connector",
+      "name": "A",
+      "x": 1140,
+      "y": 170,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "057950e625",
+      "kind": "connector",
+      "name": "A",
+      "x": 170,
+      "y": 170,
+      "description": "",
+      "params": {}
     }
   ],
   "connections": [
     {
-      "id": "a701f53b50",
+      "id": "7d2d11fa7b",
       "kind": "resource",
-      "source": "d496794030",
-      "target": "518ef6ac14",
+      "source": "0a7102e5d4",
+      "target": "3c1ac4d062",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "77b935ea0f",
+      "id": "e8a0da4474",
       "kind": "resource",
-      "source": "dd80b1eadf",
-      "target": "e69e9f4a08",
+      "source": "50ec3ae664",
+      "target": "e7d0d8a612",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ce4930c613",
+      "id": "131598c79a",
       "kind": "flow",
-      "source": "a658d04e82",
-      "target": "7ee8f48afc",
+      "source": "eb33f80e0f",
+      "target": "54a46d3c4b",
       "label": "",
       "probability": 0.9
     },
     {
-      "id": "73620eaed8",
+      "id": "b982e18249",
       "kind": "flow",
-      "source": "a658d04e82",
-      "target": "6d186dffe5",
+      "source": "13d702d938",
+      "target": "27a64a7ce5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4763b64a51",
+      "kind": "flow",
+      "source": "3c1ac4d062",
+      "target": "eb33f80e0f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4a4e200afd",
+      "kind": "flow",
+      "source": "7753442e0b",
+      "target": "3c1ac4d062",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e0a821b623",
+      "kind": "flow",
+      "source": "e7d0d8a612",
+      "target": "7753442e0b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "49a6f1e1ed",
+      "kind": "flow",
+      "source": "27a64a7ce5",
+      "target": "e7d0d8a612",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e097fe797c",
+      "kind": "flow",
+      "source": "eb33f80e0f",
+      "target": "8e6f2ab418",
       "label": "",
       "probability": 0.1
     },
     {
-      "id": "e38f737f1d",
+      "id": "d252fdf2e9",
       "kind": "flow",
-      "source": "53209af23f",
-      "target": "6d186dffe5",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "3c95e2cfe7",
-      "kind": "flow",
-      "source": "518ef6ac14",
-      "target": "a658d04e82",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "d02ec32cdb",
-      "kind": "flow",
-      "source": "d8a206240f",
-      "target": "518ef6ac14",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "7f46467a57",
-      "kind": "flow",
-      "source": "e69e9f4a08",
-      "target": "d8a206240f",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "9c5707e063",
-      "kind": "flow",
-      "source": "6d186dffe5",
-      "target": "e69e9f4a08",
+      "source": "057950e625",
+      "target": "27a64a7ce5",
       "label": "",
       "probability": 1.0
     }

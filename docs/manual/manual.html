@@ -68,7 +68,7 @@ figcaption { font-size: 9pt; color: var(--muted); margin-top: 6px; }
 <section class="cover">
   <img src="img/abertura.png" alt="Janela de abertura do IDEF-SIM Studio">
   <h1 style="margin-top:28px">Manual de uso</h1>
-  <div class="sub">IDEF-SIM Studio 1.0.0 — modelagem conceitual IDEF-SIM e simulação a eventos discretos</div>
+  <div class="sub">IDEF-SIM Studio 1.1.0 — modelagem conceitual IDEF-SIM e simulação a eventos discretos</div>
   <div class="sub">Prof. David Custódio de Sena · UFERSA · sena@ufersa.edu.br</div>
 </section>
 
@@ -175,7 +175,7 @@ satisfação.</p>
   <tr><td>Regra OU apenas visual</td><td>Escolha da doca: “doca livre”</td><td><a href="#regras">8</a></td></tr>
   <tr><td>Regra E: montagem, divisão e combinação</td><td>Bomba + kit; Laudo ∥ Limpeza</td><td><a href="#regras">8</a></td></tr>
   <tr><td>Regra E/OU</td><td>Expedir (100%) e Pesquisa (30%)</td><td><a href="#regras">8</a></td></tr>
-  <tr><td>Conexão com outra figura</td><td>A → A (continua o diagrama na linha de baixo)</td><td><a href="#simbolos">5</a></td></tr>
+  <tr><td>Conexão com outra figura</td><td>A → A (continua o diagrama na linha de baixo); B → B (o retrabalho volta ao teste sem seta para trás)</td><td><a href="#setas">10</a></td></tr>
   <tr><td>Informação explicativa e ponta de seta</td><td>Nota sobre o almoxarifado, ligada com ponta</td><td><a href="#setas">10</a></td></tr>
   <tr><td>Validação, simulação, impressão, JaamSim</td><td>Capítulos 11 a 14</td><td><a href="#validar">11–14</a></td></tr>
 </table>
@@ -203,7 +203,9 @@ satisfação.</p>
       (<b>Gama</b>, média 60, forma 3) com o Recurso “Mecânico” (capacidade 2).</li>
   <li><b>Teste e retrabalho.</b> “Reparo simples” e “Reparo complexo” seguem para “Testar” (<b>Normal</b> 10;
       2) com a “Bancada de teste”. Uma <i>Regra OU</i> por <b>probabilidade</b> envia 85% adiante e 15% para
-      “Retrabalhar” (Uniforme 10–20), que volta ao teste.</li>
+      “Retrabalhar” (Uniforme 10–20), posicionado <b>à direita</b> da regra. Ao ligar “Retrabalhar” de volta a
+      “Testar”, o programa troca a seta para trás pelo par de conexões <b>B</b>: uma à direita do retrabalho e
+      outra à esquerda do teste.</li>
   <li><b>Atividades em paralelo.</b> Uma <i>Regra E</i> com duas saídas (divisão) leva a “Emitir laudo”
       (<b>Constante</b> 5) e “Limpar e pintar” (Triangular 10, 15, 20). Outra <i>Regra E</i> junta os dois
       ramos (combinação).</li>
@@ -222,7 +224,7 @@ satisfação.</p>
 <h3>Resultados do exemplo</h3>
 <p>Com 2400 min de simulação, aquecimento de 240 min e 10 replicações, a simulação produziu, entre outros, os indicadores abaixo (média e meia-largura do
 intervalo de confiança de 95%):</p>
-<table><thead><tr><th>Categoria</th><th>Objeto</th><th>Indicador</th><th>Média</th><th>IC 95%</th></tr></thead><tbody><tr><td>Sistema</td><td>Global</td><td>Entidades que saíram</td><td class=n>86,50</td><td class=n>± 6,51</td></tr><tr><td>Sistema</td><td>Global</td><td>WIP médio</td><td class=n>11,32</td><td class=n>± 3,55</td></tr><tr><td>Sistema</td><td>Global</td><td>Tempo médio no sistema</td><td class=n>280,62</td><td class=n>± 76,61</td></tr><tr><td>Entidade</td><td>Bomba com defeito</td><td>Saídas</td><td class=n>43,70</td><td class=n>± 3,63</td></tr><tr><td>Entidade</td><td>Bomba com kit</td><td>Saídas</td><td class=n>42,80</td><td class=n>± 5,32</td></tr><tr><td>Fila</td><td>Aguardar inspeção</td><td>Tempo médio em fila</td><td class=n>0,68</td><td class=n>± 0,33</td></tr><tr><td>Fila</td><td>Aguardar inspeção</td><td>Fila máxima</td><td class=n>1,70</td><td class=n>± 0,68</td></tr><tr><td>Fila</td><td>Aguardar bomba</td><td>Tempo médio em fila</td><td class=n>283,72</td><td class=n>± 185,76</td></tr><tr><td>Fila</td><td>Aguardar bomba</td><td>Fila máxima</td><td class=n>11,50</td><td class=n>± 5,04</td></tr><tr><td>Fila</td><td>Aguardar kit</td><td>Tempo médio em fila</td><td class=n>93,96</td><td class=n>± 118,54</td></tr><tr><td>Fila</td><td>Aguardar kit</td><td>Fila máxima</td><td class=n>5,90</td><td class=n>± 5,03</td></tr><tr><td>Recurso</td><td>Técnico</td><td>Utilização (%)</td><td class=n>25,94</td><td class=n>± 2,05</td></tr><tr><td>Recurso</td><td>Mecânico</td><td>Utilização (%)</td><td class=n>45,79</td><td class=n>± 4,42</td></tr><tr><td>Recurso</td><td>Bancada de teste</td><td>Utilização (%)</td><td class=n>36,14</td><td class=n>± 2,11</td></tr><tr><td>Recurso</td><td>Empilhadeira</td><td>Utilização (%)</td><td class=n>13,89</td><td class=n>± 1,04</td></tr></tbody></table>
+<table><thead><tr><th>Categoria</th><th>Objeto</th><th>Indicador</th><th>Média</th><th>IC 95%</th></tr></thead><tbody><tr><td>Sistema</td><td>Global</td><td>Entidades que saíram</td><td class=n>86,50</td><td class=n>± 6,51</td></tr><tr><td>Sistema</td><td>Global</td><td>WIP médio</td><td class=n>11,32</td><td class=n>± 3,55</td></tr><tr><td>Sistema</td><td>Global</td><td>Tempo médio no sistema</td><td class=n>280,62</td><td class=n>± 76,61</td></tr><tr><td>Entidade</td><td>Bomba com defeito</td><td>Saídas</td><td class=n>43,70</td><td class=n>± 3,63</td></tr><tr><td>Entidade</td><td>Bomba com kit</td><td>Saídas</td><td class=n>42,80</td><td class=n>± 5,32</td></tr><tr><td>Fila</td><td>Aguardar kit</td><td>Tempo médio em fila</td><td class=n>93,96</td><td class=n>± 118,54</td></tr><tr><td>Fila</td><td>Aguardar kit</td><td>Fila máxima</td><td class=n>5,90</td><td class=n>± 5,03</td></tr><tr><td>Fila</td><td>Aguardar inspeção</td><td>Tempo médio em fila</td><td class=n>0,68</td><td class=n>± 0,33</td></tr><tr><td>Fila</td><td>Aguardar inspeção</td><td>Fila máxima</td><td class=n>1,70</td><td class=n>± 0,68</td></tr><tr><td>Fila</td><td>Aguardar bomba</td><td>Tempo médio em fila</td><td class=n>283,72</td><td class=n>± 185,76</td></tr><tr><td>Fila</td><td>Aguardar bomba</td><td>Fila máxima</td><td class=n>11,50</td><td class=n>± 5,04</td></tr><tr><td>Recurso</td><td>Técnico</td><td>Utilização (%)</td><td class=n>25,94</td><td class=n>± 2,05</td></tr><tr><td>Recurso</td><td>Mecânico</td><td>Utilização (%)</td><td class=n>45,79</td><td class=n>± 4,42</td></tr><tr><td>Recurso</td><td>Bancada de teste</td><td>Utilização (%)</td><td class=n>36,14</td><td class=n>± 2,11</td></tr><tr><td>Recurso</td><td>Empilhadeira</td><td>Utilização (%)</td><td class=n>13,89</td><td class=n>± 1,04</td></tr></tbody></table>
 <div class="tip"><b>Como ler</b>As filas <i>Aguardar kit</i> e <i>Aguardar bomba</i> mostram quanto uma parte
 espera pela outra na montagem. Os kits chegam, em média, a cada 55 min, e as bombas que precisam deles a
 cada ~58 min. Por isso essas esperas variam muito entre replicações, como mostra o intervalo de confiança
@@ -245,7 +247,8 @@ largo: é um bom ponto de estudo para dimensionar o envio de kits.</div>
   <tr><td><b>Regras &amp;, X, O</b></td><td>E, OU e E/OU (capítulo 8).</td></tr>
   <tr><td><b>Ponto final</b></td><td>A entidade sai do sistema.</td></tr>
   <tr><td><b>Conexão</b> (triângulo)</td><td>Liga partes do diagrama. A letra é automática: a nova conexão completa
-      o par pendente ou recebe a próxima letra (A, A, B, B…).</td></tr>
+      o par pendente ou recebe a próxima letra (A, A, B, B…). Também é criada sozinha quando um fluxo voltaria
+      para trás (capítulo 10).</td></tr>
   <tr><td><b>Informação explicativa</b></td><td>Nota de texto; não afeta a simulação.</td></tr>
 </table>
 </div>
@@ -352,6 +355,14 @@ e sem recurso, ganha um símbolo de fila no canto e:</p>
 ganha a sua fila automaticamente.</p>
 
 <h2 id="setas">10. Ligações e setas</h2>
+<p><b>O fluxo da entidade sempre sai pelo lado direito de um símbolo e entra pelo lado esquerdo do seguinte</b>,
+com trechos retos (horizontal, vertical, horizontal). Várias setas no mesmo lado de uma função se distribuem na
+altura. Nas regras e nos círculos, partem de um ponto só e se ramificam.</p>
+<div class="tip"><b>Fluxo que volta para trás vira conexão</b>Ao ligar um elemento a outro que está atrás dele
+(por exemplo, retrabalho → teste), o programa não desenha a seta de volta: cria um <b>par de conexões</b>
+(triângulos com a mesma letra), uma à direita da origem e outra à esquerda do destino. A probabilidade ou
+a condição da seta é mantida. Para modelos antigos, use <i>Modelo → Trocar setas de volta por conexões</i>.
+A Validação também avisa quando um fluxo volta para trás, por exemplo depois de mover um símbolo.</div>
 <p>As ligações são <b>Fluxo da entidade</b>, <b>Ligação de recurso</b>, <b>Ligação de controle</b> e <b>Ligação
 de nota</b>. Ao selecionar uma seta, as Propriedades mostram origem, destino, um <b>rótulo</b> opcional e as
 <b>pontas</b>: <i>Início da seta</i> e <i>Fim da seta</i>, cada uma com <i>Sem ponta / Com ponta</i>. Saídas
@@ -437,7 +448,7 @@ Bomba_com_defeito_Atributos AttributeAssignmentList { { &#x27;this.obj.tipo = [B
 regras e a disposição dos objetos no JaamSim. Os avisos da conversão ficam no cabeçalho do arquivo.</div>
 <h3>Importar do JaamSim</h3>
 <p><i>Arquivo → Importar modelo JaamSim (.cfg)</i> (<kbd>Ctrl</kbd>+<kbd>I</kbd>) monta o diagrama IDEF-SIM a
-partir de um modelo do JaamSim: <code>Server</code> vira Função com Recurso, <code>Queue</code> vira
+partir de um modelo do JaamSim (laços de retorno viram pares de conexões): <code>Server</code> vira Função com Recurso, <code>Queue</code> vira
 função-fila, <code>Seize</code>…<code>Release</code> ligam o recurso ao processo entre eles, e
 <code>Branch</code>, <code>Duplicate</code>, <code>Combine</code> e <code>Assemble</code> viram regras. Os
 <b>82 exemplos oficiais do JaamSim</b> já convertidos estão em <i>Abrir exemplo → Exemplos do JaamSim</i>.

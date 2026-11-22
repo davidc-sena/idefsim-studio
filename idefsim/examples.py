@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from . import AUTHOR
+from .flow_rules import fix_backward_flows
 from .model import ConnectionKind as CK, ElementKind as EK, Model
 
 
@@ -24,7 +25,7 @@ def usinagem_inspecao() -> Model:
     inspetor = m.add_element(EK.RESOURCE, 580, 320, "Inspetor", capacity=1)
     regra = m.add_element(EK.RULE_OR, 720, 200)
     fim = m.add_element(EK.EXIT, 860, 200, "Expedição")
-    retr = m.add_element(EK.FUNCTION, 720, 420, "Retrabalhar", duration="EXPO(8)")
+    retr = m.add_element(EK.FUNCTION, 880, 400, "Retrabalhar", duration="EXPO(8)")
     nota = m.add_element(EK.NOTE, 880, 80, "Taxa de rejeição histórica: 10%")
     m.add_connection(CK.FLOW, peca.id, usin.id)
     m.add_connection(CK.FLOW, usin.id, mov.id)
@@ -38,6 +39,7 @@ def usinagem_inspecao() -> Model:
     m.add_connection(CK.RESOURCE, inspetor.id, insp.id)
     m.add_connection(CK.CONTROL, ctrl.id, usin.id)
     m.add_connection(CK.NOTE, nota.id, regra.id)
+    fix_backward_flows(m)   # retrabalho → inspeção volta para trás: vira o par de conexões A
     return m
 
 
@@ -131,7 +133,7 @@ def oficina_bombas() -> Model:
     teste = add(EK.FUNCTION, 1250, 200, "Testar", duration="NORM(10; 2)")
     bancada = add(EK.RESOURCE, 1250, 320, "Bancada de teste", capacity=1)
     ou_teste = add(EK.RULE_OR, 1400, 200)
-    retrab = add(EK.FUNCTION, 1400, 340, "Retrabalhar", duration="UNIF(10; 20)")
+    retrab = add(EK.FUNCTION, 1540, 420, "Retrabalhar", duration="UNIF(10; 20)")
     # --- laudo e limpeza em paralelo (divisão e junção E)
     divide = add(EK.RULE_AND, 1540, 200)
     laudo = add(EK.FUNCTION, 1680, 90, "Emitir laudo", duration="CONST(5)")
@@ -167,6 +169,7 @@ def oficina_bombas() -> Model:
         m.add_connection(CK.RESOURCE, r.id, f.id)
     m.add_connection(CK.CONTROL, proc.id, insp.id)
     m.add_connection(CK.NOTE, nota.id, kit.id).head_end = True   # ponta escolhida na seta
+    fix_backward_flows(m)   # retrabalho → teste volta para trás: vira o par de conexões B
     return m
 
 

@@ -186,6 +186,14 @@ def validate(model: Model) -> list[Issue]:
         if n > 1:
             add(WARNING, f"Existem {n} elementos '{KIND_LABELS[kind]}' com o nome '{nm}'.")
 
+    from .flow_rules import is_backward
+    for c in model.connections.values():
+        if is_backward(model, c):
+            s_, t_ = model.elements[c.source], model.elements[c.target]
+            add(INFO, f"O fluxo de '{s_.name}' para '{t_.name}' volta para trás (o fluxo deve entrar "
+                      "pela esquerda e sair pela direita). Use Modelo → Trocar setas de volta por "
+                      "conexões.", c.target)
+
     fed_by: dict[str, list[str]] = {}
     for q in model.elements.values():
         t = model.queue_feeds(q.id)

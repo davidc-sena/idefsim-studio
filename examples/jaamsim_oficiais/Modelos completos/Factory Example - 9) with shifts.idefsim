@@ -4,7 +4,7 @@
   "name": "Factory Example - 9) with shifts",
   "author": "",
   "version": "1.0",
-  "description": "Convertido do exemplo do JaamSim 'Factory Example - 9) with shifts' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- Não representados no IDEF-SIM: limiares (condições de abertura), limiares por série temporal, séries temporais.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "description": "Convertido do exemplo do JaamSim 'Factory Example - 9) with shifts' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- Não representados no IDEF-SIM: limiares (condições de abertura), limiares por série temporal, séries temporais.\n- Duração da simulação não definida no JaamSim; usadas 8 h.\n- Fluxos de retorno representados pelas conexões A.",
   "settings": {
     "time_unit": "min",
     "duration": 480.0,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "1bc336dde5",
+      "id": "849d5bb263",
       "kind": "rule_or",
       "name": "Passed Inspection",
       "x": 1680,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "931e9a4934",
+      "id": "3af3c4799c",
       "kind": "function",
       "name": "Entity Delay1",
       "x": 280,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "fce651c3e3",
+      "id": "f6cd69bdc2",
       "kind": "function",
       "name": "Entity Delay2",
       "x": 880,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "id": "f674af4e2d",
+      "id": "aa5b59b1a7",
       "kind": "function",
       "name": "Entity Delay3",
       "x": 1480,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "a1f3570586",
+      "id": "dcb572e2b3",
       "kind": "function",
       "name": "Entity Delay4",
       "x": 1880,
@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "f701e8f279",
+      "id": "4de8982dec",
       "kind": "function",
       "name": "Entity Delay5",
       "x": 1880,
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "cddcbb9a41",
+      "id": "0375ee1aa7",
       "kind": "entity",
       "name": "Part",
       "x": 80,
@@ -103,7 +103,7 @@
       }
     },
     {
-      "id": "a80dfc2f4d",
+      "id": "18d1339f76",
       "kind": "exit",
       "name": "Good Part Finished",
       "x": 2080,
@@ -112,7 +112,7 @@
       "params": {}
     },
     {
-      "id": "1faeae1519",
+      "id": "1d1a54650a",
       "kind": "function",
       "name": "Inspect Queue",
       "x": 1080,
@@ -124,7 +124,7 @@
       }
     },
     {
-      "id": "df476df724",
+      "id": "a03b3f5eae",
       "kind": "function",
       "name": "Machine Queue",
       "x": 480,
@@ -136,7 +136,7 @@
       }
     },
     {
-      "id": "62cd2bab93",
+      "id": "839018749b",
       "kind": "function",
       "name": "Inspect Part",
       "x": 1280,
@@ -148,7 +148,7 @@
       }
     },
     {
-      "id": "e424db6665",
+      "id": "d0ccc8345e",
       "kind": "resource",
       "name": "Recurso Inspect Part",
       "x": 1280,
@@ -159,7 +159,7 @@
       }
     },
     {
-      "id": "832fc60b3b",
+      "id": "d9b90d7558",
       "kind": "function",
       "name": "Machine Part",
       "x": 680,
@@ -171,7 +171,7 @@
       }
     },
     {
-      "id": "e2e6ef8ab3",
+      "id": "212b2bb47d",
       "kind": "resource",
       "name": "Recurso Machine Part",
       "x": 680,
@@ -180,118 +180,144 @@
       "params": {
         "capacity": 1
       }
+    },
+    {
+      "id": "a17e86d0a9",
+      "kind": "connector",
+      "name": "A",
+      "x": 1990,
+      "y": 320,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "b305b03bec",
+      "kind": "connector",
+      "name": "A",
+      "x": 370,
+      "y": 170,
+      "description": "",
+      "params": {}
     }
   ],
   "connections": [
     {
-      "id": "b6397692ab",
+      "id": "38ea5c712f",
       "kind": "resource",
-      "source": "e424db6665",
-      "target": "62cd2bab93",
+      "source": "d0ccc8345e",
+      "target": "839018749b",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "50b8e53590",
+      "id": "9a7c9efc32",
       "kind": "resource",
-      "source": "e2e6ef8ab3",
-      "target": "832fc60b3b",
+      "source": "212b2bb47d",
+      "target": "d9b90d7558",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "dc38ada6eb",
+      "id": "9cab8afe6f",
       "kind": "flow",
-      "source": "1bc336dde5",
-      "target": "a1f3570586",
+      "source": "849d5bb263",
+      "target": "dcb572e2b3",
       "label": "",
       "probability": 0.9
     },
     {
-      "id": "0c42f82db5",
+      "id": "c36c88b943",
       "kind": "flow",
-      "source": "1bc336dde5",
-      "target": "f701e8f279",
+      "source": "849d5bb263",
+      "target": "4de8982dec",
       "label": "",
       "probability": 0.1
     },
     {
-      "id": "eaa548f898",
+      "id": "c858b1841f",
       "kind": "flow",
-      "source": "931e9a4934",
-      "target": "df476df724",
+      "source": "3af3c4799c",
+      "target": "a03b3f5eae",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "c45d57b651",
+      "id": "06e2b213f1",
       "kind": "flow",
-      "source": "fce651c3e3",
-      "target": "1faeae1519",
+      "source": "f6cd69bdc2",
+      "target": "1d1a54650a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "726daa3f84",
+      "id": "d181999078",
       "kind": "flow",
-      "source": "f674af4e2d",
-      "target": "1bc336dde5",
+      "source": "aa5b59b1a7",
+      "target": "849d5bb263",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "cf2c3be547",
+      "id": "7bb336a96d",
       "kind": "flow",
-      "source": "a1f3570586",
-      "target": "a80dfc2f4d",
+      "source": "dcb572e2b3",
+      "target": "18d1339f76",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "6a90e3004e",
+      "id": "5632b3fb57",
       "kind": "flow",
-      "source": "f701e8f279",
-      "target": "df476df724",
+      "source": "0375ee1aa7",
+      "target": "3af3c4799c",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "afa73e581c",
+      "id": "289c81b1c5",
       "kind": "flow",
-      "source": "cddcbb9a41",
-      "target": "931e9a4934",
+      "source": "839018749b",
+      "target": "aa5b59b1a7",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "4836736979",
+      "id": "ec70bb2971",
       "kind": "flow",
-      "source": "62cd2bab93",
-      "target": "f674af4e2d",
+      "source": "1d1a54650a",
+      "target": "839018749b",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ba12005384",
+      "id": "c6cc3235f3",
       "kind": "flow",
-      "source": "1faeae1519",
-      "target": "62cd2bab93",
+      "source": "d9b90d7558",
+      "target": "f6cd69bdc2",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "139f991d51",
+      "id": "88ce86a5d4",
       "kind": "flow",
-      "source": "832fc60b3b",
-      "target": "fce651c3e3",
+      "source": "a03b3f5eae",
+      "target": "d9b90d7558",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "cc94e18daf",
+      "id": "22238d410d",
       "kind": "flow",
-      "source": "df476df724",
-      "target": "832fc60b3b",
+      "source": "4de8982dec",
+      "target": "a17e86d0a9",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7d83b0a031",
+      "kind": "flow",
+      "source": "b305b03bec",
+      "target": "a03b3f5eae",
       "label": "",
       "probability": 1.0
     }

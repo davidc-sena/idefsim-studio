@@ -175,7 +175,7 @@ satisfação.</p>
   <tr><td>Regra OU apenas visual</td><td>Escolha da doca: “doca livre”</td><td><a href="#regras">8</a></td></tr>
   <tr><td>Regra E: montagem, divisão e combinação</td><td>Bomba + kit; Laudo ∥ Limpeza</td><td><a href="#regras">8</a></td></tr>
   <tr><td>Regra E/OU</td><td>Expedir (100%) e Pesquisa (30%)</td><td><a href="#regras">8</a></td></tr>
-  <tr><td>Conexão com outra figura</td><td>A → A (continua o diagrama na linha de baixo)</td><td><a href="#simbolos">5</a></td></tr>
+  <tr><td>Conexão com outra figura</td><td>A → A (continua o diagrama na linha de baixo); B → B (o retrabalho volta ao teste sem seta para trás)</td><td><a href="#setas">10</a></td></tr>
   <tr><td>Informação explicativa e ponta de seta</td><td>Nota sobre o almoxarifado, ligada com ponta</td><td><a href="#setas">10</a></td></tr>
   <tr><td>Validação, simulação, impressão, JaamSim</td><td>Capítulos 11 a 14</td><td><a href="#validar">11–14</a></td></tr>
 </table>
@@ -203,7 +203,9 @@ satisfação.</p>
       (<b>Gama</b>, média 60, forma 3) com o Recurso “Mecânico” (capacidade 2).</li>
   <li><b>Teste e retrabalho.</b> “Reparo simples” e “Reparo complexo” seguem para “Testar” (<b>Normal</b> 10;
       2) com a “Bancada de teste”. Uma <i>Regra OU</i> por <b>probabilidade</b> envia 85% adiante e 15% para
-      “Retrabalhar” (Uniforme 10–20), que volta ao teste.</li>
+      “Retrabalhar” (Uniforme 10–20), posicionado <b>à direita</b> da regra. Ao ligar “Retrabalhar” de volta a
+      “Testar”, o programa troca a seta para trás pelo par de conexões <b>B</b>: uma à direita do retrabalho e
+      outra à esquerda do teste.</li>
   <li><b>Atividades em paralelo.</b> Uma <i>Regra E</i> com duas saídas (divisão) leva a “Emitir laudo”
       (<b>Constante</b> 5) e “Limpar e pintar” (Triangular 10, 15, 20). Outra <i>Regra E</i> junta os dois
       ramos (combinação).</li>
@@ -245,7 +247,8 @@ largo: é um bom ponto de estudo para dimensionar o envio de kits.</div>
   <tr><td><b>Regras &amp;, X, O</b></td><td>E, OU e E/OU (capítulo 8).</td></tr>
   <tr><td><b>Ponto final</b></td><td>A entidade sai do sistema.</td></tr>
   <tr><td><b>Conexão</b> (triângulo)</td><td>Liga partes do diagrama. A letra é automática: a nova conexão completa
-      o par pendente ou recebe a próxima letra (A, A, B, B…).</td></tr>
+      o par pendente ou recebe a próxima letra (A, A, B, B…). Também é criada sozinha quando um fluxo voltaria
+      para trás (capítulo 10).</td></tr>
   <tr><td><b>Informação explicativa</b></td><td>Nota de texto; não afeta a simulação.</td></tr>
 </table>
 </div>
@@ -352,6 +355,14 @@ e sem recurso, ganha um símbolo de fila no canto e:</p>
 ganha a sua fila automaticamente.</p>
 
 <h2 id="setas">10. Ligações e setas</h2>
+<p><b>O fluxo da entidade sempre sai pelo lado direito de um símbolo e entra pelo lado esquerdo do seguinte</b>,
+com trechos retos (horizontal, vertical, horizontal). Várias setas no mesmo lado de uma função se distribuem na
+altura. Nas regras e nos círculos, partem de um ponto só e se ramificam.</p>
+<div class="tip"><b>Fluxo que volta para trás vira conexão</b>Ao ligar um elemento a outro que está atrás dele
+(por exemplo, retrabalho → teste), o programa não desenha a seta de volta: cria um <b>par de conexões</b>
+(triângulos com a mesma letra), uma à direita da origem e outra à esquerda do destino. A probabilidade ou
+a condição da seta é mantida. Para modelos antigos, use <i>Modelo → Trocar setas de volta por conexões</i>.
+A Validação também avisa quando um fluxo volta para trás, por exemplo depois de mover um símbolo.</div>
 <p>As ligações são <b>Fluxo da entidade</b>, <b>Ligação de recurso</b>, <b>Ligação de controle</b> e <b>Ligação
 de nota</b>. Ao selecionar uma seta, as Propriedades mostram origem, destino, um <b>rótulo</b> opcional e as
 <b>pontas</b>: <i>Início da seta</i> e <i>Fim da seta</i>, cada uma com <i>Sem ponta / Com ponta</i>. Saídas
@@ -425,7 +436,7 @@ para abrir no JaamSim (<i>File → Open</i>), com os objetos posicionados como n
 regras e a disposição dos objetos no JaamSim. Os avisos da conversão ficam no cabeçalho do arquivo.</div>
 <h3>Importar do JaamSim</h3>
 <p><i>Arquivo → Importar modelo JaamSim (.cfg)</i> (<kbd>Ctrl</kbd>+<kbd>I</kbd>) monta o diagrama IDEF-SIM a
-partir de um modelo do JaamSim: <code>Server</code> vira Função com Recurso, <code>Queue</code> vira
+partir de um modelo do JaamSim (laços de retorno viram pares de conexões): <code>Server</code> vira Função com Recurso, <code>Queue</code> vira
 função-fila, <code>Seize</code>…<code>Release</code> ligam o recurso ao processo entre eles, e
 <code>Branch</code>, <code>Duplicate</code>, <code>Combine</code> e <code>Assemble</code> viram regras. Os
 <b>82 exemplos oficiais do JaamSim</b> já convertidos estão em <i>Abrir exemplo → Exemplos do JaamSim</i>.

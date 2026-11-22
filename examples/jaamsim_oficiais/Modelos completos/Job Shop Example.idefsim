@@ -4,7 +4,7 @@
   "name": "Job Shop Example",
   "author": "",
   "version": "1.0",
-  "description": "Convertido do exemplo do JaamSim 'Job Shop Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Workstation1 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation2 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation3 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation4 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation5 (Workstation) representado como Função, sem a lógica de Workstation.\n- Branch1: regra de escolha 'this.obj.Stations(this.obj.PresentTask)' mantida como texto (regra OU apenas visual).\n- Branch2: regra de escolha 'this.obj.PresentTask < size(this.obj.Stations) ? 1 : 2' mantida como texto (regra OU apenas visual).",
+  "description": "Convertido do exemplo do JaamSim 'Job Shop Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Workstation1 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation2 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation3 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation4 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation5 (Workstation) representado como Função, sem a lógica de Workstation.\n- Branch1: regra de escolha 'this.obj.Stations(this.obj.PresentTask)' mantida como texto (regra OU apenas visual).\n- Branch2: regra de escolha 'this.obj.PresentTask < size(this.obj.Stations) ? 1 : 2' mantida como texto (regra OU apenas visual).\n- Fluxos de retorno representados pelas conexões A.",
   "settings": {
     "time_unit": "h",
     "duration": 87600.0,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "0effc9ef60",
+      "id": "118bffcc4e",
       "kind": "rule_or",
       "name": "Branch1",
       "x": 280,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "25183a143b",
+      "id": "c4543227e2",
       "kind": "rule_or",
       "name": "Branch2",
       "x": 680,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "0541476ba5",
+      "id": "e6174e677c",
       "kind": "rule_or",
       "name": "Branch3",
       "x": 880,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "id": "3c0d90b616",
+      "id": "58e189a3b5",
       "kind": "entity",
       "name": "Job Generator",
       "x": 80,
@@ -67,7 +67,7 @@
       }
     },
     {
-      "id": "cbf0e670cd",
+      "id": "a87ebd20dd",
       "kind": "exit",
       "name": "Entity Sink1",
       "x": 1080,
@@ -76,7 +76,7 @@
       "params": {}
     },
     {
-      "id": "5e5320bbba",
+      "id": "2f9766ea16",
       "kind": "function",
       "name": "Workstation1",
       "x": 480,
@@ -88,7 +88,7 @@
       }
     },
     {
-      "id": "647b79ae35",
+      "id": "a5bab0ba4d",
       "kind": "function",
       "name": "Workstation2",
       "x": 480,
@@ -100,7 +100,7 @@
       }
     },
     {
-      "id": "13dd4a3ee2",
+      "id": "cf9f0ad850",
       "kind": "function",
       "name": "Workstation3",
       "x": 480,
@@ -112,7 +112,7 @@
       }
     },
     {
-      "id": "141bef5c6e",
+      "id": "8793073347",
       "kind": "function",
       "name": "Workstation4",
       "x": 480,
@@ -124,7 +124,7 @@
       }
     },
     {
-      "id": "f98d2c209d",
+      "id": "d00a67dd2c",
       "kind": "function",
       "name": "Workstation5",
       "x": 480,
@@ -134,119 +134,145 @@
         "duration": "CONST(0)",
         "is_queue": false
       }
+    },
+    {
+      "id": "c57e6b6404",
+      "kind": "connector",
+      "name": "A",
+      "x": 740,
+      "y": 170,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "d06f32c433",
+      "kind": "connector",
+      "name": "A",
+      "x": 220,
+      "y": 170,
+      "description": "",
+      "params": {}
     }
   ],
   "connections": [
     {
-      "id": "e7cfbc7f2c",
+      "id": "ae7127144b",
       "kind": "flow",
-      "source": "0effc9ef60",
-      "target": "5e5320bbba",
+      "source": "118bffcc4e",
+      "target": "2f9766ea16",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "7f4a5dcb8a",
+      "id": "251eb9e0da",
       "kind": "flow",
-      "source": "0effc9ef60",
-      "target": "647b79ae35",
+      "source": "118bffcc4e",
+      "target": "a5bab0ba4d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "63f3dc90af",
+      "id": "b8a11e74d1",
       "kind": "flow",
-      "source": "0effc9ef60",
-      "target": "13dd4a3ee2",
+      "source": "118bffcc4e",
+      "target": "cf9f0ad850",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "fdaee054bc",
+      "id": "5da23b8d3c",
       "kind": "flow",
-      "source": "0effc9ef60",
-      "target": "141bef5c6e",
+      "source": "118bffcc4e",
+      "target": "8793073347",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5e78ecb0b0",
+      "id": "40b73faafc",
       "kind": "flow",
-      "source": "0effc9ef60",
-      "target": "f98d2c209d",
+      "source": "118bffcc4e",
+      "target": "d00a67dd2c",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "db59738873",
+      "id": "6c47b705c2",
       "kind": "flow",
-      "source": "25183a143b",
-      "target": "0effc9ef60",
+      "source": "c4543227e2",
+      "target": "e6174e677c",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "cff92cf97f",
+      "id": "ccb5f92f16",
       "kind": "flow",
-      "source": "25183a143b",
-      "target": "0541476ba5",
-      "label": "",
-      "probability": 1.0
-    },
-    {
-      "id": "6a1bce1723",
-      "kind": "flow",
-      "source": "0541476ba5",
-      "target": "cbf0e670cd",
+      "source": "e6174e677c",
+      "target": "a87ebd20dd",
       "label": "",
       "probability": 1.0,
       "condition": "Type == 1"
     },
     {
-      "id": "29d77bcd17",
+      "id": "b23f60e6e1",
       "kind": "flow",
-      "source": "3c0d90b616",
-      "target": "0effc9ef60",
+      "source": "58e189a3b5",
+      "target": "118bffcc4e",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "93183fa9df",
+      "id": "042d89b1e9",
       "kind": "flow",
-      "source": "5e5320bbba",
-      "target": "25183a143b",
+      "source": "2f9766ea16",
+      "target": "c4543227e2",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "c66173bc10",
+      "id": "6f4835056a",
       "kind": "flow",
-      "source": "647b79ae35",
-      "target": "25183a143b",
+      "source": "a5bab0ba4d",
+      "target": "c4543227e2",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "85f89aec41",
+      "id": "bbd456bc1b",
       "kind": "flow",
-      "source": "13dd4a3ee2",
-      "target": "25183a143b",
+      "source": "cf9f0ad850",
+      "target": "c4543227e2",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "4b4ca84326",
+      "id": "59d16ba759",
       "kind": "flow",
-      "source": "141bef5c6e",
-      "target": "25183a143b",
+      "source": "8793073347",
+      "target": "c4543227e2",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "20e47d333a",
+      "id": "fdb100c0d0",
       "kind": "flow",
-      "source": "f98d2c209d",
-      "target": "25183a143b",
+      "source": "d00a67dd2c",
+      "target": "c4543227e2",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b32be1ad78",
+      "kind": "flow",
+      "source": "c4543227e2",
+      "target": "c57e6b6404",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "77ef73975b",
+      "kind": "flow",
+      "source": "d06f32c433",
+      "target": "118bffcc4e",
       "label": "",
       "probability": 1.0
     }

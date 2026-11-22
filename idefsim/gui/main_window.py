@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (QApplication, QDialog, QDockWidget, QFileDialog, 
 from ..examples import ALL as EXAMPLES, jaamsim_examples, manual_path
 from ..jaamsim_import import JaamSimImportError, import_jaamsim
 from ..model import CONNECTION_LABELS, KIND_LABELS, ConnectionKind as CK, ElementKind as EK, Model
+from .. import flow_rules
 from ..jaamsim_export import export_jaamsim, jaamsim_name
 from ..report import model_to_html
 from ..simulation import SimulationError, run_simulation
@@ -137,6 +138,8 @@ class MainWindow(QMainWindow):
         self.a_zout = self._act("Diminuir zoom", lambda: self.view.scale(1 / 1.2, 1 / 1.2), S.ZoomOut)
         self.a_fit = self._act("Ajustar à janela", self.fit, "Ctrl+0")
         self.a_validate = self._act("&Validar modelo", self.validate, "F7")
+        self.a_fix_back = self._act("Trocar setas de volta por &conexões", self.fix_backward,
+                                    tip="Fluxos que voltam para trás viram pares de conexões")
         self.a_run = self._act("&Executar simulação", self.run_sim, "F5")
         self.a_props = self._act("Propriedades do &modelo", self._show_model_props, "Ctrl+M")
         self.a_legend = self._act("Notação IDEF-SIM", lambda: LegendDialog(self).exec(), "F1")
@@ -177,7 +180,7 @@ class MainWindow(QMainWindow):
         m = mb.addMenu("E&xibir")
         m.addActions([self.a_zin, self.a_zout, self.a_fit])
         m = mb.addMenu("&Modelo")
-        m.addActions([self.a_props, self.a_validate])
+        m.addActions([self.a_props, self.a_validate, self.a_fix_back])
         m = mb.addMenu("&Simulação")
         m.addAction(self.a_run)
         m = mb.addMenu("A&juda")
@@ -520,6 +523,17 @@ class MainWindow(QMainWindow):
             svg = svg[svg.index("<svg"):]
         Path(path).write_text(model_to_html(self.scene.model, svg), encoding="utf-8")
         self.statusBar().showMessage(f"Documentação exportada para {path}", 4000)
+
+    def fix_backward(self):
+        letters = flow_rules.fix_backward_flows(self.scene.model)
+        if not letters:
+            self.statusBar().showMessage("Nenhuma seta de fluxo volta para trás.", 4000)
+            return
+        self.scene.rebuild()
+        self._commit("Trocar setas de volta por conexões")
+        self._on_selection()
+        self.statusBar().showMessage(f"{len(letters)} seta(s) de volta trocada(s) pelas conexões "
+                                     f"{', '.join(letters)}.", 6000)
 
     def _ask_clean_options(self, title: str) -> bool:
         if not self.scene.model.elements:

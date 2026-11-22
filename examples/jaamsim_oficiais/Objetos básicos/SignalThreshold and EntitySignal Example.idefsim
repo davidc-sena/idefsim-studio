@@ -4,7 +4,7 @@
   "name": "SignalThreshold and EntitySignal Example",
   "author": "",
   "version": "1.0",
-  "description": "Convertido do exemplo do JaamSim 'SignalThreshold and EntitySignal Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: sinais.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "description": "Convertido do exemplo do JaamSim 'SignalThreshold and EntitySignal Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: sinais.\n- Duração da simulação não definida no JaamSim; usadas 8 h.\n- Fluxos de retorno representados pelas conexões A.",
   "settings": {
     "time_unit": "s",
     "duration": 28800.0,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "3aeb153ca1",
+      "id": "2bbba82c01",
       "kind": "movement",
       "name": "Entity Conveyor1",
       "x": 280,
@@ -25,7 +25,7 @@
       }
     },
     {
-      "id": "cf1a54a69e",
+      "id": "190c864d49",
       "kind": "function",
       "name": "Close Time",
       "x": 480,
@@ -37,7 +37,7 @@
       }
     },
     {
-      "id": "f5d7b626a6",
+      "id": "a7a5a4388b",
       "kind": "function",
       "name": "Open Time",
       "x": 280,
@@ -49,7 +49,7 @@
       }
     },
     {
-      "id": "134e7738fc",
+      "id": "ce21d4d8b0",
       "kind": "entity",
       "name": "Sim Entity1",
       "x": 80,
@@ -66,7 +66,7 @@
       }
     },
     {
-      "id": "6ed47e6913",
+      "id": "dd394e7b9b",
       "kind": "entity",
       "name": "Sim Entity2",
       "x": 80,
@@ -83,53 +83,79 @@
       }
     },
     {
-      "id": "678abf425c",
+      "id": "fed4f4d227",
       "kind": "exit",
       "name": "Entity Sink1",
       "x": 480,
       "y": 100.0,
       "description": "",
       "params": {}
+    },
+    {
+      "id": "87140e96a3",
+      "kind": "connector",
+      "name": "A",
+      "x": 590,
+      "y": 250,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "052af67051",
+      "kind": "connector",
+      "name": "A",
+      "x": 170,
+      "y": 320,
+      "description": "",
+      "params": {}
     }
   ],
   "connections": [
     {
-      "id": "0e522449ba",
+      "id": "a7e4942b97",
       "kind": "flow",
-      "source": "3aeb153ca1",
-      "target": "678abf425c",
+      "source": "2bbba82c01",
+      "target": "fed4f4d227",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "d21d6ecc90",
+      "id": "a3b6001c32",
       "kind": "flow",
-      "source": "cf1a54a69e",
-      "target": "f5d7b626a6",
+      "source": "a7a5a4388b",
+      "target": "190c864d49",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "1ba1531d39",
+      "id": "d683598c52",
       "kind": "flow",
-      "source": "f5d7b626a6",
-      "target": "cf1a54a69e",
+      "source": "ce21d4d8b0",
+      "target": "2bbba82c01",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2071dd3006",
+      "id": "92c7bca71b",
       "kind": "flow",
-      "source": "134e7738fc",
-      "target": "3aeb153ca1",
+      "source": "dd394e7b9b",
+      "target": "a7a5a4388b",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "e9d1c4a999",
+      "id": "c66c3c83f3",
       "kind": "flow",
-      "source": "6ed47e6913",
-      "target": "f5d7b626a6",
+      "source": "190c864d49",
+      "target": "87140e96a3",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "8e105d7e8c",
+      "kind": "flow",
+      "source": "052af67051",
+      "target": "a7a5a4388b",
       "label": "",
       "probability": 1.0
     }

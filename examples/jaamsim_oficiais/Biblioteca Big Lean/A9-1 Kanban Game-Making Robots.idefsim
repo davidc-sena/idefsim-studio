@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "ebf0d86565",
+      "id": "30253dde9a",
       "kind": "rule_and",
       "name": "Assemble1",
       "x": 680,
@@ -23,7 +23,7 @@
       "params": {}
     },
     {
-      "id": "62cea1a526",
+      "id": "5e34b0ce0a",
       "kind": "entity",
       "name": "Sim Entity Completed Head",
       "x": 880,
@@ -40,7 +40,7 @@
       }
     },
     {
-      "id": "3873c15df8",
+      "id": "800bafbce8",
       "kind": "rule_and",
       "name": "Assemble2",
       "x": 2480,
@@ -49,7 +49,7 @@
       "params": {}
     },
     {
-      "id": "d036e6d391",
+      "id": "fb78d52110",
       "kind": "entity",
       "name": "Robot-Assembled",
       "x": 2680,
@@ -66,7 +66,7 @@
       }
     },
     {
-      "id": "c672b02f09",
+      "id": "c7bd6157e5",
       "kind": "rule_and",
       "name": "Assemble All",
       "x": 1680,
@@ -75,7 +75,7 @@
       "params": {}
     },
     {
-      "id": "cd0240023c",
+      "id": "c24fd82cb3",
       "kind": "entity",
       "name": "Sim Entity Assembled",
       "x": 1880,
@@ -92,7 +92,7 @@
       }
     },
     {
-      "id": "e5259be8fe",
+      "id": "ff98dd5c6d",
       "kind": "rule_and",
       "name": "Assemble Torso",
       "x": 880,
@@ -101,7 +101,7 @@
       "params": {}
     },
     {
-      "id": "7eaa708125",
+      "id": "fac2dddf0a",
       "kind": "entity",
       "name": "Sim Entity Torso And Arms",
       "x": 1080,
@@ -118,7 +118,7 @@
       }
     },
     {
-      "id": "0783cf7f0e",
+      "id": "d9b224336f",
       "kind": "movement",
       "name": "Entity Conveyor1",
       "x": 2080,
@@ -129,7 +129,7 @@
       }
     },
     {
-      "id": "456ff3a0cb",
+      "id": "4207625326",
       "kind": "movement",
       "name": "Entity Conveyor2",
       "x": 280,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "id": "409eef5702",
+      "id": "bad5d39ee6",
       "kind": "movement",
       "name": "Entity Conveyor3",
       "x": 1080,
@@ -151,7 +151,7 @@
       }
     },
     {
-      "id": "3e6126ae97",
+      "id": "41d258bdd0",
       "kind": "movement",
       "name": "Entity Conveyor4",
       "x": 280,
@@ -162,7 +162,7 @@
       }
     },
     {
-      "id": "71152321e2",
+      "id": "e79cbb869f",
       "kind": "movement",
       "name": "Entity Conveyor5",
       "x": 1280,
@@ -173,7 +173,7 @@
       }
     },
     {
-      "id": "2293aa332e",
+      "id": "d93ed44946",
       "kind": "movement",
       "name": "Entity Conveyor6",
       "x": 280,
@@ -184,7 +184,7 @@
       }
     },
     {
-      "id": "dc0460802f",
+      "id": "3363b18253",
       "kind": "movement",
       "name": "Entity Conveyor7",
       "x": 280,
@@ -195,7 +195,7 @@
       }
     },
     {
-      "id": "665a1fc420",
+      "id": "bf8768a389",
       "kind": "movement",
       "name": "Entity Conveyor8a",
       "x": 280,
@@ -206,7 +206,7 @@
       }
     },
     {
-      "id": "0e7d347e48",
+      "id": "55a3df2709",
       "kind": "movement",
       "name": "Entity Conveyor8b",
       "x": 480,
@@ -217,7 +217,7 @@
       }
     },
     {
-      "id": "9e462414ab",
+      "id": "984013191d",
       "kind": "movement",
       "name": "Entity Conveyor Shipped",
       "x": 2880,
@@ -228,7 +228,7 @@
       }
     },
     {
-      "id": "cc8c2c34c0",
+      "id": "9cbbbb178a",
       "kind": "entity",
       "name": "Sim Entity Head",
       "x": 80,
@@ -245,7 +245,7 @@
       }
     },
     {
-      "id": "0e4e0695db",
+      "id": "719bb84ff1",
       "kind": "entity",
       "name": "Sim Entity Left Arm",
       "x": 80,
@@ -262,7 +262,7 @@
       }
     },
     {
-      "id": "9cfefe5307",
+      "id": "5ff8d4e8e3",
       "kind": "entity",
       "name": "Sim Entity Right Arm",
       "x": 80,
@@ -279,7 +279,7 @@
       }
     },
     {
-      "id": "24f7394697",
+      "id": "9e34077c65",
       "kind": "entity",
       "name": "Sim Entity Torso",
       "x": 80,
@@ -296,7 +296,7 @@
       }
     },
     {
-      "id": "b6fc9bb5d8",
+      "id": "36f134c62c",
       "kind": "entity",
       "name": "Sim Entity Wheel",
       "x": 80,
@@ -313,7 +313,7 @@
       }
     },
     {
-      "id": "1f77d29080",
+      "id": "bfd4fb7cc2",
       "kind": "exit",
       "name": "Set Kanban Levels",
       "x": 3080,
@@ -322,7 +322,7 @@
       "params": {}
     },
     {
-      "id": "e058844c0d",
+      "id": "913c69269c",
       "kind": "exit",
       "name": "Set Kanban Levels Copy1",
       "x": 80,
@@ -331,7 +331,7 @@
       "params": {}
     },
     {
-      "id": "585cc7111d",
+      "id": "a338903053",
       "kind": "function",
       "name": "Queue1",
       "x": 2280,
@@ -343,7 +343,7 @@
       }
     },
     {
-      "id": "85313aaa45",
+      "id": "f337a0b036",
       "kind": "function",
       "name": "Queue2",
       "x": 480,
@@ -355,7 +355,7 @@
       }
     },
     {
-      "id": "c2b92969f6",
+      "id": "50ab0d6dce",
       "kind": "function",
       "name": "Queue3",
       "x": 1280,
@@ -367,7 +367,7 @@
       }
     },
     {
-      "id": "7e53a59c96",
+      "id": "3c7591b830",
       "kind": "function",
       "name": "Queue4",
       "x": 480,
@@ -379,7 +379,7 @@
       }
     },
     {
-      "id": "d7111f1816",
+      "id": "bc36b4ee31",
       "kind": "function",
       "name": "Queue5",
       "x": 1480,
@@ -391,7 +391,7 @@
       }
     },
     {
-      "id": "2d949741b4",
+      "id": "e009893d39",
       "kind": "function",
       "name": "Queue6",
       "x": 480,
@@ -403,7 +403,7 @@
       }
     },
     {
-      "id": "685e38a616",
+      "id": "85b5d0bcc3",
       "kind": "function",
       "name": "Queue7",
       "x": 480,
@@ -415,7 +415,7 @@
       }
     },
     {
-      "id": "86e8703536",
+      "id": "5cc6e207bf",
       "kind": "function",
       "name": "Queue8",
       "x": 680,
@@ -429,250 +429,250 @@
   ],
   "connections": [
     {
-      "id": "d76a909e64",
+      "id": "7dd72dcd56",
       "kind": "flow",
-      "source": "62cea1a526",
-      "target": "409eef5702",
+      "source": "5e34b0ce0a",
+      "target": "bad5d39ee6",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "246e971b20",
+      "id": "bb0f3867b5",
       "kind": "flow",
-      "source": "ebf0d86565",
-      "target": "62cea1a526",
+      "source": "30253dde9a",
+      "target": "5e34b0ce0a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "97567d37be",
+      "id": "ba404270b6",
       "kind": "flow",
-      "source": "7e53a59c96",
-      "target": "ebf0d86565",
+      "source": "3c7591b830",
+      "target": "30253dde9a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "db42676d79",
+      "id": "7a37a56a88",
       "kind": "flow",
-      "source": "d036e6d391",
-      "target": "9e462414ab",
+      "source": "fb78d52110",
+      "target": "984013191d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "791f85d196",
+      "id": "6ad5ec3264",
       "kind": "flow",
-      "source": "3873c15df8",
-      "target": "d036e6d391",
+      "source": "800bafbce8",
+      "target": "fb78d52110",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "9966b0c522",
+      "id": "96091f36d2",
       "kind": "flow",
-      "source": "585cc7111d",
-      "target": "3873c15df8",
+      "source": "a338903053",
+      "target": "800bafbce8",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "f07612f086",
+      "id": "aac9ed70f7",
       "kind": "flow",
-      "source": "cd0240023c",
-      "target": "0783cf7f0e",
+      "source": "c24fd82cb3",
+      "target": "d9b224336f",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "e07038cafa",
+      "id": "875de48858",
       "kind": "flow",
-      "source": "c672b02f09",
-      "target": "cd0240023c",
+      "source": "c7bd6157e5",
+      "target": "c24fd82cb3",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "12df3e1aa2",
+      "id": "e6177f7f38",
       "kind": "flow",
-      "source": "c2b92969f6",
-      "target": "c672b02f09",
+      "source": "50ab0d6dce",
+      "target": "c7bd6157e5",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "27ab1c7253",
+      "id": "ca16d879c4",
       "kind": "flow",
-      "source": "d7111f1816",
-      "target": "c672b02f09",
+      "source": "bc36b4ee31",
+      "target": "c7bd6157e5",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "4890256ff1",
+      "id": "11459cd59f",
       "kind": "flow",
-      "source": "85313aaa45",
-      "target": "c672b02f09",
+      "source": "f337a0b036",
+      "target": "c7bd6157e5",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "fb2d3ed167",
+      "id": "8482a5c9be",
       "kind": "flow",
-      "source": "7eaa708125",
-      "target": "71152321e2",
+      "source": "fac2dddf0a",
+      "target": "e79cbb869f",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "c8440026e3",
+      "id": "498f9c603f",
       "kind": "flow",
-      "source": "e5259be8fe",
-      "target": "7eaa708125",
+      "source": "ff98dd5c6d",
+      "target": "fac2dddf0a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "4982a04bda",
+      "id": "8f65b4eb82",
       "kind": "flow",
-      "source": "685e38a616",
-      "target": "e5259be8fe",
+      "source": "85b5d0bcc3",
+      "target": "ff98dd5c6d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "4f15b345dc",
+      "id": "bb342a38c2",
       "kind": "flow",
-      "source": "86e8703536",
-      "target": "e5259be8fe",
+      "source": "5cc6e207bf",
+      "target": "ff98dd5c6d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "b36a5865eb",
+      "id": "dc81655f9f",
       "kind": "flow",
-      "source": "2d949741b4",
-      "target": "e5259be8fe",
+      "source": "e009893d39",
+      "target": "ff98dd5c6d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "9c0e3bd04c",
+      "id": "525e507c4f",
       "kind": "flow",
-      "source": "0783cf7f0e",
-      "target": "585cc7111d",
+      "source": "d9b224336f",
+      "target": "a338903053",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "e326226049",
+      "id": "46dc96818b",
       "kind": "flow",
-      "source": "456ff3a0cb",
-      "target": "85313aaa45",
+      "source": "4207625326",
+      "target": "f337a0b036",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2cd5ea7517",
+      "id": "438bbd8985",
       "kind": "flow",
-      "source": "409eef5702",
-      "target": "c2b92969f6",
+      "source": "bad5d39ee6",
+      "target": "50ab0d6dce",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "1bca1dea25",
+      "id": "3f8c0c4c6f",
       "kind": "flow",
-      "source": "3e6126ae97",
-      "target": "7e53a59c96",
+      "source": "41d258bdd0",
+      "target": "3c7591b830",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "0685b2ef9a",
+      "id": "ce10eb7b03",
       "kind": "flow",
-      "source": "71152321e2",
-      "target": "d7111f1816",
+      "source": "e79cbb869f",
+      "target": "bc36b4ee31",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "45d3ebf6ab",
+      "id": "e368647902",
       "kind": "flow",
-      "source": "2293aa332e",
-      "target": "2d949741b4",
+      "source": "d93ed44946",
+      "target": "e009893d39",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "f4e71f28b6",
+      "id": "5b9404d03d",
       "kind": "flow",
-      "source": "dc0460802f",
-      "target": "685e38a616",
+      "source": "3363b18253",
+      "target": "85b5d0bcc3",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2799061ea1",
+      "id": "e174607595",
       "kind": "flow",
-      "source": "665a1fc420",
-      "target": "0e7d347e48",
+      "source": "bf8768a389",
+      "target": "55a3df2709",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "17ed8d6f06",
+      "id": "d7ca38a5a4",
       "kind": "flow",
-      "source": "0e7d347e48",
-      "target": "86e8703536",
+      "source": "55a3df2709",
+      "target": "5cc6e207bf",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2aa241752e",
+      "id": "495f5d1c55",
       "kind": "flow",
-      "source": "9e462414ab",
-      "target": "1f77d29080",
+      "source": "984013191d",
+      "target": "bfd4fb7cc2",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "7f33d61c19",
+      "id": "994e439f14",
       "kind": "flow",
-      "source": "cc8c2c34c0",
-      "target": "3e6126ae97",
+      "source": "9cbbbb178a",
+      "target": "41d258bdd0",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "6fcc72567f",
+      "id": "ce66782d61",
       "kind": "flow",
-      "source": "0e4e0695db",
-      "target": "dc0460802f",
+      "source": "719bb84ff1",
+      "target": "3363b18253",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ca361d9183",
+      "id": "5f8c6d86bb",
       "kind": "flow",
-      "source": "9cfefe5307",
-      "target": "2293aa332e",
+      "source": "5ff8d4e8e3",
+      "target": "d93ed44946",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "77c1ce8052",
+      "id": "3fe71140ee",
       "kind": "flow",
-      "source": "24f7394697",
-      "target": "665a1fc420",
+      "source": "9e34077c65",
+      "target": "bf8768a389",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "22e0a1cd72",
+      "id": "7c41336169",
       "kind": "flow",
-      "source": "b6fc9bb5d8",
-      "target": "456ff3a0cb",
+      "source": "36f134c62c",
+      "target": "4207625326",
       "label": "",
       "probability": 1.0
     }

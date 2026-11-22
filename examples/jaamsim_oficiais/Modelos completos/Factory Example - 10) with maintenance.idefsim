@@ -4,7 +4,7 @@
   "name": "Factory Example - 10) with maintenance",
   "author": "",
   "version": "1.0",
-  "description": "Convertido do exemplo do JaamSim 'Factory Example - 10) with maintenance' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- Não representados no IDEF-SIM: limiares (condições de abertura), limiares por série temporal, paradas/manutenção, séries temporais.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "description": "Convertido do exemplo do JaamSim 'Factory Example - 10) with maintenance' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- GenerateParts: chegadas não estacionárias (NonStatDist) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- Não representados no IDEF-SIM: limiares (condições de abertura), limiares por série temporal, paradas/manutenção, séries temporais.\n- Duração da simulação não definida no JaamSim; usadas 8 h.\n- Fluxos de retorno representados pelas conexões A.",
   "settings": {
     "time_unit": "min",
     "duration": 480.0,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "4a11d7230c",
+      "id": "ceb73145da",
       "kind": "rule_or",
       "name": "Passed Inspection",
       "x": 1680,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "dbef5c1053",
+      "id": "d796bb16a3",
       "kind": "function",
       "name": "Entity Delay1",
       "x": 280,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "fceb0a9f4b",
+      "id": "d1b2bef505",
       "kind": "function",
       "name": "Entity Delay2",
       "x": 880,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "id": "3d249e0cbb",
+      "id": "b978ce5a60",
       "kind": "function",
       "name": "Entity Delay3",
       "x": 1480,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "93bf28c304",
+      "id": "5009de9c54",
       "kind": "function",
       "name": "Entity Delay4",
       "x": 1880,
@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "a70985c6b8",
+      "id": "f97da42511",
       "kind": "function",
       "name": "Entity Delay5",
       "x": 1880,
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "ce2ada3f0c",
+      "id": "07ed13440b",
       "kind": "entity",
       "name": "Part",
       "x": 80,
@@ -103,7 +103,7 @@
       }
     },
     {
-      "id": "623e2f1dd2",
+      "id": "3b8af948b1",
       "kind": "exit",
       "name": "Good Part Finished",
       "x": 2080,
@@ -112,7 +112,7 @@
       "params": {}
     },
     {
-      "id": "d4718d2394",
+      "id": "a567db76ba",
       "kind": "function",
       "name": "Inspect Queue",
       "x": 1080,
@@ -124,7 +124,7 @@
       }
     },
     {
-      "id": "de65468009",
+      "id": "85c1fea1f8",
       "kind": "function",
       "name": "Machine Queue",
       "x": 480,
@@ -136,7 +136,7 @@
       }
     },
     {
-      "id": "5bb806b5f5",
+      "id": "39f64b7ae8",
       "kind": "function",
       "name": "Inspect Part",
       "x": 1280,
@@ -148,7 +148,7 @@
       }
     },
     {
-      "id": "552222626b",
+      "id": "f14e721f84",
       "kind": "resource",
       "name": "Recurso Inspect Part",
       "x": 1280,
@@ -159,7 +159,7 @@
       }
     },
     {
-      "id": "9fef78d8e9",
+      "id": "f958d6183a",
       "kind": "function",
       "name": "Machine Part",
       "x": 680,
@@ -171,7 +171,7 @@
       }
     },
     {
-      "id": "8bff7ed01d",
+      "id": "60627abe15",
       "kind": "resource",
       "name": "Recurso Machine Part",
       "x": 680,
@@ -180,118 +180,144 @@
       "params": {
         "capacity": 1
       }
+    },
+    {
+      "id": "504da7154d",
+      "kind": "connector",
+      "name": "A",
+      "x": 1990,
+      "y": 320,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "41fab9af63",
+      "kind": "connector",
+      "name": "A",
+      "x": 370,
+      "y": 170,
+      "description": "",
+      "params": {}
     }
   ],
   "connections": [
     {
-      "id": "6ed0d48a50",
+      "id": "880e3b8c40",
       "kind": "resource",
-      "source": "552222626b",
-      "target": "5bb806b5f5",
+      "source": "f14e721f84",
+      "target": "39f64b7ae8",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "04555c5e4b",
+      "id": "40255ad623",
       "kind": "resource",
-      "source": "8bff7ed01d",
-      "target": "9fef78d8e9",
+      "source": "60627abe15",
+      "target": "f958d6183a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "c64a24f6e9",
+      "id": "40d0674f1b",
       "kind": "flow",
-      "source": "4a11d7230c",
-      "target": "93bf28c304",
+      "source": "ceb73145da",
+      "target": "5009de9c54",
       "label": "",
       "probability": 0.9
     },
     {
-      "id": "2ce92eac10",
+      "id": "47948bd85c",
       "kind": "flow",
-      "source": "4a11d7230c",
-      "target": "a70985c6b8",
+      "source": "ceb73145da",
+      "target": "f97da42511",
       "label": "",
       "probability": 0.1
     },
     {
-      "id": "eb8852807e",
+      "id": "95c441c831",
       "kind": "flow",
-      "source": "dbef5c1053",
-      "target": "de65468009",
+      "source": "d796bb16a3",
+      "target": "85c1fea1f8",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "7e625891b7",
+      "id": "774449babb",
       "kind": "flow",
-      "source": "fceb0a9f4b",
-      "target": "d4718d2394",
+      "source": "d1b2bef505",
+      "target": "a567db76ba",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "5c8b13e8ae",
+      "id": "636f30d49c",
       "kind": "flow",
-      "source": "3d249e0cbb",
-      "target": "4a11d7230c",
+      "source": "b978ce5a60",
+      "target": "ceb73145da",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "9bb7b85409",
+      "id": "f4787a641c",
       "kind": "flow",
-      "source": "93bf28c304",
-      "target": "623e2f1dd2",
+      "source": "5009de9c54",
+      "target": "3b8af948b1",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "a3e6b65a75",
+      "id": "b632bd0700",
       "kind": "flow",
-      "source": "a70985c6b8",
-      "target": "de65468009",
+      "source": "07ed13440b",
+      "target": "d796bb16a3",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "a7f94e7141",
+      "id": "c1270044f0",
       "kind": "flow",
-      "source": "ce2ada3f0c",
-      "target": "dbef5c1053",
+      "source": "39f64b7ae8",
+      "target": "b978ce5a60",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "e252602002",
+      "id": "ac75d90e50",
       "kind": "flow",
-      "source": "5bb806b5f5",
-      "target": "3d249e0cbb",
+      "source": "a567db76ba",
+      "target": "39f64b7ae8",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "e9aca0c133",
+      "id": "30525bd5f6",
       "kind": "flow",
-      "source": "d4718d2394",
-      "target": "5bb806b5f5",
+      "source": "f958d6183a",
+      "target": "d1b2bef505",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ca36feb307",
+      "id": "e0b95048e8",
       "kind": "flow",
-      "source": "9fef78d8e9",
-      "target": "fceb0a9f4b",
+      "source": "85c1fea1f8",
+      "target": "f958d6183a",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "137ebccd9f",
+      "id": "96183fd2a3",
       "kind": "flow",
-      "source": "de65468009",
-      "target": "9fef78d8e9",
+      "source": "f97da42511",
+      "target": "504da7154d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "0069084cec",
+      "kind": "flow",
+      "source": "41fab9af63",
+      "target": "85c1fea1f8",
       "label": "",
       "probability": 1.0
     }
