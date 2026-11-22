@@ -4,7 +4,7 @@
   "name": "Montagem com junção E",
   "author": "Prof. David Custódio de Sena",
   "version": "1.0",
-  "description": "",
+  "description": "Base e tampa são preparadas em paralelo e esperam uma pela outra nas filas antes da junção E; juntas formam o Produto, que é montado.",
   "settings": {
     "time_unit": "min",
     "duration": 600,
@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "b8a7ad1c3b",
+      "id": "2a42aec9f3",
       "kind": "entity",
       "name": "Base",
       "x": 60,
@@ -31,7 +31,7 @@
       }
     },
     {
-      "id": "800491c428",
+      "id": "553c610b8d",
       "kind": "entity",
       "name": "Tampa",
       "x": 60,
@@ -48,41 +48,67 @@
       }
     },
     {
-      "id": "5ee387781a",
+      "id": "22de5b6f4e",
       "kind": "function",
       "name": "Preparar base",
       "x": 220,
       "y": 120,
       "description": "",
       "params": {
-        "duration": "TRIA(2, 3, 4)"
+        "duration": "TRIA(2, 3, 4)",
+        "is_queue": false
       }
     },
     {
-      "id": "7eda6aded0",
+      "id": "ccd63e1b24",
       "kind": "function",
       "name": "Preparar tampa",
       "x": 220,
       "y": 300,
       "description": "",
       "params": {
-        "duration": "TRIA(1, 2, 3)"
+        "duration": "TRIA(1, 2, 3)",
+        "is_queue": false
       }
     },
     {
-      "id": "8ead37aabe",
+      "id": "ca17067663",
+      "kind": "function",
+      "name": "Aguardar base",
+      "x": 390,
+      "y": 120,
+      "description": "",
+      "params": {
+        "duration": "TRIA(4, 5, 6)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "e1f5ba2335",
+      "kind": "function",
+      "name": "Aguardar tampa",
+      "x": 390,
+      "y": 300,
+      "description": "",
+      "params": {
+        "duration": "TRIA(4, 5, 6)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "87cbc0fd48",
       "kind": "rule_and",
       "name": "&",
-      "x": 380,
+      "x": 530,
       "y": 210,
       "description": "",
       "params": {}
     },
     {
-      "id": "5f3eea6d5e",
+      "id": "087c9fc75c",
       "kind": "entity",
       "name": "Produto",
-      "x": 480,
+      "x": 630,
       "y": 210,
       "description": "",
       "params": {
@@ -96,21 +122,22 @@
       }
     },
     {
-      "id": "923cfc80bb",
+      "id": "98b50e0c91",
       "kind": "function",
       "name": "Montar",
-      "x": 620,
+      "x": 770,
       "y": 210,
       "description": "",
       "params": {
-        "duration": "NORM(3.5, 0.4)"
+        "duration": "NORM(3.5, 0.4)",
+        "is_queue": false
       }
     },
     {
-      "id": "f710855d32",
+      "id": "662baac12d",
       "kind": "resource",
       "name": "Montador",
-      "x": 620,
+      "x": 770,
       "y": 330,
       "description": "",
       "params": {
@@ -118,10 +145,10 @@
       }
     },
     {
-      "id": "f3d887c52c",
+      "id": "dd05c8560b",
       "kind": "exit",
       "name": "Armazém",
-      "x": 780,
+      "x": 930,
       "y": 210,
       "description": "",
       "params": {}
@@ -129,66 +156,82 @@
   ],
   "connections": [
     {
-      "id": "e6229372bb",
+      "id": "91225cd40d",
       "kind": "flow",
-      "source": "b8a7ad1c3b",
-      "target": "5ee387781a",
+      "source": "2a42aec9f3",
+      "target": "22de5b6f4e",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "ed37fe0896",
+      "id": "5947d129b7",
       "kind": "flow",
-      "source": "800491c428",
-      "target": "7eda6aded0",
+      "source": "553c610b8d",
+      "target": "ccd63e1b24",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "d162823d4c",
+      "id": "0c09f86caa",
       "kind": "flow",
-      "source": "5ee387781a",
-      "target": "8ead37aabe",
+      "source": "22de5b6f4e",
+      "target": "ca17067663",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "020dc1776d",
+      "id": "196939e7e2",
       "kind": "flow",
-      "source": "7eda6aded0",
-      "target": "8ead37aabe",
+      "source": "ccd63e1b24",
+      "target": "e1f5ba2335",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "26823bcb9e",
+      "id": "b3e9e51a58",
       "kind": "flow",
-      "source": "8ead37aabe",
-      "target": "5f3eea6d5e",
+      "source": "ca17067663",
+      "target": "87cbc0fd48",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "65858ff4a4",
+      "id": "559c252457",
       "kind": "flow",
-      "source": "5f3eea6d5e",
-      "target": "923cfc80bb",
+      "source": "e1f5ba2335",
+      "target": "87cbc0fd48",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "8bdf0bd089",
+      "id": "406c6c4d0f",
       "kind": "flow",
-      "source": "923cfc80bb",
-      "target": "f3d887c52c",
+      "source": "87cbc0fd48",
+      "target": "087c9fc75c",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "f724dccd4f",
+      "id": "375bb35b53",
+      "kind": "flow",
+      "source": "087c9fc75c",
+      "target": "98b50e0c91",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ff59f7d652",
+      "kind": "flow",
+      "source": "98b50e0c91",
+      "target": "dd05c8560b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f2036724a9",
       "kind": "resource",
-      "source": "f710855d32",
-      "target": "923cfc80bb",
+      "source": "662baac12d",
+      "target": "98b50e0c91",
       "label": "",
       "probability": 1.0
     }

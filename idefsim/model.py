@@ -328,7 +328,9 @@ class Model:
 
     def queue_feeds(self, element_id: str) -> str | None:
         """Processo alimentado por uma função-fila: uma única saída para uma Função (que não
-        seja fila) ou Movimentação com recurso. None se a fila não alimenta ninguém assim."""
+        seja fila), Movimentação com recurso ou junção E (&) — nesse caso a fila guarda as
+        entidades do seu ramo à espera das outras (montagem/combinação). None se a fila não
+        alimenta ninguém assim."""
         if not self.is_queue(element_id):
             return None
         outs = self.outgoing(element_id)
@@ -338,6 +340,8 @@ class Model:
         if t.kind == ElementKind.FUNCTION and not self.is_queue(t.id):
             return t.id
         if t.kind == ElementKind.MOVEMENT and self.resources_of(t.id):
+            return t.id
+        if t.kind == ElementKind.RULE_AND and len(self.incoming(t.id)) > 1:
             return t.id
         return None
 

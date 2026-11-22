@@ -201,10 +201,14 @@ class PropertiesPanel(QScrollArea):
         elif e.kind in PROCESS_KINDS and model.is_queue(e.id):
             self._queue_box(model, e)
             fed = model.queue_feeds(e.id)
-            info = QLabel(f"<i>Sem tempo: é a fila de espera de <b>{model.elements[fed].name}</b>. "
+            join = fed and model.elements[fed].kind == EK.RULE_AND
+            info = QLabel("<i>Sem tempo: guarda as entidades deste ramo à espera das dos outros "
+                          "ramos na junção <b>&amp;</b> (montagem/combinação). No JaamSim vira um "
+                          "Queue da WaitQueueList do Assemble/Combine.</i>" if join else
+                          f"<i>Sem tempo: é a fila de espera de <b>{model.elements[fed].name}</b>. "
                           "No JaamSim vira um Queue (WaitQueue desse processo).</i>" if fed else
-                          "<i>Sem tempo. Ligue-a com uma única seta a uma Função (ou Movimentação "
-                          "com recurso): ela será a fila de espera desse processo.</i>")
+                          "<i>Sem tempo. Ligue-a com uma única seta a uma Função, Movimentação "
+                          "com recurso ou junção E (&amp;): ela será a fila de espera ali.</i>")
             info.setWordWrap(True)
             self.form.addRow(info)
         elif e.kind in PROCESS_KINDS:

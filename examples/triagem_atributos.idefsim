@@ -14,7 +14,7 @@
   },
   "elements": [
     {
-      "id": "c04e0eb1f6",
+      "id": "4f18e2ab28",
       "kind": "entity",
       "name": "Pedido",
       "x": 60,
@@ -40,18 +40,19 @@
       }
     },
     {
-      "id": "96c42a65d7",
+      "id": "4a5b532a8d",
       "kind": "function",
       "name": "Triar",
       "x": 220,
       "y": 200,
       "description": "",
       "params": {
-        "duration": "UNIF(1; 2)"
+        "duration": "UNIF(1; 2)",
+        "is_queue": false
       }
     },
     {
-      "id": "e644c68a95",
+      "id": "abee336d24",
       "kind": "resource",
       "name": "Triador",
       "x": 220,
@@ -62,7 +63,7 @@
       }
     },
     {
-      "id": "e4c7b7fefd",
+      "id": "2f7ef9f57d",
       "kind": "rule_or",
       "name": "X",
       "x": 370,
@@ -74,29 +75,31 @@
       }
     },
     {
-      "id": "a85b031dc9",
+      "id": "a0381b2aff",
       "kind": "function",
       "name": "Embalar leve",
       "x": 530,
       "y": 100,
       "description": "",
       "params": {
-        "duration": "TRIA(2; 3; 4)"
+        "duration": "TRIA(2; 3; 4)",
+        "is_queue": false
       }
     },
     {
-      "id": "5ca6c7eed2",
+      "id": "fc5dec6581",
       "kind": "function",
       "name": "Embalar pesado",
       "x": 530,
       "y": 300,
       "description": "",
       "params": {
-        "duration": "GAMM(6; 2)"
+        "duration": "GAMM(6; 2)",
+        "is_queue": false
       }
     },
     {
-      "id": "d4a246e09c",
+      "id": "a56b96fdb7",
       "kind": "resource",
       "name": "Embalador",
       "x": 530,
@@ -107,7 +110,7 @@
       }
     },
     {
-      "id": "72d323a8ab",
+      "id": "93968031f6",
       "kind": "rule_or",
       "name": "X",
       "x": 690,
@@ -119,7 +122,7 @@
       }
     },
     {
-      "id": "f4c5066281",
+      "id": "f76e56e875",
       "kind": "exit",
       "name": "Doca 1",
       "x": 850,
@@ -128,7 +131,7 @@
       "params": {}
     },
     {
-      "id": "1f464ab711",
+      "id": "51ae34abc5",
       "kind": "exit",
       "name": "Doca 2",
       "x": 850,
@@ -139,84 +142,84 @@
   ],
   "connections": [
     {
-      "id": "fde82b5227",
+      "id": "3d36b73f5e",
       "kind": "flow",
-      "source": "c04e0eb1f6",
-      "target": "96c42a65d7",
+      "source": "4f18e2ab28",
+      "target": "4a5b532a8d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "deccd3e7cd",
+      "id": "eb0dc945ab",
       "kind": "flow",
-      "source": "96c42a65d7",
-      "target": "e4c7b7fefd",
+      "source": "4a5b532a8d",
+      "target": "2f7ef9f57d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "a7a5f2a8b5",
+      "id": "8146cc3952",
       "kind": "flow",
-      "source": "a85b031dc9",
-      "target": "72d323a8ab",
+      "source": "a0381b2aff",
+      "target": "93968031f6",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2efab7b0a6",
+      "id": "c5bb160193",
       "kind": "flow",
-      "source": "5ca6c7eed2",
-      "target": "72d323a8ab",
+      "source": "fc5dec6581",
+      "target": "93968031f6",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "f12cb69f7c",
+      "id": "25567ac312",
       "kind": "flow",
-      "source": "72d323a8ab",
-      "target": "f4c5066281",
+      "source": "93968031f6",
+      "target": "f76e56e875",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "2f7f2e38c3",
+      "id": "2767ab1d96",
       "kind": "flow",
-      "source": "72d323a8ab",
-      "target": "1f464ab711",
+      "source": "93968031f6",
+      "target": "51ae34abc5",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "77d5e9734f",
+      "id": "3b94a92e4b",
       "kind": "flow",
-      "source": "e4c7b7fefd",
-      "target": "a85b031dc9",
+      "source": "2f7ef9f57d",
+      "target": "a0381b2aff",
       "label": "",
       "probability": 1.0,
       "condition": "tipo == 1 e peso < 15"
     },
     {
-      "id": "30e2feba31",
+      "id": "011420aea2",
       "kind": "flow",
-      "source": "e4c7b7fefd",
-      "target": "5ca6c7eed2",
+      "source": "2f7ef9f57d",
+      "target": "fc5dec6581",
       "label": "",
       "probability": 1.0,
       "condition": "senão"
     },
     {
-      "id": "e522628314",
+      "id": "8b47508ff1",
       "kind": "resource",
-      "source": "e644c68a95",
-      "target": "96c42a65d7",
+      "source": "abee336d24",
+      "target": "4a5b532a8d",
       "label": "",
       "probability": 1.0
     },
     {
-      "id": "cdba1492b6",
+      "id": "007ec39a87",
       "kind": "resource",
-      "source": "d4a246e09c",
-      "target": "5ca6c7eed2",
+      "source": "a56b96fdb7",
+      "target": "fc5dec6581",
       "label": "",
       "probability": 1.0
     }

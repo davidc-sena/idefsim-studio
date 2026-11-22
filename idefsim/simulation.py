@@ -188,6 +188,9 @@ class _Replication:
         self.joins: dict[str, dict[str, deque]] = {
             e.id: {c.id: deque() for c in self.inc[e.id]}
             for e in model.by_kind(EK.RULE_AND) if len(self.inc[e.id]) > 1}
+        # espera de cada ramo na junção E: (fila ponderada no tempo, tempos de espera)
+        self.join_stats = {cid: (TimeWeighted(self.warmup), [])
+                           for qs in self.joins.values() for cid in qs}
 
         self.connector_exit: dict[str, str] = {}
         for e in model.by_kind(EK.CONNECTOR):
@@ -294,10 +297,18 @@ class _Replication:
             elif k == EK.RULE_AND:
                 if node in self.joins:
                     queues = self.joins[node]
-                    queues[via.id].append(tok)
+                    queues[via.id].append((tok, self.env.now))
+                    self.join_stats[via.id][0].add(self.env.now, 1)
                     if not all(queues.values()):
                         return  # aguarda os outros ramos
-                    parts = [q.popleft() for q in queues.values()]
+                    parts = []
+                    for cid, q in queues.items():
+                        t_, t0 = q.popleft()
+                        tw, waits = self.join_stats[cid]
+                        tw.add(self.env.now, -1)
+                        if self.env.now >= self.warmup:
+                            waits.append(self.env.now - t0)
+                        parts.append(t_)
                     tok = min(parts, key=lambda t: t.created)
                     for other in parts:
                         if other is not tok:
@@ -403,7 +414,12 @@ class _Replication:
             nm = self.m.elements[qid].name
             r[("Fila", nm, "Entidades que entraram")] = self.queue_passed[qid]
             fed = self.m.queue_feeds(qid)
-            if fed and self.proc_res.get(fed):
+            if fed and self.m.elements[fed].kind == EK.RULE_AND:   # espera pelas outras partes
+                tw, waits = self.join_stats[self.out[qid][0].id]
+                r[("Fila", nm, "Tempo médio em fila")] = mean(waits)
+                r[("Fila", nm, "Fila média")] = tw.mean(end)
+                r[("Fila", nm, "Fila máxima")] = tw.max
+            elif fed and self.proc_res.get(fed):
                 st = self.proc[fed]
                 r[("Fila", nm, "Tempo médio em fila")] = mean(st.waits)
                 r[("Fila", nm, "Fila média")] = st.queue.mean(end)

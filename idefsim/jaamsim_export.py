@@ -17,7 +17,7 @@ Regra OU (X) – por atributo        Branch com Choice 'cond1 ? 1 : (cond2 ? 2 :
 Regra OU (X) – apenas visual       Branch com chances iguais + Text com o critério (aviso)
 Atributos da entidade              AttributeDefinitionList + Assign ([Distribuição].Value)
 Regra E (&) – divisão              Duplicate
-Regra E (&) – junção               Queue por ramo + Combine
+Regra E (&) – junção               Queue por ramo (a função-fila do ramo, se houver) + Combine
 Regra E (&) – junção → Entidade    Queue por ramo + Assemble (montagem)
 Regra E/OU (O)                     Duplicate + Branch por ramo (segue ou descarta)
 Ponto final                        EntitySink
@@ -263,8 +263,8 @@ class _Exporter:
             return f"{n}_Branch" if len(outs) > 1 else self.after(node, _seen)
         if k == EK.RULE_AND:
             if len(ins) > 1:
-                return f"{n}_Fila_{ins.index(next(c for c in ins if c.id == via)) + 1}" if via else \
-                    f"{n}_Fila_1"
+                qs = self.join_queues(node)
+                return qs[ins.index(next(c for c in ins if c.id == via))] if via else qs[0]
             return f"{n}_Duplicate" if len(outs) > 1 else self.after(node, _seen)
         if k == EK.RULE_ANDOR:
             return f"{n}_Duplicate" if len(outs) > 1 else self.after(node, _seen)
@@ -309,7 +309,15 @@ class _Exporter:
     def queue_active(self, node: str) -> bool:
         """A função-fila é de fato a fila de espera do processo seguinte?"""
         fed = self.m.queue_feeds(node)
+        if fed and self.m.elements[fed].kind == EK.RULE_AND:
+            return True  # na junção E cada ramo tem a sua fila
         return bool(fed) and self.queue_of(fed) == self.names[node]
+
+    def join_queues(self, node: str) -> list[str]:
+        """Filas da WaitQueueList da junção E: a função-fila do ramo ou uma fila criada."""
+        n = self.names[node]
+        return [self.names[c.source] if self.m.queue_feeds(c.source) == node else f"{n}_Fila_{i + 1}"
+                for i, c in enumerate(self.m.incoming(node))]
 
     def define_queue(self, name: str, x: float, y: float) -> str:
         """Define o Queue uma única vez (pode ser compartilhado com uma função-fila)."""
@@ -507,12 +515,11 @@ class _Exporter:
 
             elif k == EK.RULE_AND:
                 if len(ins) > 1:
-                    qs = []
-                    for i, _c in enumerate(ins):
-                        q = self.define("Queue", f"{n}_Fila_{i + 1}")
-                        self.used.add(q)
-                        self.pos(q, e.x - 40, e.y - 30 + 30 * i)
-                        qs.append(q)
+                    qs = self.join_queues(e.id)
+                    for i, q in enumerate(qs):  # filas dos ramos sem função-fila
+                        if q not in self.names.values():
+                            self.used.add(q)
+                            self.define_queue(q, e.x - 40, e.y - 30 + 30 * i)
                     target = self._assemble_target(e.id)
                     if target:  # montagem: as partes formam a nova entidade
                         a = self.define("Assemble", self.unique(f"{n}_Montagem"))

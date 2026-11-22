@@ -208,3 +208,15 @@ def test_queue_function_without_process_warns():
     m.add_connection(CK.FLOW, q.id, x.id)
     assert any("Fila 'Aguardar torno'" in str(i) for i in validate(m))
     run_simulation(m)   # passa direto, sem erro
+
+
+def test_queue_before_and_measures_wait_for_other_parts():
+    from idefsim.examples import montagem
+    m = montagem()
+    m.settings.replications = 2
+    rows = {(r.category, r.obj, r.metric): r.mean for r in run_simulation(m).rows()}
+    wb = rows[("Fila", "Aguardar base", "Tempo médio em fila")]
+    wt = rows[("Fila", "Aguardar tampa", "Tempo médio em fila")]
+    assert wb >= 0 and wt >= 0 and (wb + wt) > 0
+    assert rows[("Fila", "Aguardar tampa", "Fila máxima")] >= 1
+    assert not has_errors(validate(m))

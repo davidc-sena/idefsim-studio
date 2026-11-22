@@ -79,9 +79,9 @@ def validate(model: Model) -> list[Issue]:
                 add(WARNING, f"{label} representa uma fila: os recursos ligados a ela são ignorados.",
                     e.id)
             if outs and not model.queue_feeds(e.id):
-                add(WARNING, f"{label} deveria ter uma única saída para uma Função (ou Movimentação "
-                             "com recurso); assim ela é a fila de espera desse processo. No JaamSim "
-                             "ela será ignorada.", e.id)
+                add(WARNING, f"{label} deveria ter uma única saída para uma Função, Movimentação "
+                             "com recurso ou junção E (&); assim ela é a fila de espera desse "
+                             "processo. No JaamSim ela será ignorada.", e.id)
         elif e.kind in PROCESS_KINDS:
             try:
                 dist.parse(e.params.get("duration", ""), for_time=True)
@@ -189,7 +189,7 @@ def validate(model: Model) -> list[Issue]:
     fed_by: dict[str, list[str]] = {}
     for q in model.elements.values():
         t = model.queue_feeds(q.id)
-        if t:
+        if t and model.elements[t].kind != EK.RULE_AND:  # na junção E, uma fila por ramo é o normal
             fed_by.setdefault(t, []).append(q.name)
     for t, qs in fed_by.items():
         if len(qs) > 1:

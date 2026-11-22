@@ -39,19 +39,24 @@ def usinagem_inspecao() -> Model:
 
 
 def montagem() -> Model:
-    """Montagem: base e tampa se juntam em uma regra E (&) e formam o produto."""
-    m = Model(name="Montagem com junção E", author=AUTHOR)
+    """Montagem: base e tampa esperam uma pela outra (filas antes do &) e formam o produto."""
+    m = Model(name="Montagem com junção E", author=AUTHOR,
+              description="Base e tampa são preparadas em paralelo e esperam uma pela outra "
+                          "nas filas antes da junção E; juntas formam o Produto, que é montado.")
     m.settings.duration, m.settings.replications = 600, 5
     base = m.add_element(EK.ENTITY, 60, 120, "Base", interarrival="EXPO(5)")
     tampa = m.add_element(EK.ENTITY, 60, 300, "Tampa", interarrival="EXPO(5)")
     pb = m.add_element(EK.FUNCTION, 220, 120, "Preparar base", duration="TRIA(2, 3, 4)")
     pt = m.add_element(EK.FUNCTION, 220, 300, "Preparar tampa", duration="TRIA(1, 2, 3)")
-    j = m.add_element(EK.RULE_AND, 380, 210)
-    prod = m.add_element(EK.ENTITY, 480, 210, "Produto")
-    mont = m.add_element(EK.FUNCTION, 620, 210, "Montar", duration="NORM(3.5, 0.4)")
-    mont_r = m.add_element(EK.RESOURCE, 620, 330, "Montador", capacity=1)
-    fim = m.add_element(EK.EXIT, 780, 210, "Armazém")
-    for a, b in ((base, pb), (tampa, pt), (pb, j), (pt, j), (j, prod), (prod, mont), (mont, fim)):
+    qb = m.add_element(EK.FUNCTION, 390, 120, "Aguardar base", is_queue=True)
+    qt = m.add_element(EK.FUNCTION, 390, 300, "Aguardar tampa", is_queue=True)
+    j = m.add_element(EK.RULE_AND, 530, 210)
+    prod = m.add_element(EK.ENTITY, 630, 210, "Produto")
+    mont = m.add_element(EK.FUNCTION, 770, 210, "Montar", duration="NORM(3.5, 0.4)")
+    mont_r = m.add_element(EK.RESOURCE, 770, 330, "Montador", capacity=1)
+    fim = m.add_element(EK.EXIT, 930, 210, "Armazém")
+    for a, b in ((base, pb), (tampa, pt), (pb, qb), (pt, qt), (qb, j), (qt, j), (j, prod),
+                 (prod, mont), (mont, fim)):
         m.add_connection(CK.FLOW, a.id, b.id)
     m.add_connection(CK.RESOURCE, mont_r.id, mont.id)
     return m

@@ -10,6 +10,7 @@ import pytest
 from idefsim.examples import montagem, usinagem_inspecao
 from idefsim.jaamsim_export import export_jaamsim, jaamsim_name
 from idefsim.model import ConnectionKind as CK, ElementKind as EK, Model
+from idefsim.validation import validate
 
 DIST = {"UnitType", "RandomSeed", "MinValue", "MaxValue", "Location", "Scale"}
 KEYWORDS = {
@@ -341,3 +342,36 @@ def test_functions_without_queue_function_keep_their_own_queue():
     d = {(o, k): v for o, k, v in kws}
     for f in ("Usinar", "Inspecionar", "Retrabalhar"):
         assert d[(f, "WaitQueue")] == f"{f}_Fila"
+
+
+def _join_model(assemble: bool):
+    """Dois ramos esperando um pelo outro no &: o de cima com função-fila, o de baixo sem."""
+    m = Model()
+    a = m.add_element(EK.ENTITY, 0, 0, "Base")
+    b = m.add_element(EK.ENTITY, 0, 200, "Tampa")
+    qa = m.add_element(EK.FUNCTION, 160, 0, "Aguardar base", is_queue=True)
+    pb = m.add_element(EK.FUNCTION, 160, 200, "Preparar tampa", duration="2")
+    j = m.add_element(EK.RULE_AND, 320, 100)
+    x = m.add_element(EK.EXIT, 600, 100, "Fim")
+    for s_, t_ in ((a, qa), (b, pb), (qa, j), (pb, j)):
+        m.add_connection(CK.FLOW, s_.id, t_.id)
+    if assemble:
+        p = m.add_element(EK.ENTITY, 440, 100, "Produto")
+        m.add_connection(CK.FLOW, j.id, p.id)
+        m.add_connection(CK.FLOW, p.id, x.id)
+    else:
+        m.add_connection(CK.FLOW, j.id, x.id)
+    return m
+
+
+def test_queue_functions_are_the_waitqueues_of_assemble_and_combine():
+    for assemble, kind in ((True, "Assemble"), (False, "Combine")):
+        m = _join_model(assemble)
+        assert not [i for i in validate(m) if "Aguardar" in i.message]
+        types, kws = check(export_jaamsim(m).text)
+        d = {(o, k): v for o, k, v in kws}
+        obj = next(n for n, t in types.items() if t == kind)
+        # ramo com função-fila usa a própria; ramo sem ganha uma fila do &
+        assert d[(obj, "WaitQueueList")] == "Aguardar_base  Regra_E_Fila_2"
+        assert d[("Base_Chegada", "NextComponent")] == "Aguardar_base"
+        assert d[("Preparar_tampa", "NextComponent")] == "Regra_E_Fila_2"
