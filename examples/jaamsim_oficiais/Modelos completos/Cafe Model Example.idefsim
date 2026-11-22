@@ -1,0 +1,457 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Cafe Model Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Cafe Model Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "9e35b870e1",
+      "kind": "rule_or",
+      "name": "Branch1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "probability",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "11fb203bcf",
+      "kind": "function",
+      "name": "Eat Meal",
+      "x": 1680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(600; 1800)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "0b573a830c",
+      "kind": "function",
+      "name": "Enter Cafe",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(15)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "957e5c96e2",
+      "kind": "function",
+      "name": "Leave Cafe",
+      "x": 2480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(15)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "f00e98037f",
+      "kind": "function",
+      "name": "Make Payment",
+      "x": 2280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(15; 35)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "49a99a0e04",
+      "kind": "function",
+      "name": "Move From Bar To Checkout",
+      "x": 1280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(15)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "3e3ce06064",
+      "kind": "function",
+      "name": "Move From Tables To Checkout",
+      "x": 1880,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(15)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "c8447df3b4",
+      "kind": "function",
+      "name": "Move To Sandwich Bar",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(15)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "7c0b097adb",
+      "kind": "function",
+      "name": "Move To Tables",
+      "x": 680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(15)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "9959aa4500",
+      "kind": "function",
+      "name": "Order Meal",
+      "x": 1480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(15; 45)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "b7395f0ee7",
+      "kind": "function",
+      "name": "Prepare Sandwich",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(30; 90)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "dc3bd7997b",
+      "kind": "function",
+      "name": "Sit Down At Table",
+      "x": 1080,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(15)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "71c38e71ab",
+      "kind": "entity",
+      "name": "Proto Customer",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(10; 50)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "3980962684",
+      "kind": "exit",
+      "name": "Customer Sink",
+      "x": 2680,
+      "y": 320.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "81409a55e5",
+      "kind": "function",
+      "name": "Checkout Queue",
+      "x": 2080,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "a1e1ea3d63",
+      "kind": "function",
+      "name": "Sandwich Maker Queue",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "7ed977ca0f",
+      "kind": "function",
+      "name": "Table Queue",
+      "x": 880,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "31f609d46a",
+      "kind": "function",
+      "name": "Waitress Queue",
+      "x": 1280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "b22548b669",
+      "kind": "resource",
+      "name": "Checkouts",
+      "x": 2280,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "232c6c089f",
+      "kind": "resource",
+      "name": "Sandwich Makers",
+      "x": 1080,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "216dd690fd",
+      "kind": "resource",
+      "name": "Tables",
+      "x": 1080,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 100
+      }
+    },
+    {
+      "id": "3884fb6b60",
+      "kind": "resource",
+      "name": "Waitresses",
+      "x": 1480,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "e3b97875b7",
+      "kind": "flow",
+      "source": "9e35b870e1",
+      "target": "c8447df3b4",
+      "label": "",
+      "probability": 0.4
+    },
+    {
+      "id": "c881646f5c",
+      "kind": "flow",
+      "source": "9e35b870e1",
+      "target": "7c0b097adb",
+      "label": "",
+      "probability": 0.6
+    },
+    {
+      "id": "e868d1d932",
+      "kind": "flow",
+      "source": "11fb203bcf",
+      "target": "3e3ce06064",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "10622a873f",
+      "kind": "flow",
+      "source": "0b573a830c",
+      "target": "9e35b870e1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f8da766ac3",
+      "kind": "flow",
+      "source": "957e5c96e2",
+      "target": "3980962684",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3591a7b2c8",
+      "kind": "flow",
+      "source": "f00e98037f",
+      "target": "957e5c96e2",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "68dcce1785",
+      "kind": "flow",
+      "source": "49a99a0e04",
+      "target": "81409a55e5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "64dab0c856",
+      "kind": "flow",
+      "source": "3e3ce06064",
+      "target": "81409a55e5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7442856ac6",
+      "kind": "flow",
+      "source": "c8447df3b4",
+      "target": "a1e1ea3d63",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "5ac0b4f703",
+      "kind": "flow",
+      "source": "7c0b097adb",
+      "target": "7ed977ca0f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "5aa25d1b5a",
+      "kind": "flow",
+      "source": "9959aa4500",
+      "target": "11fb203bcf",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9f57a6f5f0",
+      "kind": "flow",
+      "source": "b7395f0ee7",
+      "target": "49a99a0e04",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fb70cb3fb0",
+      "kind": "flow",
+      "source": "dc3bd7997b",
+      "target": "31f609d46a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "42c419ffe9",
+      "kind": "flow",
+      "source": "71c38e71ab",
+      "target": "0b573a830c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9ad8603ab0",
+      "kind": "flow",
+      "source": "81409a55e5",
+      "target": "f00e98037f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2868e8ef10",
+      "kind": "flow",
+      "source": "a1e1ea3d63",
+      "target": "b7395f0ee7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "51925e2ae1",
+      "kind": "flow",
+      "source": "7ed977ca0f",
+      "target": "dc3bd7997b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "09c7bf5f09",
+      "kind": "flow",
+      "source": "31f609d46a",
+      "target": "9959aa4500",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f722cbd6d3",
+      "kind": "resource",
+      "source": "b22548b669",
+      "target": "f00e98037f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "74817c0870",
+      "kind": "resource",
+      "source": "232c6c089f",
+      "target": "b7395f0ee7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "27618950cf",
+      "kind": "resource",
+      "source": "216dd690fd",
+      "target": "dc3bd7997b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "1e63ede284",
+      "kind": "resource",
+      "source": "3884fb6b60",
+      "target": "9959aa4500",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

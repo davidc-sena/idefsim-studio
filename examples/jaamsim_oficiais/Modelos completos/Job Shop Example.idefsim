@@ -1,0 +1,254 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Job Shop Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Job Shop Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Workstation1 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation2 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation3 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation4 (Workstation) representado como Função, sem a lógica de Workstation.\n- Workstation5 (Workstation) representado como Função, sem a lógica de Workstation.\n- Branch1: regra de escolha 'this.obj.Stations(this.obj.PresentTask)' mantida como texto (regra OU apenas visual).\n- Branch2: regra de escolha 'this.obj.PresentTask < size(this.obj.Stations) ? 1 : 2' mantida como texto (regra OU apenas visual).",
+  "settings": {
+    "time_unit": "h",
+    "duration": 87600.0,
+    "warmup": 168.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "0effc9ef60",
+      "kind": "rule_or",
+      "name": "Branch1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "this.obj.Stations(this.obj.PresentTask)"
+      }
+    },
+    {
+      "id": "25183a143b",
+      "kind": "rule_or",
+      "name": "Branch2",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "this.obj.PresentTask < size(this.obj.Stations) ? 1 : 2"
+      }
+    },
+    {
+      "id": "0541476ba5",
+      "kind": "rule_or",
+      "name": "Branch3",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "condition",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "3c0d90b616",
+      "kind": "entity",
+      "name": "Job Generator",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(0,25)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "cbf0e670cd",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "5e5320bbba",
+      "kind": "function",
+      "name": "Workstation1",
+      "x": 480,
+      "y": 100.0,
+      "description": "No JaamSim: Workstation (apenas representado)",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "647b79ae35",
+      "kind": "function",
+      "name": "Workstation2",
+      "x": 480,
+      "y": 250.0,
+      "description": "No JaamSim: Workstation (apenas representado)",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "13dd4a3ee2",
+      "kind": "function",
+      "name": "Workstation3",
+      "x": 480,
+      "y": 400.0,
+      "description": "No JaamSim: Workstation (apenas representado)",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "141bef5c6e",
+      "kind": "function",
+      "name": "Workstation4",
+      "x": 480,
+      "y": 550.0,
+      "description": "No JaamSim: Workstation (apenas representado)",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "f98d2c209d",
+      "kind": "function",
+      "name": "Workstation5",
+      "x": 480,
+      "y": 700.0,
+      "description": "No JaamSim: Workstation (apenas representado)",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "e7cfbc7f2c",
+      "kind": "flow",
+      "source": "0effc9ef60",
+      "target": "5e5320bbba",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7f4a5dcb8a",
+      "kind": "flow",
+      "source": "0effc9ef60",
+      "target": "647b79ae35",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "63f3dc90af",
+      "kind": "flow",
+      "source": "0effc9ef60",
+      "target": "13dd4a3ee2",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fdaee054bc",
+      "kind": "flow",
+      "source": "0effc9ef60",
+      "target": "141bef5c6e",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "5e78ecb0b0",
+      "kind": "flow",
+      "source": "0effc9ef60",
+      "target": "f98d2c209d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "db59738873",
+      "kind": "flow",
+      "source": "25183a143b",
+      "target": "0effc9ef60",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cff92cf97f",
+      "kind": "flow",
+      "source": "25183a143b",
+      "target": "0541476ba5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6a1bce1723",
+      "kind": "flow",
+      "source": "0541476ba5",
+      "target": "cbf0e670cd",
+      "label": "",
+      "probability": 1.0,
+      "condition": "Type == 1"
+    },
+    {
+      "id": "29d77bcd17",
+      "kind": "flow",
+      "source": "3c0d90b616",
+      "target": "0effc9ef60",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "93183fa9df",
+      "kind": "flow",
+      "source": "5e5320bbba",
+      "target": "25183a143b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "c66173bc10",
+      "kind": "flow",
+      "source": "647b79ae35",
+      "target": "25183a143b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "85f89aec41",
+      "kind": "flow",
+      "source": "13dd4a3ee2",
+      "target": "25183a143b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4b4ca84326",
+      "kind": "flow",
+      "source": "141bef5c6e",
+      "target": "25183a143b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "20e47d333a",
+      "kind": "flow",
+      "source": "f98d2c209d",
+      "target": "25183a143b",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

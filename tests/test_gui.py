@@ -208,3 +208,20 @@ def test_queue_checkbox_hides_time(app):
     assert not win.scene.model.elements[f.id].params["is_queue"]
     win.dirty = False
     win.close()
+
+
+def test_import_jaamsim_from_gui(app, tmp_path, monkeypatch):
+    from PySide6.QtWidgets import QFileDialog, QMessageBox
+    from idefsim.examples import usinagem_inspecao
+    from idefsim.jaamsim_export import export_jaamsim
+    cfg = tmp_path / "modelo.cfg"
+    cfg.write_text(export_jaamsim(usinagem_inspecao()).text, encoding="ascii")
+    win = MainWindow()
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *a, **k: (str(cfg), ""))
+    monkeypatch.setattr(QMessageBox, "exec", lambda self: 0)
+    win.import_jaamsim()
+    names = {e.name for e in win.scene.model.elements.values()}
+    assert {"Usinar", "Inspecionar", "Torno"} <= names
+    assert any("Exemplos do JaamSim" in a.text() for a in win.menuBar().findChildren(type(win.a_new)))
+    win.dirty = False
+    win.close()

@@ -21,6 +21,7 @@ simulação a eventos discretos.
 | **Gestão de modelos** | Arquivos `.idefsim` (JSON legível e versionável), metadados (autor, versão e descrição), arquivos recentes e modelos de exemplo. |
 | **Exportação para JaamSim** | Gera um modelo **básico** do [JaamSim](https://jaamsim.com) (`.cfg`) a partir do diagrama IDEF-SIM: chegadas, filas, recursos, tempos, regras de decisão, montagem e saídas, já posicionados como no diagrama. |
 | **Impressão e exportação limpa** | **Arquivo → Imprimir** (Ctrl+P, com pré-visualização) e **Exportar diagrama limpo** (PDF, PNG, SVG; Ctrl+Shift+E): sem grade nem marcas de edição, com opção de preto e branco, título/autor/data e rótulos das setas. A página (A4) fica deitada ou em pé conforme o formato do diagrama. |
+| **Importação do JaamSim** | **Arquivo → Importar modelo JaamSim (.cfg)** converte um modelo do JaamSim em diagrama IDEF-SIM. Os **82 exemplos oficiais do JaamSim** já vêm convertidos em **Arquivo → Abrir exemplo → Exemplos do JaamSim**. |
 | **Documentação** | Exportação do diagrama em PNG ou SVG e do dicionário do modelo conceitual em HTML (com o diagrama embutido). |
 
 ## Instalação e execução
@@ -196,6 +197,36 @@ em [`examples/jaamsim/`](examples/jaamsim/).
 
 > É um modelo **básico**, ponto de partida para o modelo computacional: confira os tempos, as
 > regras e a disposição dos objetos no JaamSim antes de usá-lo em estudos.
+
+## Importação do JaamSim
+
+**Arquivo → Importar modelo JaamSim (.cfg)** (Ctrl+I) lê um modelo do JaamSim e monta o
+diagrama IDEF-SIM, da esquerda para a direita, com os recursos abaixo das funções:
+
+| JaamSim | IDEF-SIM |
+|---|---|
+| `EntityGenerator` + `SimEntity` | Entidade com chegada externa (+ atributos) |
+| `Server` | Função + Recurso de capacidade 1 |
+| `EntityProcessor` | Função + recursos (`ResourceList`) ou capacidade |
+| `EntityDelay` / `EntityConveyor` | Função sem recurso / Movimentação |
+| `Queue` | Função que representa uma fila |
+| `Seize` … `Release` | recursos ligados ao processo entre eles |
+| `Resource` / `ResourcePool` | Recurso |
+| `Branch` | Regra OU: probabilidade (`DiscreteDistribution`), atributo (`this.obj.X`) ou visual |
+| `Duplicate` / `Combine` / `Assemble` | Regra E (divisão / junção / junção + nova entidade) |
+| `EntitySink` | Ponto final |
+| `Assign`, `Statistics`, `SetGraphics`… | omitidos (as entidades atravessam) |
+
+Distribuições, unidades de tempo, `InputValue`, duração, aquecimento, replicações e semente
+também são convertidos. O que não tem equivalente em IDEF-SIM (paradas, limiares, expressões)
+é anotado no relatório da importação e na descrição do modelo.
+
+**Exemplos oficiais convertidos:** os exemplos do JaamSim com fluxo de entidades (82 de 91) estão em
+[`examples/jaamsim_oficiais/`](examples/jaamsim_oficiais/) e no menu **Abrir exemplo → Exemplos do
+JaamSim**, por categoria. Os outros 9 (fluidos, cálculo, gráficos 3D, leitura de arquivos) não
+têm entidades para representar. Os exemplos do JaamSim são distribuídos sob a Apache License 2.0
+(© JaamSim Software Inc.); a licença acompanha os arquivos convertidos. Para refazer a conversão:
+`python packaging/convert_jaamsim_examples.py <pasta examples do JaamSim>`.
 
 ## Créditos
 

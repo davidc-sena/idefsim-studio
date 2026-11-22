@@ -1,0 +1,199 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntitySystem Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntitySystem Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "70638c0820",
+      "kind": "function",
+      "name": "Entity Delay1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "35ec6b7484",
+      "kind": "function",
+      "name": "Entity Delay2",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "66c5abe125",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1,5)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "faabde619a",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "9a0d3e8608",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "ce3f013cda",
+      "kind": "function",
+      "name": "Server1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "0e62682f75",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "bd3efaf9e1",
+      "kind": "function",
+      "name": "Server2",
+      "x": 680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "ceaffaf17b",
+      "kind": "resource",
+      "name": "Recurso Server2",
+      "x": 680,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "806c785058",
+      "kind": "resource",
+      "source": "0e62682f75",
+      "target": "ce3f013cda",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fadcb8f4a3",
+      "kind": "resource",
+      "source": "ceaffaf17b",
+      "target": "bd3efaf9e1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "01d92df623",
+      "kind": "flow",
+      "source": "70638c0820",
+      "target": "9a0d3e8608",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "804f4af56a",
+      "kind": "flow",
+      "source": "35ec6b7484",
+      "target": "faabde619a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4e3e92e892",
+      "kind": "flow",
+      "source": "66c5abe125",
+      "target": "70638c0820",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ee511df8a7",
+      "kind": "flow",
+      "source": "ce3f013cda",
+      "target": "35ec6b7484",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d12b260904",
+      "kind": "flow",
+      "source": "9a0d3e8608",
+      "target": "ce3f013cda",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "375592a577",
+      "kind": "flow",
+      "source": "bd3efaf9e1",
+      "target": "35ec6b7484",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "02eeeadc50",
+      "kind": "flow",
+      "source": "9a0d3e8608",
+      "target": "bd3efaf9e1",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

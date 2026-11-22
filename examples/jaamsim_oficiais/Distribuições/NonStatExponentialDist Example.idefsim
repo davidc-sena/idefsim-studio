@@ -1,0 +1,72 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "NonStatExponentialDist Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'NonStatExponentialDist Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- EntityGenerator1: chegadas não estacionárias (NonStatExponentialDist1) aproximadas por Exponencial de média 1 (ajuste o intervalo).\n- Não representados no IDEF-SIM: séries temporais.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "eb2fe1c655",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(10)"
+      }
+    },
+    {
+      "id": "284ec5e288",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "ce67923004",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "30383ba590",
+      "kind": "flow",
+      "source": "eb2fe1c655",
+      "target": "ce67923004",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e162bebca3",
+      "kind": "flow",
+      "source": "284ec5e288",
+      "target": "eb2fe1c655",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

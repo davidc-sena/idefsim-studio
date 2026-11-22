@@ -1,0 +1,150 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntityLogger Example - with TraceEntityStates",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntityLogger Example - with TraceEntityStates' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "6256585d4d",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "5e017e872a",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "098ebe3908",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "f555d2a727",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "de80057680",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "1c2492a6a4",
+      "kind": "function",
+      "name": "Server1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0,9)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "21bcaa40ae",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "f128b59747",
+      "kind": "resource",
+      "source": "21bcaa40ae",
+      "target": "1c2492a6a4",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "50bdc24f32",
+      "kind": "flow",
+      "source": "6256585d4d",
+      "target": "de80057680",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "49c9758a0a",
+      "kind": "flow",
+      "source": "5e017e872a",
+      "target": "f555d2a727",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "618bbd79e1",
+      "kind": "flow",
+      "source": "098ebe3908",
+      "target": "6256585d4d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fd28a6e5fa",
+      "kind": "flow",
+      "source": "1c2492a6a4",
+      "target": "5e017e872a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "47fed5638a",
+      "kind": "flow",
+      "source": "de80057680",
+      "target": "1c2492a6a4",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

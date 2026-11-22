@@ -1,0 +1,150 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntityProcessor Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntityProcessor Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "febf844c13",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "5e8bac01ad",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "eaecb4d7b1",
+      "kind": "entity",
+      "name": "Proto",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "fc038661ab",
+      "kind": "function",
+      "name": "Entity Processor1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "3f801dd9f2",
+      "kind": "resource",
+      "name": "Recurso Entity Processor1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 2
+      }
+    },
+    {
+      "id": "13bcc571fc",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "9d1e38fae5",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "e21a376ac8",
+      "kind": "resource",
+      "source": "3f801dd9f2",
+      "target": "fc038661ab",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "93e2db9f0c",
+      "kind": "flow",
+      "source": "febf844c13",
+      "target": "9d1e38fae5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "83fdb88ae3",
+      "kind": "flow",
+      "source": "5e8bac01ad",
+      "target": "13bcc571fc",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f427c6f346",
+      "kind": "flow",
+      "source": "eaecb4d7b1",
+      "target": "febf844c13",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "327cba91c4",
+      "kind": "flow",
+      "source": "fc038661ab",
+      "target": "5e8bac01ad",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "def35458f6",
+      "kind": "flow",
+      "source": "9d1e38fae5",
+      "target": "fc038661ab",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntityLauncher Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntityLauncher Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- EntityLauncher1: EntityLauncher lança entidades por evento; representado como chegada a cada 1 unidade de tempo (ajuste o intervalo).",
+  "settings": {
+    "time_unit": "s",
+    "duration": 3153600000.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "92793d6e11",
+      "kind": "function",
+      "name": "Entity Delay1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(5)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "56ac38f839",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "No JaamSim: EntityLauncher (chegadas disparadas por evento)",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "9fce7a96e6",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "706391d0b0",
+      "kind": "flow",
+      "source": "92793d6e11",
+      "target": "9fce7a96e6",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cd38551dad",
+      "kind": "flow",
+      "source": "56ac38f839",
+      "target": "92793d6e11",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

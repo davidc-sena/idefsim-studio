@@ -1,0 +1,277 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "AddTo, RemoveFrom, and EntityContainer Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'AddTo, RemoveFrom, and EntityContainer Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- AddTo1 (AddTo) representado como Função, sem a lógica de AddTo.\n- ProtoContainer (EntityContainer) representado como Função, sem a lógica de EntityContainer.\n- RemoveFrom1 (RemoveFrom) representado como Função, sem a lógica de RemoveFrom.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "453680d94f",
+      "kind": "function",
+      "name": "Add To1",
+      "x": 480,
+      "y": 700.0,
+      "description": "No JaamSim: AddTo (apenas representado)",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "5931eca4ff",
+      "kind": "function",
+      "name": "Proto Container",
+      "x": 80,
+      "y": 250.0,
+      "description": "No JaamSim: EntityContainer (apenas representado)",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "ef3a5e580f",
+      "kind": "movement",
+      "name": "Conveyor1",
+      "x": 280,
+      "y": 700.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "ef2396369d",
+      "kind": "movement",
+      "name": "Conveyor2",
+      "x": 680,
+      "y": 700.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "3c20ea0e76",
+      "kind": "movement",
+      "name": "Conveyor3",
+      "x": 1080,
+      "y": 700.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "fc50a2782c",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "4ff7f03a5b",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 80,
+      "y": 850.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(4)"
+      }
+    },
+    {
+      "id": "8c4ab43ed0",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 700.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(4)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "862b59f794",
+      "kind": "entity",
+      "name": "Proto Container",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 1,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "d9991d61dd",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1280,
+      "y": 700.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "50616261fe",
+      "kind": "function",
+      "name": "Container Queue",
+      "x": 80,
+      "y": 1000.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "f0d5484120",
+      "kind": "function",
+      "name": "Container Queue2",
+      "x": 80,
+      "y": 550.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "bed3eb02d0",
+      "kind": "function",
+      "name": "Entity Queue",
+      "x": 80,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "7e3e7e31da",
+      "kind": "function",
+      "name": "Remove From1",
+      "x": 880,
+      "y": 700.0,
+      "description": "No JaamSim: RemoveFrom (apenas representado)",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "34b3fb6650",
+      "kind": "flow",
+      "source": "453680d94f",
+      "target": "ef2396369d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "eb8dd81039",
+      "kind": "flow",
+      "source": "bed3eb02d0",
+      "target": "453680d94f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "242d6cee3e",
+      "kind": "flow",
+      "source": "ef3a5e580f",
+      "target": "453680d94f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "66da6ee1e7",
+      "kind": "flow",
+      "source": "ef2396369d",
+      "target": "7e3e7e31da",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "160fbddd71",
+      "kind": "flow",
+      "source": "3c20ea0e76",
+      "target": "d9991d61dd",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "78097afee0",
+      "kind": "flow",
+      "source": "fc50a2782c",
+      "target": "453680d94f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "8ad0dfb912",
+      "kind": "flow",
+      "source": "4ff7f03a5b",
+      "target": "453680d94f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "563b40caa3",
+      "kind": "flow",
+      "source": "8c4ab43ed0",
+      "target": "ef3a5e580f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3446e61d77",
+      "kind": "flow",
+      "source": "862b59f794",
+      "target": "fc50a2782c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a3cdae192b",
+      "kind": "flow",
+      "source": "7e3e7e31da",
+      "target": "3c20ea0e76",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9e99158761",
+      "kind": "flow",
+      "source": "f0d5484120",
+      "target": "7e3e7e31da",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntityConveyor Example - with Entities of Different Length",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntityConveyor Example - with Entities of Different Length' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: limiares (condições de abertura).\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "0357ff79bd",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "061df9ea67",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(5)"
+      }
+    },
+    {
+      "id": "b64a90f86f",
+      "kind": "movement",
+      "name": "Entity Conveyor3",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(5)"
+      }
+    },
+    {
+      "id": "f45d8f9d4f",
+      "kind": "entity",
+      "name": "Entity Generator1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "6f93567fe8",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "a016742ab5",
+      "kind": "flow",
+      "source": "0357ff79bd",
+      "target": "061df9ea67",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b2f9a1bf9e",
+      "kind": "flow",
+      "source": "061df9ea67",
+      "target": "b64a90f86f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "5dce168b69",
+      "kind": "flow",
+      "source": "b64a90f86f",
+      "target": "6f93567fe8",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f76468dc11",
+      "kind": "flow",
+      "source": "f45d8f9d4f",
+      "target": "0357ff79bd",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "ResourceUnit and ResourcePool Example - with FollowAssignment",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'ResourceUnit and ResourcePool Example - with FollowAssignment' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 1
+  },
+  "elements": [
+    {
+      "id": "026feadab6",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "66ce2f6275",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "df7d00b257",
+      "kind": "movement",
+      "name": "Entity Conveyor3",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "f2256a24d3",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(2)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "871b4ee2df",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "3379a3dfbb",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "08e0950b38",
+      "kind": "resource",
+      "name": "Resource Pool1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 4
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "fe186cbcd9",
+      "kind": "flow",
+      "source": "026feadab6",
+      "target": "3379a3dfbb",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "864ee40ca9",
+      "kind": "flow",
+      "source": "66ce2f6275",
+      "target": "df7d00b257",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "72d36c8dc0",
+      "kind": "flow",
+      "source": "df7d00b257",
+      "target": "871b4ee2df",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "31598c1ffb",
+      "kind": "flow",
+      "source": "f2256a24d3",
+      "target": "026feadab6",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "1296f4dfef",
+      "kind": "flow",
+      "source": "3379a3dfbb",
+      "target": "66ce2f6275",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9a8d5269f5",
+      "kind": "resource",
+      "source": "08e0950b38",
+      "target": "66ce2f6275",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

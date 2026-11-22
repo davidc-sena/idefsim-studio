@@ -11,7 +11,8 @@ from PySide6.QtWidgets import (QApplication, QDialog, QDockWidget, QFileDialog, 
                                QListWidget, QListWidgetItem, QMainWindow, QMessageBox,
                                QProgressDialog, QToolBar)
 
-from ..examples import ALL as EXAMPLES
+from ..examples import ALL as EXAMPLES, jaamsim_examples
+from ..jaamsim_import import JaamSimImportError, import_jaamsim
 from ..model import CONNECTION_LABELS, KIND_LABELS, ConnectionKind as CK, ElementKind as EK, Model
 from ..jaamsim_export import export_jaamsim, jaamsim_name
 from ..report import model_to_html
@@ -118,6 +119,8 @@ class MainWindow(QMainWindow):
         self.a_png = self._act("Exportar imagem PNG…", lambda: self.export_image("png"))
         self.a_svg = self._act("Exportar imagem SVG…", lambda: self.export_image("svg"))
         self.a_html = self._act("Exportar documentação HTML…", self.export_html)
+        self.a_import = self._act("Importar modelo JaamSim (.cfg)…", self.import_jaamsim, "Ctrl+I",
+                                  "Converte um modelo do JaamSim em diagrama IDEF-SIM")
         self.a_jaamsim = self._act("Exportar modelo JaamSim (.cfg)…", self.export_jaamsim, "Ctrl+J",
                                    "Gera um modelo básico do JaamSim a partir do diagrama IDEF-SIM")
         self.a_print = self._act("&Imprimir…", self.print_clean, S.Print,
@@ -147,6 +150,14 @@ class MainWindow(QMainWindow):
         ex = m.addMenu("Abrir &exemplo")
         for name, fn in EXAMPLES.items():
             ex.addAction(self._act(name, lambda _=False, fn=fn: self._load_example(fn)))
+        cats = jaamsim_examples()
+        if cats:
+            ex.addSeparator()
+            js = ex.addMenu(f"Exemplos do JaamSim ({sum(len(v) for v in cats.values())})")
+            for cat, files in cats.items():
+                sub = js.addMenu(cat)
+                for f in files:
+                    sub.addAction(self._act(f.stem, lambda _=False, f=f: self._open_example_file(f)))
         m.addSeparator()
         m.addActions([self.a_save, self.a_save_as])
         m.addSeparator()
@@ -154,7 +165,7 @@ class MainWindow(QMainWindow):
         m.addSeparator()
         m.addActions([self.a_png, self.a_svg, self.a_html])
         m.addSeparator()
-        m.addAction(self.a_jaamsim)
+        m.addActions([self.a_import, self.a_jaamsim])
         m.addSeparator()
         m.addAction(self.a_quit)
         m = mb.addMenu("&Editar")
@@ -334,6 +345,44 @@ class MainWindow(QMainWindow):
     def new_model(self):
         if self._maybe_save():
             self._set_model(Model(), None)
+
+    def _open_example_file(self, path):
+        """Abre um exemplo como modelo novo (sem arquivo associado, para não alterar o original)."""
+        if self._maybe_save():
+            try:
+                self._set_model(load_model(path), None)
+            except Exception as ex:  # noqa: BLE001
+                QMessageBox.critical(self, "Erro ao abrir exemplo", str(ex))
+
+    def import_jaamsim(self):
+        if not self._maybe_save():
+            return
+        path, _ = QFileDialog.getOpenFileName(self, "Importar modelo JaamSim", self._last_dir(),
+                                              "Modelo JaamSim (*.cfg);;Todos os arquivos (*)")
+        if not path:
+            return
+        try:
+            res = import_jaamsim(path)
+        except JaamSimImportError as ex:
+            QMessageBox.warning(self, "Importar modelo JaamSim", str(ex))
+            return
+        except Exception as ex:  # noqa: BLE001
+            QMessageBox.critical(self, "Importar modelo JaamSim", f"Não foi possível importar:\n{ex}")
+            return
+        self._set_model(res.model, None)
+        self._set_dirty(True)
+        m = res.model
+        msg = (f"<p>Importado como diagrama IDEF-SIM com <b>{len(m.elements)} elementos</b> e "
+               f"<b>{len(m.connections)} ligações</b>.</p><p>É um modelo conceitual: confira tempos "
+               "e regras. Salve-o para manter as alterações.</p>")
+        if res.notes:
+            msg += "<p><b>Observações da conversão:</b></p><ul>" + "".join(
+                f"<li>{n}</li>" for n in res.notes[:25]) + "</ul>"
+            if len(res.notes) > 25:
+                msg += f"<p>… e mais {len(res.notes) - 25} (veja a descrição do modelo).</p>"
+        box = QMessageBox(QMessageBox.Information, "Importar modelo JaamSim", msg, parent=self)
+        box.setTextFormat(Qt.RichText)
+        box.exec()
 
     def _load_example(self, fn):
         if self._maybe_save():

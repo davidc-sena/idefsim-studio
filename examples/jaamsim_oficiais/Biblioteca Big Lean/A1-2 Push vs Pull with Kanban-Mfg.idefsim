@@ -1,0 +1,481 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "A1-2 Push vs Pull with Kanban-Mfg",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'A1-2 Push vs Pull with Kanban-Mfg' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: limiares (condições de abertura).\n- Branch1: regra de escolha '(this.FoundFirstDefect*(this.obj.GoodPart-1))+1' mantida como texto (regra OU apenas visual).\n- Branch2: regra de escolha '(this.FoundFirstDefect*(this.obj.GoodPart-1))+1' mantida como texto (regra OU apenas visual).\n- Branch3: regra de escolha '(this.FoundFirstDefect*(this.obj.GoodPart-1))+1' mantida como texto (regra OU apenas visual).",
+  "settings": {
+    "time_unit": "s",
+    "duration": 60.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "7a878bc51c",
+      "kind": "rule_or",
+      "name": "Branch1",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "(this.FoundFirstDefect*(this.obj.GoodPart-1))+1"
+      }
+    },
+    {
+      "id": "ee2c82c356",
+      "kind": "rule_or",
+      "name": "Branch2",
+      "x": 880,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "(this.FoundFirstDefect*(this.obj.GoodPart-1))+1"
+      }
+    },
+    {
+      "id": "a5ba839295",
+      "kind": "rule_or",
+      "name": "Branch3",
+      "x": 880,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "(this.FoundFirstDefect*(this.obj.GoodPart-1))+1"
+      }
+    },
+    {
+      "id": "0efba14e3c",
+      "kind": "movement",
+      "name": "Entity Conveyor1 1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(10)"
+      }
+    },
+    {
+      "id": "2335bfb80d",
+      "kind": "movement",
+      "name": "Entity Conveyor1 2",
+      "x": 280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(10)"
+      }
+    },
+    {
+      "id": "775a5eb154",
+      "kind": "movement",
+      "name": "Entity Conveyor1 3",
+      "x": 280,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "2e6f62bc40",
+      "kind": "movement",
+      "name": "Entity Conveyor2 1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "5584130ce5",
+      "kind": "movement",
+      "name": "Entity Conveyor2 2",
+      "x": 1080,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "c3eef588ae",
+      "kind": "movement",
+      "name": "Entity Conveyor2 3",
+      "x": 1080,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "8e9a79fc4a",
+      "kind": "entity",
+      "name": "Entity Generator1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(0,5)",
+        "first_arrival": "0",
+        "max_arrivals": 100,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "GoodPart",
+            "value": "CONST(1)"
+          },
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "d80e392cb5",
+      "kind": "entity",
+      "name": "Entity Generator2",
+      "x": 80,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(0,5)",
+        "first_arrival": "0",
+        "max_arrivals": 100,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "GoodPart",
+            "value": "CONST(1)"
+          },
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "32cf8f58ee",
+      "kind": "entity",
+      "name": "Entity Generator3",
+      "x": 80,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(0,5)",
+        "first_arrival": "0",
+        "max_arrivals": 100,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "GoodPart",
+            "value": "CONST(1)"
+          },
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "413f954ca1",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1280,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "9b9ec39e66",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "2dbeb298ac",
+      "kind": "function",
+      "name": "Queue2",
+      "x": 480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "c5441279f8",
+      "kind": "function",
+      "name": "Queue3",
+      "x": 480,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "8b7aca1345",
+      "kind": "function",
+      "name": "Server1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1,25)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "e26ae0aadc",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "f3904a1a8b",
+      "kind": "function",
+      "name": "Server2",
+      "x": 680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1,25)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "cd7b8141ad",
+      "kind": "resource",
+      "name": "Recurso Server2",
+      "x": 680,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "6056e772c3",
+      "kind": "function",
+      "name": "Server3",
+      "x": 680,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1,25)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "fab690dabc",
+      "kind": "resource",
+      "name": "Recurso Server3",
+      "x": 680,
+      "y": 645.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "c19071516e",
+      "kind": "resource",
+      "source": "e26ae0aadc",
+      "target": "8b7aca1345",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "066a75d8ce",
+      "kind": "resource",
+      "source": "cd7b8141ad",
+      "target": "f3904a1a8b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4910749f55",
+      "kind": "resource",
+      "source": "fab690dabc",
+      "target": "6056e772c3",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "73df0de146",
+      "kind": "flow",
+      "source": "7a878bc51c",
+      "target": "2e6f62bc40",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b76e87407f",
+      "kind": "flow",
+      "source": "ee2c82c356",
+      "target": "5584130ce5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b0701c06c7",
+      "kind": "flow",
+      "source": "a5ba839295",
+      "target": "c3eef588ae",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b210c1fa92",
+      "kind": "flow",
+      "source": "0efba14e3c",
+      "target": "9b9ec39e66",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e9cabe38ac",
+      "kind": "flow",
+      "source": "2335bfb80d",
+      "target": "2dbeb298ac",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fe1ad4fdd8",
+      "kind": "flow",
+      "source": "775a5eb154",
+      "target": "c5441279f8",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2416a57df4",
+      "kind": "flow",
+      "source": "2e6f62bc40",
+      "target": "413f954ca1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b988750cf3",
+      "kind": "flow",
+      "source": "5584130ce5",
+      "target": "413f954ca1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cc8c1c0f47",
+      "kind": "flow",
+      "source": "c3eef588ae",
+      "target": "413f954ca1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a62dfab55e",
+      "kind": "flow",
+      "source": "8e9a79fc4a",
+      "target": "0efba14e3c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fa7f940d3d",
+      "kind": "flow",
+      "source": "d80e392cb5",
+      "target": "2335bfb80d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "37daf6deb8",
+      "kind": "flow",
+      "source": "32cf8f58ee",
+      "target": "775a5eb154",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "43d25a4ccc",
+      "kind": "flow",
+      "source": "8b7aca1345",
+      "target": "7a878bc51c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f862b055c4",
+      "kind": "flow",
+      "source": "9b9ec39e66",
+      "target": "8b7aca1345",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2b631fed6d",
+      "kind": "flow",
+      "source": "f3904a1a8b",
+      "target": "ee2c82c356",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e397c55fa9",
+      "kind": "flow",
+      "source": "2dbeb298ac",
+      "target": "f3904a1a8b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d743f4b2e8",
+      "kind": "flow",
+      "source": "6056e772c3",
+      "target": "a5ba839295",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "280f88a93a",
+      "kind": "flow",
+      "source": "c5441279f8",
+      "target": "6056e772c3",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

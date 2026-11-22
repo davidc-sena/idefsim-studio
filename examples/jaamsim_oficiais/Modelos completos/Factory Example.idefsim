@@ -1,0 +1,199 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Factory Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Factory Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.",
+  "settings": {
+    "time_unit": "min",
+    "duration": 100000.0,
+    "warmup": 0.0,
+    "replications": 10,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "0428832997",
+      "kind": "rule_or",
+      "name": "Passed Inspection",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "probability",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "e1952fbbe8",
+      "kind": "entity",
+      "name": "Part",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "603f846c2c",
+      "kind": "exit",
+      "name": "Good Part Finished",
+      "x": 1280,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "63b94ba2f9",
+      "kind": "function",
+      "name": "Inspect Queue",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "38a5cd0d55",
+      "kind": "function",
+      "name": "Machine Queue",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "dc5f5e3bf1",
+      "kind": "function",
+      "name": "Inspect Part",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(0,75; 0,8)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "851edb9287",
+      "kind": "resource",
+      "name": "Recurso Inspect Part",
+      "x": 880,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "0fbe88fe23",
+      "kind": "function",
+      "name": "Machine Part",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(0,65; 0,7)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "d63b0d3479",
+      "kind": "resource",
+      "name": "Recurso Machine Part",
+      "x": 480,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "030b83ba60",
+      "kind": "resource",
+      "source": "851edb9287",
+      "target": "dc5f5e3bf1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "c44370ac75",
+      "kind": "resource",
+      "source": "d63b0d3479",
+      "target": "0fbe88fe23",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cbf2f73fce",
+      "kind": "flow",
+      "source": "0428832997",
+      "target": "603f846c2c",
+      "label": "",
+      "probability": 0.9
+    },
+    {
+      "id": "0ba6088ec9",
+      "kind": "flow",
+      "source": "0428832997",
+      "target": "38a5cd0d55",
+      "label": "",
+      "probability": 0.1
+    },
+    {
+      "id": "fc73d914b4",
+      "kind": "flow",
+      "source": "e1952fbbe8",
+      "target": "38a5cd0d55",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d38560b82b",
+      "kind": "flow",
+      "source": "dc5f5e3bf1",
+      "target": "0428832997",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "1e34c29c15",
+      "kind": "flow",
+      "source": "63b94ba2f9",
+      "target": "dc5f5e3bf1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "68910b4e89",
+      "kind": "flow",
+      "source": "0fbe88fe23",
+      "target": "63b94ba2f9",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "5c3e19d771",
+      "kind": "flow",
+      "source": "38a5cd0d55",
+      "target": "0fbe88fe23",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

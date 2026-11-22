@@ -1,0 +1,202 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Pack, Unpack, and EntityContainer Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Pack, Unpack, and EntityContainer Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- ProtoContainer (EntityContainer) representado como Função, sem a lógica de EntityContainer.\n- Pack1 (Pack) representado como Função, sem a lógica de Pack.\n- Unpack1 (Unpack) representado como Função, sem a lógica de Unpack.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 1
+  },
+  "elements": [
+    {
+      "id": "16db692d5a",
+      "kind": "function",
+      "name": "Proto Container",
+      "x": 80,
+      "y": 550.0,
+      "description": "No JaamSim: EntityContainer (apenas representado)",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "408ab636b4",
+      "kind": "movement",
+      "name": "Conveyor1",
+      "x": 280,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "c2e9fdaf6a",
+      "kind": "movement",
+      "name": "Conveyor2",
+      "x": 680,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "0c1d9763f2",
+      "kind": "movement",
+      "name": "Conveyor3",
+      "x": 1080,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "7f78b51328",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(0,5)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "8ecc44049f",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1280,
+      "y": 400.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "3a83a93be3",
+      "kind": "function",
+      "name": "Pack1",
+      "x": 480,
+      "y": 400.0,
+      "description": "No JaamSim: Pack (apenas representado)",
+      "params": {
+        "duration": "CONST(0,4)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "dacdc36ca7",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 80,
+      "y": 250.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "e9bc97724c",
+      "kind": "function",
+      "name": "Queue2",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "b5e9f5aa26",
+      "kind": "function",
+      "name": "Unpack1",
+      "x": 880,
+      "y": 400.0,
+      "description": "No JaamSim: Unpack (apenas representado)",
+      "params": {
+        "duration": "CONST(0,45)",
+        "is_queue": false
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "983c591125",
+      "kind": "flow",
+      "source": "408ab636b4",
+      "target": "3a83a93be3",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6d4afbea4e",
+      "kind": "flow",
+      "source": "c2e9fdaf6a",
+      "target": "b5e9f5aa26",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "5ec16823b2",
+      "kind": "flow",
+      "source": "0c1d9763f2",
+      "target": "8ecc44049f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "23e8c333dd",
+      "kind": "flow",
+      "source": "7f78b51328",
+      "target": "408ab636b4",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cf41d916ce",
+      "kind": "flow",
+      "source": "3a83a93be3",
+      "target": "c2e9fdaf6a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a781df96de",
+      "kind": "flow",
+      "source": "dacdc36ca7",
+      "target": "3a83a93be3",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7c7da90dec",
+      "kind": "flow",
+      "source": "b5e9f5aa26",
+      "target": "0c1d9763f2",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e8118af07a",
+      "kind": "flow",
+      "source": "e9bc97724c",
+      "target": "b5e9f5aa26",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

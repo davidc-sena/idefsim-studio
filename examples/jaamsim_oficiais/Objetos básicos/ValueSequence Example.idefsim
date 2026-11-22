@@ -1,0 +1,77 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "ValueSequence Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'ValueSequence Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "b2700e3892",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(6)"
+      }
+    },
+    {
+      "id": "9831f1a91e",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "a",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "677c743a74",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "f4900f9415",
+      "kind": "flow",
+      "source": "b2700e3892",
+      "target": "677c743a74",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cc2b135642",
+      "kind": "flow",
+      "source": "9831f1a91e",
+      "target": "b2700e3892",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

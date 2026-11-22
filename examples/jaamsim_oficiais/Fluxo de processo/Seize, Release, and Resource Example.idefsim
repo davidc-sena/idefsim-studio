@@ -1,0 +1,149 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Seize, Release, and Resource Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Seize, Release, and Resource Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 1
+  },
+  "elements": [
+    {
+      "id": "90d982b044",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "eca7e095f9",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "f036e2536e",
+      "kind": "movement",
+      "name": "Entity Conveyor3",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "a1c9f691c2",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(2)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "8b85535c88",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "c817b3c5ad",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "e0380be188",
+      "kind": "resource",
+      "name": "Resource1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 4
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "0ab3f885b9",
+      "kind": "flow",
+      "source": "90d982b044",
+      "target": "c817b3c5ad",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fe5e63af18",
+      "kind": "flow",
+      "source": "eca7e095f9",
+      "target": "f036e2536e",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "56a4a94d8a",
+      "kind": "flow",
+      "source": "f036e2536e",
+      "target": "8b85535c88",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "979160021d",
+      "kind": "flow",
+      "source": "a1c9f691c2",
+      "target": "90d982b044",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "58a266c5c8",
+      "kind": "flow",
+      "source": "c817b3c5ad",
+      "target": "eca7e095f9",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fd6ca55a64",
+      "kind": "resource",
+      "source": "e0380be188",
+      "target": "eca7e095f9",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

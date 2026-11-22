@@ -1,0 +1,72 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EventSchedule Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EventSchedule Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- EntityGenerator1: InterArrivalTime 'EventSchedule1' não tem equivalente direto; usado o valor 1.\n- EntityGenerator1: FirstArrivalTime 'EventSchedule1' não tem equivalente direto; usado o valor 1.\n- Não representados no IDEF-SIM: programação de eventos.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "h",
+    "duration": 8.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "06d31f9425",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "bda95dd3bc",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "CONST(1)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "b08d421a57",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "a42f512800",
+      "kind": "flow",
+      "source": "06d31f9425",
+      "target": "b08d421a57",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "47c222f56f",
+      "kind": "flow",
+      "source": "bda95dd3bc",
+      "target": "06d31f9425",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

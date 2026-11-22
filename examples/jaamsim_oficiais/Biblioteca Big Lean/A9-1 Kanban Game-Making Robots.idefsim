@@ -1,0 +1,680 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "A9-1 Kanban Game-Making Robots",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'A9-1 Kanban Game-Making Robots' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: limiares (condições de abertura).\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "ebf0d86565",
+      "kind": "rule_and",
+      "name": "Assemble1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "62cea1a526",
+      "kind": "entity",
+      "name": "Sim Entity Completed Head",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": false,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "3873c15df8",
+      "kind": "rule_and",
+      "name": "Assemble2",
+      "x": 2480,
+      "y": 400.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "d036e6d391",
+      "kind": "entity",
+      "name": "Robot-Assembled",
+      "x": 2680,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": false,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "c672b02f09",
+      "kind": "rule_and",
+      "name": "Assemble All",
+      "x": 1680,
+      "y": 400.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "cd0240023c",
+      "kind": "entity",
+      "name": "Sim Entity Assembled",
+      "x": 1880,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": false,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "e5259be8fe",
+      "kind": "rule_and",
+      "name": "Assemble Torso",
+      "x": 880,
+      "y": 400.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "7eaa708125",
+      "kind": "entity",
+      "name": "Sim Entity Torso And Arms",
+      "x": 1080,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": false,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "0783cf7f0e",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 2080,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "456ff3a0cb",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 280,
+      "y": 700.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "409eef5702",
+      "kind": "movement",
+      "name": "Entity Conveyor3",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "3e6126ae97",
+      "kind": "movement",
+      "name": "Entity Conveyor4",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "71152321e2",
+      "kind": "movement",
+      "name": "Entity Conveyor5",
+      "x": 1280,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "2293aa332e",
+      "kind": "movement",
+      "name": "Entity Conveyor6",
+      "x": 280,
+      "y": 250.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "dc0460802f",
+      "kind": "movement",
+      "name": "Entity Conveyor7",
+      "x": 280,
+      "y": 550.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "665a1fc420",
+      "kind": "movement",
+      "name": "Entity Conveyor8a",
+      "x": 280,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "0e7d347e48",
+      "kind": "movement",
+      "name": "Entity Conveyor8b",
+      "x": 480,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "9e462414ab",
+      "kind": "movement",
+      "name": "Entity Conveyor Shipped",
+      "x": 2880,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "cc8c2c34c0",
+      "kind": "entity",
+      "name": "Sim Entity Head",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(1; 2)",
+        "first_arrival": "UNIF(1; 2)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "0e4e0695db",
+      "kind": "entity",
+      "name": "Sim Entity Left Arm",
+      "x": 80,
+      "y": 550.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(1; 2)",
+        "first_arrival": "UNIF(1; 2)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "9cfefe5307",
+      "kind": "entity",
+      "name": "Sim Entity Right Arm",
+      "x": 80,
+      "y": 250.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(1; 2)",
+        "first_arrival": "UNIF(1; 2)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "24f7394697",
+      "kind": "entity",
+      "name": "Sim Entity Torso",
+      "x": 80,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(2,5; 5)",
+        "first_arrival": "UNIF(2,5; 5)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "b6fc9bb5d8",
+      "kind": "entity",
+      "name": "Sim Entity Wheel",
+      "x": 80,
+      "y": 700.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(1; 1,5)",
+        "first_arrival": "UNIF(1; 1,5)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "1f77d29080",
+      "kind": "exit",
+      "name": "Set Kanban Levels",
+      "x": 3080,
+      "y": 400.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "e058844c0d",
+      "kind": "exit",
+      "name": "Set Kanban Levels Copy1",
+      "x": 80,
+      "y": 850.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "585cc7111d",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 2280,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "85313aaa45",
+      "kind": "function",
+      "name": "Queue2",
+      "x": 480,
+      "y": 700.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "c2b92969f6",
+      "kind": "function",
+      "name": "Queue3",
+      "x": 1280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "7e53a59c96",
+      "kind": "function",
+      "name": "Queue4",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "d7111f1816",
+      "kind": "function",
+      "name": "Queue5",
+      "x": 1480,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "2d949741b4",
+      "kind": "function",
+      "name": "Queue6",
+      "x": 480,
+      "y": 250.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "685e38a616",
+      "kind": "function",
+      "name": "Queue7",
+      "x": 480,
+      "y": 550.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "86e8703536",
+      "kind": "function",
+      "name": "Queue8",
+      "x": 680,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "d76a909e64",
+      "kind": "flow",
+      "source": "62cea1a526",
+      "target": "409eef5702",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "246e971b20",
+      "kind": "flow",
+      "source": "ebf0d86565",
+      "target": "62cea1a526",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "97567d37be",
+      "kind": "flow",
+      "source": "7e53a59c96",
+      "target": "ebf0d86565",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "db42676d79",
+      "kind": "flow",
+      "source": "d036e6d391",
+      "target": "9e462414ab",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "791f85d196",
+      "kind": "flow",
+      "source": "3873c15df8",
+      "target": "d036e6d391",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9966b0c522",
+      "kind": "flow",
+      "source": "585cc7111d",
+      "target": "3873c15df8",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f07612f086",
+      "kind": "flow",
+      "source": "cd0240023c",
+      "target": "0783cf7f0e",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e07038cafa",
+      "kind": "flow",
+      "source": "c672b02f09",
+      "target": "cd0240023c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "12df3e1aa2",
+      "kind": "flow",
+      "source": "c2b92969f6",
+      "target": "c672b02f09",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "27ab1c7253",
+      "kind": "flow",
+      "source": "d7111f1816",
+      "target": "c672b02f09",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4890256ff1",
+      "kind": "flow",
+      "source": "85313aaa45",
+      "target": "c672b02f09",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fb2d3ed167",
+      "kind": "flow",
+      "source": "7eaa708125",
+      "target": "71152321e2",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "c8440026e3",
+      "kind": "flow",
+      "source": "e5259be8fe",
+      "target": "7eaa708125",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4982a04bda",
+      "kind": "flow",
+      "source": "685e38a616",
+      "target": "e5259be8fe",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4f15b345dc",
+      "kind": "flow",
+      "source": "86e8703536",
+      "target": "e5259be8fe",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b36a5865eb",
+      "kind": "flow",
+      "source": "2d949741b4",
+      "target": "e5259be8fe",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9c0e3bd04c",
+      "kind": "flow",
+      "source": "0783cf7f0e",
+      "target": "585cc7111d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e326226049",
+      "kind": "flow",
+      "source": "456ff3a0cb",
+      "target": "85313aaa45",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2cd5ea7517",
+      "kind": "flow",
+      "source": "409eef5702",
+      "target": "c2b92969f6",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "1bca1dea25",
+      "kind": "flow",
+      "source": "3e6126ae97",
+      "target": "7e53a59c96",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "0685b2ef9a",
+      "kind": "flow",
+      "source": "71152321e2",
+      "target": "d7111f1816",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "45d3ebf6ab",
+      "kind": "flow",
+      "source": "2293aa332e",
+      "target": "2d949741b4",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f4e71f28b6",
+      "kind": "flow",
+      "source": "dc0460802f",
+      "target": "685e38a616",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2799061ea1",
+      "kind": "flow",
+      "source": "665a1fc420",
+      "target": "0e7d347e48",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "17ed8d6f06",
+      "kind": "flow",
+      "source": "0e7d347e48",
+      "target": "86e8703536",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2aa241752e",
+      "kind": "flow",
+      "source": "9e462414ab",
+      "target": "1f77d29080",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7f33d61c19",
+      "kind": "flow",
+      "source": "cc8c2c34c0",
+      "target": "3e6126ae97",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6fcc72567f",
+      "kind": "flow",
+      "source": "0e4e0695db",
+      "target": "dc0460802f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ca361d9183",
+      "kind": "flow",
+      "source": "9cfefe5307",
+      "target": "2293aa332e",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "77c1ce8052",
+      "kind": "flow",
+      "source": "24f7394697",
+      "target": "665a1fc420",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "22e0a1cd72",
+      "kind": "flow",
+      "source": "b6fc9bb5d8",
+      "target": "456ff3a0cb",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

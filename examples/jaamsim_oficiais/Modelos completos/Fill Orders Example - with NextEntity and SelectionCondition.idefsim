@@ -1,0 +1,365 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Fill Orders Example - with NextEntity and SelectionCondition",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Fill Order Example - with NextEntity and SelectionCondition' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "9570bf598d",
+      "kind": "rule_or",
+      "name": "Branch1",
+      "x": 880,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "decision": "condition",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "30be5ac006",
+      "kind": "function",
+      "name": "Entity Delay1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "9e1902fe86",
+      "kind": "function",
+      "name": "Entity Delay2",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "445401499d",
+      "kind": "function",
+      "name": "Entity Delay3",
+      "x": 280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "1b3db461f5",
+      "kind": "function",
+      "name": "Entity Delay4",
+      "x": 1080,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0,1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "772132c552",
+      "kind": "function",
+      "name": "Entity Delay5",
+      "x": 1080,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "f7f5a8b83c",
+      "kind": "function",
+      "name": "Entity Delay6",
+      "x": 680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0,5)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "0953459660",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "type",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "quantity",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "capacity",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "f2aa4b9c17",
+      "kind": "entity",
+      "name": "Sim Entity2",
+      "x": 80,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(2)",
+        "first_arrival": "CONST(4)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "type",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "quantity",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "remaining",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "required",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ce2a16fe21",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "206b5f2abb",
+      "kind": "exit",
+      "name": "Entity Sink2",
+      "x": 1280,
+      "y": 540.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "5996df3a49",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "1c96ec270a",
+      "kind": "function",
+      "name": "Queue2",
+      "x": 480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "948625c8ec",
+      "kind": "function",
+      "name": "Server1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "6facc56db0",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "e7c89a2494",
+      "kind": "resource",
+      "name": "Resource Unit1",
+      "x": 680,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "28a4b6d091",
+      "kind": "resource",
+      "source": "6facc56db0",
+      "target": "948625c8ec",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "43bc2993a6",
+      "kind": "flow",
+      "source": "9570bf598d",
+      "target": "772132c552",
+      "label": "",
+      "probability": 1.0,
+      "condition": "remaining <= 0"
+    },
+    {
+      "id": "63c34fe7a9",
+      "kind": "flow",
+      "source": "9570bf598d",
+      "target": "1b3db461f5",
+      "label": "",
+      "probability": 1.0,
+      "condition": "senão"
+    },
+    {
+      "id": "8a6583b878",
+      "kind": "flow",
+      "source": "30be5ac006",
+      "target": "5996df3a49",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "1180403e1a",
+      "kind": "flow",
+      "source": "9e1902fe86",
+      "target": "ce2a16fe21",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6fa740e6a3",
+      "kind": "flow",
+      "source": "445401499d",
+      "target": "1c96ec270a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "550c06ffa4",
+      "kind": "flow",
+      "source": "1b3db461f5",
+      "target": "f7f5a8b83c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "12b26c4eda",
+      "kind": "flow",
+      "source": "772132c552",
+      "target": "206b5f2abb",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b9b3279816",
+      "kind": "flow",
+      "source": "f7f5a8b83c",
+      "target": "9570bf598d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "170567a0ea",
+      "kind": "flow",
+      "source": "0953459660",
+      "target": "30be5ac006",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ca149d74cd",
+      "kind": "flow",
+      "source": "f2aa4b9c17",
+      "target": "445401499d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9a7fbc2b37",
+      "kind": "flow",
+      "source": "1c96ec270a",
+      "target": "f7f5a8b83c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7df6d67853",
+      "kind": "flow",
+      "source": "948625c8ec",
+      "target": "9e1902fe86",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "40bc5692b7",
+      "kind": "flow",
+      "source": "5996df3a49",
+      "target": "948625c8ec",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "8a69d9b7d3",
+      "kind": "resource",
+      "source": "e7c89a2494",
+      "target": "f7f5a8b83c",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

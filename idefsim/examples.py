@@ -1,6 +1,9 @@
 """Modelos de exemplo."""
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 from . import AUTHOR
 from .model import ConnectionKind as CK, ElementKind as EK, Model
 
@@ -89,6 +92,20 @@ def triagem_atributos() -> Model:
     m.add_connection(CK.RESOURCE, triador.id, tri.id)
     m.add_connection(CK.RESOURCE, emb.id, pes.id)
     return m
+
+
+def examples_dir() -> Path:
+    """Pasta 'examples' (no código-fonte ou dentro do executável)."""
+    base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
+    return base / "examples"
+
+
+def jaamsim_examples() -> dict[str, list[Path]]:
+    """Exemplos oficiais do JaamSim convertidos, por categoria."""
+    root = examples_dir() / "jaamsim_oficiais"
+    if not root.is_dir():
+        return {}
+    return {d.name: sorted(d.glob("*.idefsim")) for d in sorted(root.iterdir()) if d.is_dir()}
 
 
 ALL = {"Célula de usinagem com inspeção": usinagem_inspecao,

@@ -1,0 +1,418 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "A8-1 Little's Law Demonstrated-Call Center",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'A8-1 Little's Law Demonstrated-Call Center' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Server1: ServiceTime 'this.Duration' não tem equivalente direto; usado o valor 1.\n- Server2: ServiceTime 'this.Duration' não tem equivalente direto; usado o valor 1.\n- Server3: ServiceTime 'this.Duration' não tem equivalente direto; usado o valor 1.\n- Server4: ServiceTime 'this.Duration' não tem equivalente direto; usado o valor 1.\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "40c11227e4",
+      "kind": "rule_or",
+      "name": "Branch1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "probability",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "df56e16083",
+      "kind": "entity",
+      "name": "Entity Generator1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "EXPO(10)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeExisted",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeSentTo4",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeIn4",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "622e47078e",
+      "kind": "entity",
+      "name": "Entity Generator2",
+      "x": 80,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "EXPO(10)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeExisted",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeSentTo4",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeIn4",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3fdd039e2e",
+      "kind": "entity",
+      "name": "Entity Generator3",
+      "x": 80,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(10)",
+        "first_arrival": "EXPO(10)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeExisted",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeSentTo4",
+            "value": "CONST(0)"
+          },
+          {
+            "name": "TimeIn4",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8ad0ceec27",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1280,
+      "y": 320.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "be9db1fdc8",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "55f5c571d6",
+      "kind": "function",
+      "name": "Queue2",
+      "x": 280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "abb32c3fe0",
+      "kind": "function",
+      "name": "Queue3",
+      "x": 280,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "28e07ee0d5",
+      "kind": "function",
+      "name": "Queue4",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "3ae77c0b8b",
+      "kind": "function",
+      "name": "Server1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "c908dc1bad",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 480,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "7f6a6d760c",
+      "kind": "function",
+      "name": "Server2",
+      "x": 480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "8f6c3102f7",
+      "kind": "resource",
+      "name": "Recurso Server2",
+      "x": 480,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "65fef67149",
+      "kind": "function",
+      "name": "Server3",
+      "x": 480,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "94934ad826",
+      "kind": "resource",
+      "name": "Recurso Server3",
+      "x": 480,
+      "y": 645.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "f3692009ac",
+      "kind": "function",
+      "name": "Server4",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "15caec4480",
+      "kind": "resource",
+      "name": "Recurso Server4",
+      "x": 1080,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "6a5bf930f3",
+      "kind": "resource",
+      "source": "c908dc1bad",
+      "target": "3ae77c0b8b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "532eee26d8",
+      "kind": "resource",
+      "source": "8f6c3102f7",
+      "target": "7f6a6d760c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "46552394e3",
+      "kind": "resource",
+      "source": "94934ad826",
+      "target": "65fef67149",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3e32b67fb5",
+      "kind": "resource",
+      "source": "15caec4480",
+      "target": "f3692009ac",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "15765fd451",
+      "kind": "flow",
+      "source": "40c11227e4",
+      "target": "8ad0ceec27",
+      "label": "",
+      "probability": 0.6667
+    },
+    {
+      "id": "ecd27ac79f",
+      "kind": "flow",
+      "source": "40c11227e4",
+      "target": "28e07ee0d5",
+      "label": "",
+      "probability": 0.3333
+    },
+    {
+      "id": "18becffe9e",
+      "kind": "flow",
+      "source": "df56e16083",
+      "target": "be9db1fdc8",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "11d1ecd3ef",
+      "kind": "flow",
+      "source": "622e47078e",
+      "target": "55f5c571d6",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "142004a625",
+      "kind": "flow",
+      "source": "3fdd039e2e",
+      "target": "abb32c3fe0",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "82a9784b60",
+      "kind": "flow",
+      "source": "3ae77c0b8b",
+      "target": "40c11227e4",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "070d4c9cf8",
+      "kind": "flow",
+      "source": "be9db1fdc8",
+      "target": "3ae77c0b8b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e2e040d99b",
+      "kind": "flow",
+      "source": "7f6a6d760c",
+      "target": "40c11227e4",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "77caf2c54a",
+      "kind": "flow",
+      "source": "55f5c571d6",
+      "target": "7f6a6d760c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b993389e45",
+      "kind": "flow",
+      "source": "65fef67149",
+      "target": "40c11227e4",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "856f9c9400",
+      "kind": "flow",
+      "source": "abb32c3fe0",
+      "target": "65fef67149",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7ddf9e0ea3",
+      "kind": "flow",
+      "source": "f3692009ac",
+      "target": "8ad0ceec27",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b01a68c4bb",
+      "kind": "flow",
+      "source": "28e07ee0d5",
+      "target": "f3692009ac",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

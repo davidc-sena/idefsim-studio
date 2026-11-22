@@ -1,0 +1,183 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntitlementSelector Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntitlementSelector Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: seleção por direito.\n- Branch1: regra de escolha 'EntitlementSelector1' mantida como texto (regra OU apenas visual).\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "061aa32772",
+      "kind": "rule_or",
+      "name": "Branch1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "EntitlementSelector1"
+      }
+    },
+    {
+      "id": "6f724c0111",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "5523ab2192",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "c4871c3c91",
+      "kind": "movement",
+      "name": "Entity Conveyor3",
+      "x": 680,
+      "y": 250.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "11eac39d27",
+      "kind": "movement",
+      "name": "Entity Conveyor4",
+      "x": 680,
+      "y": 400.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "ccb988e196",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "fa1da9faaf",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "f1078feaaf",
+      "kind": "exit",
+      "name": "Entity Sink2",
+      "x": 880,
+      "y": 250.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "490799aa8a",
+      "kind": "exit",
+      "name": "Entity Sink3",
+      "x": 880,
+      "y": 400.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "2071fface9",
+      "kind": "flow",
+      "source": "061aa32772",
+      "target": "5523ab2192",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "681d074824",
+      "kind": "flow",
+      "source": "061aa32772",
+      "target": "c4871c3c91",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9dcc05b7f8",
+      "kind": "flow",
+      "source": "061aa32772",
+      "target": "11eac39d27",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b4555fa40f",
+      "kind": "flow",
+      "source": "6f724c0111",
+      "target": "061aa32772",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "bcf470426d",
+      "kind": "flow",
+      "source": "5523ab2192",
+      "target": "fa1da9faaf",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3fbe2b2147",
+      "kind": "flow",
+      "source": "c4871c3c91",
+      "target": "f1078feaaf",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "702c25362e",
+      "kind": "flow",
+      "source": "11eac39d27",
+      "target": "490799aa8a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7b5a46bf9c",
+      "kind": "flow",
+      "source": "ccb988e196",
+      "target": "6f724c0111",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

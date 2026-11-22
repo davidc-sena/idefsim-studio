@@ -1,0 +1,91 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "SetGraphics Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'SetGraphics Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "1c64971d03",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "66d54f59db",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "4c683f72e0",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "88b4195808",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "08a84395c1",
+      "kind": "flow",
+      "source": "1c64971d03",
+      "target": "66d54f59db",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4d65df068e",
+      "kind": "flow",
+      "source": "66d54f59db",
+      "target": "88b4195808",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "63349d29cb",
+      "kind": "flow",
+      "source": "4c683f72e0",
+      "target": "1c64971d03",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

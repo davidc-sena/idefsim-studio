@@ -1,0 +1,199 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Factory Example - 1) with input file",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Factory Example - 1) with input file' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- GenerateParts: InterArrivalTime 'GenerateDistribution' não tem equivalente direto; usado o valor 1.\n- InspectPart: ServiceTime 'InspectDistribution' não tem equivalente direto; usado o valor 1.\n- MachinePart: ServiceTime 'MachineDistribution' não tem equivalente direto; usado o valor 1.",
+  "settings": {
+    "time_unit": "min",
+    "duration": 100000.0,
+    "warmup": 0.0,
+    "replications": 10,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "a658d04e82",
+      "kind": "rule_or",
+      "name": "Passed Inspection",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "probability",
+        "criterion": ""
+      }
+    },
+    {
+      "id": "53209af23f",
+      "kind": "entity",
+      "name": "Part",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "7ee8f48afc",
+      "kind": "exit",
+      "name": "Good Part Finished",
+      "x": 1280,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "d8a206240f",
+      "kind": "function",
+      "name": "Inspect Queue",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "6d186dffe5",
+      "kind": "function",
+      "name": "Machine Queue",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "518ef6ac14",
+      "kind": "function",
+      "name": "Inspect Part",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "d496794030",
+      "kind": "resource",
+      "name": "Recurso Inspect Part",
+      "x": 880,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "e69e9f4a08",
+      "kind": "function",
+      "name": "Machine Part",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "dd80b1eadf",
+      "kind": "resource",
+      "name": "Recurso Machine Part",
+      "x": 480,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "a701f53b50",
+      "kind": "resource",
+      "source": "d496794030",
+      "target": "518ef6ac14",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "77b935ea0f",
+      "kind": "resource",
+      "source": "dd80b1eadf",
+      "target": "e69e9f4a08",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ce4930c613",
+      "kind": "flow",
+      "source": "a658d04e82",
+      "target": "7ee8f48afc",
+      "label": "",
+      "probability": 0.9
+    },
+    {
+      "id": "73620eaed8",
+      "kind": "flow",
+      "source": "a658d04e82",
+      "target": "6d186dffe5",
+      "label": "",
+      "probability": 0.1
+    },
+    {
+      "id": "e38f737f1d",
+      "kind": "flow",
+      "source": "53209af23f",
+      "target": "6d186dffe5",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3c95e2cfe7",
+      "kind": "flow",
+      "source": "518ef6ac14",
+      "target": "a658d04e82",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d02ec32cdb",
+      "kind": "flow",
+      "source": "d8a206240f",
+      "target": "518ef6ac14",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7f46467a57",
+      "kind": "flow",
+      "source": "e69e9f4a08",
+      "target": "d8a206240f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9c5707e063",
+      "kind": "flow",
+      "source": "6d186dffe5",
+      "target": "e69e9f4a08",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntityConveyor Example - with TriggerPointList",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntityConveyor Example - with TriggerPointList' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: limiares (condições de abertura).",
+  "settings": {
+    "time_unit": "s",
+    "duration": 604800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "e5d2a6eaef",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(6)"
+      }
+    },
+    {
+      "id": "73a1725d58",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(4)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "8458d72d20",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "476e7b840b",
+      "kind": "flow",
+      "source": "e5d2a6eaef",
+      "target": "8458d72d20",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "abd70a44cc",
+      "kind": "flow",
+      "source": "73a1725d58",
+      "target": "e5d2a6eaef",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

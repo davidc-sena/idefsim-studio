@@ -1,0 +1,966 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "A4-2 Variation in a Push System-Manufacturing",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'A4-2 Variation in a Push System-Manufacturing' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "770d0a5b3b",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "2d00767dde",
+      "kind": "movement",
+      "name": "Entity Conveyor1 1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "c8b4049f27",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 880,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "dc4219a7ef",
+      "kind": "movement",
+      "name": "Entity Conveyor2 1",
+      "x": 280,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "529e909c68",
+      "kind": "movement",
+      "name": "Entity Conveyor3",
+      "x": 1480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "2ef0eabdb1",
+      "kind": "movement",
+      "name": "Entity Conveyor4",
+      "x": 2080,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "5403e67e15",
+      "kind": "movement",
+      "name": "Entity Conveyor5",
+      "x": 2680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "76d97529da",
+      "kind": "movement",
+      "name": "Entity Conveyor6",
+      "x": 280,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "6f07745856",
+      "kind": "movement",
+      "name": "Entity Conveyor7",
+      "x": 880,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "e236c9042d",
+      "kind": "movement",
+      "name": "Entity Conveyor8",
+      "x": 1480,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "e735d9b12f",
+      "kind": "movement",
+      "name": "Entity Conveyor9",
+      "x": 2080,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "7238221182",
+      "kind": "movement",
+      "name": "Entity Conveyor10",
+      "x": 2680,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "4dce3bd317",
+      "kind": "entity",
+      "name": "Entity Generator1",
+      "x": 80,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "e50beb49c6",
+      "kind": "entity",
+      "name": "Entity Generator1 1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "87d086f153",
+      "kind": "entity",
+      "name": "Entity Generator2",
+      "x": 80,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(0; 2)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "029b043865",
+      "kind": "entity",
+      "name": "Entity Generator2 1",
+      "x": 80,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "interarrival": "UNIF(0; 2)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": [
+          {
+            "name": "TimeCreated",
+            "value": "CONST(0)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "864c471e7b",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 2880,
+      "y": 320.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "57614d6815",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "990afbc4b2",
+      "kind": "function",
+      "name": "Queue1 1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "6f06240d74",
+      "kind": "function",
+      "name": "Queue2",
+      "x": 1080,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "e88afde84d",
+      "kind": "function",
+      "name": "Queue3",
+      "x": 1680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "c826bc8c97",
+      "kind": "function",
+      "name": "Queue4",
+      "x": 2280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "908ee8ce4c",
+      "kind": "function",
+      "name": "Queue5",
+      "x": 480,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "4242b8f537",
+      "kind": "function",
+      "name": "Queue5 1",
+      "x": 480,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "26560ff200",
+      "kind": "function",
+      "name": "Queue6",
+      "x": 1080,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "3f235c4970",
+      "kind": "function",
+      "name": "Queue7",
+      "x": 1680,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "bd27fddd33",
+      "kind": "function",
+      "name": "Queue8",
+      "x": 2280,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "3e713efc9c",
+      "kind": "function",
+      "name": "Server1",
+      "x": 680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "efd09d87b0",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 680,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "70593b3e05",
+      "kind": "function",
+      "name": "Server1 1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "354501b4cc",
+      "kind": "resource",
+      "name": "Recurso Server1 1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "ef77ec0abd",
+      "kind": "function",
+      "name": "Server2",
+      "x": 1280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "6853963a14",
+      "kind": "resource",
+      "name": "Recurso Server2",
+      "x": 1280,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "e2dcad9430",
+      "kind": "function",
+      "name": "Server3",
+      "x": 1880,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "394f131941",
+      "kind": "resource",
+      "name": "Recurso Server3",
+      "x": 1880,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "4d5a1a8ad8",
+      "kind": "function",
+      "name": "Server4",
+      "x": 2480,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "ee05ac5548",
+      "kind": "resource",
+      "name": "Recurso Server4",
+      "x": 2480,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "737ddb3ed0",
+      "kind": "function",
+      "name": "Server5",
+      "x": 680,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(0; 2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "ac368e6d38",
+      "kind": "resource",
+      "name": "Recurso Server5",
+      "x": 680,
+      "y": 865.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "4dbe5e0a38",
+      "kind": "function",
+      "name": "Server5 1",
+      "x": 680,
+      "y": 540.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(0; 2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "962283451d",
+      "kind": "resource",
+      "name": "Recurso Server5 1",
+      "x": 680,
+      "y": 645.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "39ba6a179a",
+      "kind": "function",
+      "name": "Server6",
+      "x": 1280,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(0; 2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "c7df06b0b8",
+      "kind": "resource",
+      "name": "Recurso Server6",
+      "x": 1280,
+      "y": 865.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "6ecf4e7c81",
+      "kind": "function",
+      "name": "Server7",
+      "x": 1880,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(0; 2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "8ca4e72e93",
+      "kind": "resource",
+      "name": "Recurso Server7",
+      "x": 1880,
+      "y": 865.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "bbe4426d0d",
+      "kind": "function",
+      "name": "Server8",
+      "x": 2480,
+      "y": 760.0,
+      "description": "",
+      "params": {
+        "duration": "UNIF(0; 2)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "1ae1744393",
+      "kind": "resource",
+      "name": "Recurso Server8",
+      "x": 2480,
+      "y": 865.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "0bd8401f63",
+      "kind": "resource",
+      "source": "efd09d87b0",
+      "target": "3e713efc9c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "289d65a4e2",
+      "kind": "resource",
+      "source": "354501b4cc",
+      "target": "70593b3e05",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6d16093f21",
+      "kind": "resource",
+      "source": "6853963a14",
+      "target": "ef77ec0abd",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "309af53486",
+      "kind": "resource",
+      "source": "394f131941",
+      "target": "e2dcad9430",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "996c7ccaeb",
+      "kind": "resource",
+      "source": "ee05ac5548",
+      "target": "4d5a1a8ad8",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6c40af0af3",
+      "kind": "resource",
+      "source": "ac368e6d38",
+      "target": "737ddb3ed0",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "590f10d9b3",
+      "kind": "resource",
+      "source": "962283451d",
+      "target": "4dbe5e0a38",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a28dc2d19c",
+      "kind": "resource",
+      "source": "c7df06b0b8",
+      "target": "39ba6a179a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "b4dc23b74c",
+      "kind": "resource",
+      "source": "8ca4e72e93",
+      "target": "6ecf4e7c81",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "1ec2186709",
+      "kind": "resource",
+      "source": "1ae1744393",
+      "target": "bbe4426d0d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d8af093482",
+      "kind": "flow",
+      "source": "770d0a5b3b",
+      "target": "57614d6815",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e6ff2fde42",
+      "kind": "flow",
+      "source": "2d00767dde",
+      "target": "990afbc4b2",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "17b9ac042b",
+      "kind": "flow",
+      "source": "c8b4049f27",
+      "target": "6f06240d74",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4e4a875f50",
+      "kind": "flow",
+      "source": "dc4219a7ef",
+      "target": "4242b8f537",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2de94c6233",
+      "kind": "flow",
+      "source": "529e909c68",
+      "target": "e88afde84d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a4cd08fe40",
+      "kind": "flow",
+      "source": "2ef0eabdb1",
+      "target": "c826bc8c97",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e1ab06216c",
+      "kind": "flow",
+      "source": "5403e67e15",
+      "target": "864c471e7b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "60e04fb2ed",
+      "kind": "flow",
+      "source": "76d97529da",
+      "target": "908ee8ce4c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "cf06380107",
+      "kind": "flow",
+      "source": "6f07745856",
+      "target": "26560ff200",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "1c69b35559",
+      "kind": "flow",
+      "source": "e236c9042d",
+      "target": "3f235c4970",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d2473b0fae",
+      "kind": "flow",
+      "source": "e735d9b12f",
+      "target": "bd27fddd33",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "bddd8ae641",
+      "kind": "flow",
+      "source": "7238221182",
+      "target": "864c471e7b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "e3f222e7aa",
+      "kind": "flow",
+      "source": "4dce3bd317",
+      "target": "770d0a5b3b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "350d91a337",
+      "kind": "flow",
+      "source": "e50beb49c6",
+      "target": "2d00767dde",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d94b068967",
+      "kind": "flow",
+      "source": "87d086f153",
+      "target": "76d97529da",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "693e118353",
+      "kind": "flow",
+      "source": "029b043865",
+      "target": "dc4219a7ef",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f0571df837",
+      "kind": "flow",
+      "source": "3e713efc9c",
+      "target": "c8b4049f27",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "8ac23f041f",
+      "kind": "flow",
+      "source": "57614d6815",
+      "target": "3e713efc9c",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "48074bb053",
+      "kind": "flow",
+      "source": "70593b3e05",
+      "target": "864c471e7b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3a770a1387",
+      "kind": "flow",
+      "source": "990afbc4b2",
+      "target": "70593b3e05",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "0267cca74c",
+      "kind": "flow",
+      "source": "ef77ec0abd",
+      "target": "529e909c68",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "d1b343c58a",
+      "kind": "flow",
+      "source": "6f06240d74",
+      "target": "ef77ec0abd",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "3a7fbeb448",
+      "kind": "flow",
+      "source": "e2dcad9430",
+      "target": "2ef0eabdb1",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "faf0514962",
+      "kind": "flow",
+      "source": "e88afde84d",
+      "target": "e2dcad9430",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "acd5be1f25",
+      "kind": "flow",
+      "source": "4d5a1a8ad8",
+      "target": "5403e67e15",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "087abb2df6",
+      "kind": "flow",
+      "source": "c826bc8c97",
+      "target": "4d5a1a8ad8",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "410e8be742",
+      "kind": "flow",
+      "source": "737ddb3ed0",
+      "target": "6f07745856",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "8207975c3f",
+      "kind": "flow",
+      "source": "908ee8ce4c",
+      "target": "737ddb3ed0",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "fcc157c63d",
+      "kind": "flow",
+      "source": "4dbe5e0a38",
+      "target": "864c471e7b",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6f1219fa96",
+      "kind": "flow",
+      "source": "4242b8f537",
+      "target": "4dbe5e0a38",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "10afc6d8dd",
+      "kind": "flow",
+      "source": "39ba6a179a",
+      "target": "e236c9042d",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "be8b2d690c",
+      "kind": "flow",
+      "source": "26560ff200",
+      "target": "39ba6a179a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6498e90ef7",
+      "kind": "flow",
+      "source": "6ecf4e7c81",
+      "target": "e735d9b12f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "c7c6afa94d",
+      "kind": "flow",
+      "source": "3f235c4970",
+      "target": "6ecf4e7c81",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "68b5203976",
+      "kind": "flow",
+      "source": "bbe4426d0d",
+      "target": "7238221182",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "97165ad460",
+      "kind": "flow",
+      "source": "bd27fddd33",
+      "target": "bbe4426d0d",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

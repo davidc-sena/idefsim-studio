@@ -1,0 +1,150 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "EntityProcessor Example - with ReleaseThresholdList",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'EntityProcessor Example - with ReleaseThresholdList' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: limiares (condições de abertura).\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "007b4e2709",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "b2a71e053a",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(3)"
+      }
+    },
+    {
+      "id": "6ee6e6f9da",
+      "kind": "entity",
+      "name": "Proto",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1,25)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "124158c535",
+      "kind": "function",
+      "name": "Entity Processor1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "bfc0488566",
+      "kind": "resource",
+      "name": "Recurso Entity Processor1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 2
+      }
+    },
+    {
+      "id": "5b887d54ce",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "3c2ab0381a",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "05735d022c",
+      "kind": "resource",
+      "source": "bfc0488566",
+      "target": "124158c535",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "f64e3af00c",
+      "kind": "flow",
+      "source": "007b4e2709",
+      "target": "3c2ab0381a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "283480e7dd",
+      "kind": "flow",
+      "source": "b2a71e053a",
+      "target": "5b887d54ce",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "99191c8a07",
+      "kind": "flow",
+      "source": "6ee6e6f9da",
+      "target": "007b4e2709",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a443ea6888",
+      "kind": "flow",
+      "source": "124158c535",
+      "target": "b2a71e053a",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4aadbe479a",
+      "kind": "flow",
+      "source": "3c2ab0381a",
+      "target": "124158c535",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

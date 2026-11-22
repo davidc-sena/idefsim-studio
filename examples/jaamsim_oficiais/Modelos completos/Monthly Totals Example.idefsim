@@ -1,0 +1,106 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Monthly Totals Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Monthly Totals Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- EntityGenerator2: InterArrivalTime ''[StartOfNextMonth].Value - simTime'' não tem equivalente direto; usado o valor 1.\n- EntityGenerator2: FirstArrivalTime '[StartOfNextMonth].Value' não tem equivalente direto; usado o valor 1.",
+  "settings": {
+    "time_unit": "dia",
+    "duration": 366.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "86c2677882",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1)"
+      }
+    },
+    {
+      "id": "34284bb632",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "82a37af987",
+      "kind": "entity",
+      "name": "Sim Entity2",
+      "x": 80,
+      "y": 250.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "CONST(1)",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "41fd8b7421",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "c2755e067a",
+      "kind": "exit",
+      "name": "Entity Sink2",
+      "x": 280,
+      "y": 250.0,
+      "description": "",
+      "params": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "10b17a9331",
+      "kind": "flow",
+      "source": "86c2677882",
+      "target": "41fd8b7421",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "6af17df395",
+      "kind": "flow",
+      "source": "34284bb632",
+      "target": "86c2677882",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "52929d6bc1",
+      "kind": "flow",
+      "source": "82a37af987",
+      "target": "c2755e067a",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

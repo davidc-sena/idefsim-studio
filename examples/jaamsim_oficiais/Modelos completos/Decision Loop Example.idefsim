@@ -1,0 +1,255 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "Decision Loop Example",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'Decision Loop Example' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Branch1: regra de escolha 'this.state' mantida como texto (regra OU apenas visual).\n- Duração da simulação não definida no JaamSim; usadas 8 h.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 28800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "b2f05eba60",
+      "kind": "rule_or",
+      "name": "Branch1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "decision": "visual",
+        "criterion": "this.state"
+      }
+    },
+    {
+      "id": "973d095f4f",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "f62230717f",
+      "kind": "function",
+      "name": "Entity Delay1",
+      "x": 280,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(5)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "2d1326deb6",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 1,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "f8119211ef",
+      "kind": "entity",
+      "name": "Sim Entity2",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "EXPO(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "85672cc727",
+      "kind": "exit",
+      "name": "Entity Sink1",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "51799b6242",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "8242b30e99",
+      "kind": "function",
+      "name": "Queue2",
+      "x": 680,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "8284baeb20",
+      "kind": "function",
+      "name": "Server1",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1,5)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "170edc4547",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 880,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    },
+    {
+      "id": "69ff1927a7",
+      "kind": "function",
+      "name": "Server2",
+      "x": 880,
+      "y": 320.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(1,5)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "9bdaf374b9",
+      "kind": "resource",
+      "name": "Recurso Server2",
+      "x": 880,
+      "y": 425.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "7cb69be983",
+      "kind": "resource",
+      "source": "170edc4547",
+      "target": "8284baeb20",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "8bfb4bd56b",
+      "kind": "resource",
+      "source": "9bdaf374b9",
+      "target": "69ff1927a7",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "dda8b63aba",
+      "kind": "flow",
+      "source": "b2f05eba60",
+      "target": "51799b6242",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "95dc6bf6e2",
+      "kind": "flow",
+      "source": "b2f05eba60",
+      "target": "8242b30e99",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "16a8188bd1",
+      "kind": "flow",
+      "source": "973d095f4f",
+      "target": "b2f05eba60",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "2d921049c9",
+      "kind": "flow",
+      "source": "2d1326deb6",
+      "target": "f62230717f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "76c382c9b1",
+      "kind": "flow",
+      "source": "f8119211ef",
+      "target": "973d095f4f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "a34aacf836",
+      "kind": "flow",
+      "source": "8284baeb20",
+      "target": "85672cc727",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ade7624a14",
+      "kind": "flow",
+      "source": "51799b6242",
+      "target": "8284baeb20",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "c34ad845a9",
+      "kind": "flow",
+      "source": "69ff1927a7",
+      "target": "85672cc727",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "32e0e0f160",
+      "kind": "flow",
+      "source": "8242b30e99",
+      "target": "69ff1927a7",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}

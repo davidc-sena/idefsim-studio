@@ -1,0 +1,150 @@
+{
+  "format": "idefsim-studio",
+  "format_version": 1,
+  "name": "DowntimeEntity Example - EntityConveyor",
+  "author": "",
+  "version": "1.0",
+  "description": "Convertido do exemplo do JaamSim 'DowntimeEntity Example - EntityConveyor' (JaamSim: Apache License 2.0, © JaamSim Software Inc.). Modelo conceitual: confira tempos e regras.\n\nObservações da conversão:\n- Não representados no IDEF-SIM: limiares (condições de abertura), paradas/manutenção.",
+  "settings": {
+    "time_unit": "s",
+    "duration": 604800.0,
+    "warmup": 0.0,
+    "replications": 1,
+    "seed": 12345
+  },
+  "elements": [
+    {
+      "id": "c5e90e3566",
+      "kind": "movement",
+      "name": "Entity Conveyor1",
+      "x": 280,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "c96aee2254",
+      "kind": "movement",
+      "name": "Entity Conveyor2",
+      "x": 880,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(2)"
+      }
+    },
+    {
+      "id": "41933846e4",
+      "kind": "entity",
+      "name": "Sim Entity1",
+      "x": 80,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "interarrival": "CONST(1)",
+        "first_arrival": "0",
+        "max_arrivals": 0,
+        "batch_size": 1,
+        "external_arrival": true,
+        "arrival_side": "left",
+        "attributes": []
+      }
+    },
+    {
+      "id": "6fdfaaab96",
+      "kind": "exit",
+      "name": "Sink",
+      "x": 1080,
+      "y": 100.0,
+      "description": "",
+      "params": {}
+    },
+    {
+      "id": "95ec344165",
+      "kind": "function",
+      "name": "Queue1",
+      "x": 480,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0)",
+        "is_queue": true
+      }
+    },
+    {
+      "id": "3e2a791c8f",
+      "kind": "function",
+      "name": "Server1",
+      "x": 680,
+      "y": 100.0,
+      "description": "",
+      "params": {
+        "duration": "CONST(0,5)",
+        "is_queue": false
+      }
+    },
+    {
+      "id": "48f57b749b",
+      "kind": "resource",
+      "name": "Recurso Server1",
+      "x": 680,
+      "y": 205.0,
+      "description": "",
+      "params": {
+        "capacity": 1
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "9dd4e1e88e",
+      "kind": "resource",
+      "source": "48f57b749b",
+      "target": "3e2a791c8f",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "9954a88f9e",
+      "kind": "flow",
+      "source": "c5e90e3566",
+      "target": "95ec344165",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "ae822ba277",
+      "kind": "flow",
+      "source": "c96aee2254",
+      "target": "6fdfaaab96",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "25d67ba709",
+      "kind": "flow",
+      "source": "41933846e4",
+      "target": "c5e90e3566",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "7ef25a5752",
+      "kind": "flow",
+      "source": "3e2a791c8f",
+      "target": "c96aee2254",
+      "label": "",
+      "probability": 1.0
+    },
+    {
+      "id": "4b650937a5",
+      "kind": "flow",
+      "source": "95ec344165",
+      "target": "3e2a791c8f",
+      "label": "",
+      "probability": 1.0
+    }
+  ]
+}
