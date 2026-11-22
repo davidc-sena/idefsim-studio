@@ -69,6 +69,20 @@ class NodeItem(QGraphicsItem):
     def paint(self, painter, option, widget=None):
         shapes.paint_node(painter, self.element.kind, self._rect, self.element.name,
                           self.isSelected())
+        if self.element.kind == EK.FUNCTION and self.element.params.get("is_queue"):
+            # marca de fila: caixa aberta com três entidades em espera, no canto superior direito
+            r = self._rect
+            w, h = 22.0, 9.0
+            x0, y0 = r.right() - w - 5, r.top() + 5
+            pen = QPen(shapes.SELECT if self.isSelected() else shapes.INK, 1.1)
+            painter.setPen(pen)
+            painter.drawLine(QPointF(x0, y0), QPointF(x0 + w, y0))
+            painter.drawLine(QPointF(x0, y0 + h), QPointF(x0 + w, y0 + h))
+            painter.drawLine(QPointF(x0 + w, y0), QPointF(x0 + w, y0 + h))
+            painter.setBrush(pen.color())
+            for i in range(3):
+                painter.drawEllipse(QPointF(x0 + w - 4.5 - i * 6.5, y0 + h / 2), 2.2, 2.2)
+            painter.setBrush(Qt.NoBrush)
         crit = self._criterion()
         if crit:  # regra OU apenas visual: critério escrito abaixo do símbolo
             box = QRectF(self._rect.left() - 40, self._rect.bottom() + 2, self._rect.width() + 80, 30)

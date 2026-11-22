@@ -288,3 +288,35 @@ def test_objects_are_spaced():
         closest = min(((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5
                       for a, b in itertools.combinations(pts, 2))
         assert closest >= 1.0, f"objetos a {closest:.2f} m um do outro"
+
+
+def _q_model():
+    m = Model()
+    e = m.add_element(EK.ENTITY, 0, 0, "Peca")
+    q = m.add_element(EK.FUNCTION, 160, 0, "Aguardar torno", is_queue=True)
+    f = m.add_element(EK.FUNCTION, 320, 0, "Tornear", duration="EXPO(4)")
+    r = m.add_element(EK.RESOURCE, 320, 120, "Torno")
+    x = m.add_element(EK.EXIT, 480, 0, "Fim")
+    for a, b in ((e, q), (q, f), (f, x)):
+        m.add_connection(CK.FLOW, a.id, b.id)
+    m.add_connection(CK.RESOURCE, r.id, f.id)
+    return m, q, x
+
+
+def test_queue_function_is_waitqueue_of_next_processor():
+    m, q, x = _q_model()
+    types, kws = check(export_jaamsim(m).text)
+    d = {(o, k): v for o, k, v in kws}
+    assert types["Aguardar_torno"] == "Queue"
+    assert d[("Peca_Chegada", "NextComponent")] == "Aguardar_torno"
+    assert d[("Tornear", "WaitQueue")] == "Aguardar_torno"
+    assert [n for n, t in types.items() if t == "Queue"] == ["Aguardar_torno"]  # nenhuma fila extra
+    # fila sem processo depois: ignorada (passagem direta) com aviso
+    for c in list(m.outgoing(q.id)):
+        del m.connections[c.id]
+    m.add_connection(CK.FLOW, q.id, x.id)
+    res = export_jaamsim(m)
+    types, kws = check(res.text)
+    assert "Aguardar_torno" not in types
+    assert dict(((o, k), v) for o, k, v in kws)[("Peca_Chegada", "NextComponent")] == "Fim"
+    assert any("Aguardar torno" in w for w in res.warnings)

@@ -11,7 +11,7 @@ _PARAM_LABELS = {
     "max_arrivals": "Máx. de chegadas (0 = ilimitado)", "batch_size": "Entidades por chegada",
     "duration": "Tempo", "capacity": "Capacidade",
     "external_arrival": "Fluxo de entrada no sistema", "arrival_side": "Seta vem da",
-    "decision": "Decisão", "criterion": "Critério",
+    "decision": "Decisão", "criterion": "Critério", "is_queue": "Representa uma fila",
 }
 _DECISIONS = {"probability": "por probabilidade", "condition": "por atributo (condição)",
               "visual": "apenas visual"}
@@ -62,7 +62,9 @@ def model_to_html(model: Model, diagram_svg: str | None = None) -> str:
             params = "<br>".join(
                 show(k, v) for k, v in e.params.items()
                 if not (k == "arrival_side" and not e.params.get("external_arrival"))
-                and not (k == "criterion" and not v))
+                and not (k == "criterion" and not v)
+                and not (k == "is_queue" and not v)
+                and not (k == "duration" and e.params.get("is_queue")))
             links = []
             for c in model.outgoing(e.id):
                 p = f" (p={c.probability:g})" if len(model.outgoing(e.id)) > 1 else ""

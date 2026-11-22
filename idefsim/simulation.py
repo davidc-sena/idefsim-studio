@@ -157,8 +157,11 @@ class _Replication:
         self.next_id = 0
 
         self.dists: dict[str, dist.Distribution] = {}
+        # funções-fila: sem tempo nem recurso; a espera acontece no processo seguinte
+        self.queues = {e.id for e in model.elements.values() if model.is_queue(e.id)}
+        self.queue_passed: dict[str, int] = {q: 0 for q in self.queues}
         for e in model.elements.values():
-            if e.kind in PROCESS_KINDS:
+            if e.kind in PROCESS_KINDS and e.id not in self.queues:
                 self.dists[e.id] = dist.parse(e.params["duration"])
         # atributos (nome, distribuição) de cada entidade e modo de decisão das regras OU
         self.attr_defs = {
@@ -177,7 +180,8 @@ class _Replication:
         self.out = {e.id: model.outgoing(e.id) for e in model.elements.values()}
         self.inc = {e.id: model.incoming(e.id) for e in model.elements.values()}
         self.proc_res = {e.id: sorted(r.id for r in model.resources_of(e.id))
-                         for e in model.elements.values() if e.kind in PROCESS_KINDS}
+                         for e in model.elements.values()
+                         if e.kind in PROCESS_KINDS and e.id not in self.queues}
         self.proc = {eid: _ProcStats(TimeWeighted(self.warmup), TimeWeighted(self.warmup))
                      for eid in self.proc_res}
 
@@ -269,7 +273,10 @@ class _Replication:
             k = el.kind
             outs = self.out[node]
 
-            if k in PROCESS_KINDS:
+            if node in self.queues:
+                if self.env.now >= self.warmup:
+                    self.queue_passed[node] += 1
+            elif k in PROCESS_KINDS:
                 yield from self._process(tok, el)
             elif k == EK.EXIT:
                 self._leave(tok, el.name)
@@ -392,6 +399,15 @@ class _Replication:
                 r[(cat, nm, "Fila média")] = st.queue.mean(end)
                 r[(cat, nm, "Fila máxima")] = st.queue.max
             r[(cat, nm, "Em processamento (média)")] = st.busy.mean(end)
+        for qid in self.queues:  # fila: mostra a espera antes do processo que ela alimenta
+            nm = self.m.elements[qid].name
+            r[("Fila", nm, "Entidades que entraram")] = self.queue_passed[qid]
+            fed = self.m.queue_feeds(qid)
+            if fed and self.proc_res.get(fed):
+                st = self.proc[fed]
+                r[("Fila", nm, "Tempo médio em fila")] = mean(st.waits)
+                r[("Fila", nm, "Fila média")] = st.queue.mean(end)
+                r[("Fila", nm, "Fila máxima")] = st.queue.max
         for rid, tw in self.res_busy.items():
             res = self.m.elements[rid]
             cap = int(res.params.get("capacity", 1))

@@ -198,7 +198,18 @@ class PropertiesPanel(QScrollArea):
                 self._spin("Máx. de chegadas", e.params.get("max_arrivals", 0),
                            set_param("max_arrivals", "Máx. chegadas"), 0, 10**9, "0 = ilimitado")
             self._attributes(model, e)
+        elif e.kind in PROCESS_KINDS and model.is_queue(e.id):
+            self._queue_box(model, e)
+            fed = model.queue_feeds(e.id)
+            info = QLabel(f"<i>Sem tempo: é a fila de espera de <b>{model.elements[fed].name}</b>. "
+                          "No JaamSim vira um Queue (WaitQueue desse processo).</i>" if fed else
+                          "<i>Sem tempo. Ligue-a com uma única seta a uma Função (ou Movimentação "
+                          "com recurso): ela será a fila de espera desse processo.</i>")
+            info.setWordWrap(True)
+            self.form.addRow(info)
         elif e.kind in PROCESS_KINDS:
+            if e.kind == EK.FUNCTION:
+                self._queue_box(model, e)
             self._dist("Tempo" + (" de processamento" if e.kind == EK.FUNCTION else " de deslocamento"),
                        e.params.get("duration", ""), set_param("duration", "Tempo"))
             res = model.resources_of(e.id)
@@ -245,6 +256,20 @@ class PropertiesPanel(QScrollArea):
                     self._cond_row(model, c, f"→ {name}")
                 else:
                     self._prob_row(model, c, name)
+
+    def _queue_box(self, model, e) -> None:
+        box = QCheckBox("Representa uma fila (sem tempo)")
+        box.setToolTip("A função só representa a espera: não tem tempo nem recurso. No JaamSim "
+                       "vira apenas um Queue, usado como fila de espera do processo seguinte.")
+        box.setChecked(bool(e.params.get("is_queue")))
+
+        def toggle(v):
+            e.params["is_queue"] = bool(v)
+            self.elementRenamed.emit(e.id)
+            self.edited.emit("Representa uma fila", f"{e.id}.is_queue")
+            self._rebuild_later(model, e)
+        box.toggled.connect(toggle)
+        self.form.addRow("Fila", box)
 
     # ------------------------------------------------------------ atributos
     def _attributes(self, model, e) -> None:

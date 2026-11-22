@@ -186,3 +186,25 @@ def test_distribution_editor(app):
     assert got[-1] == "GAMM(4,5; 2)"
     assert ed.combo.findData("POIS") == -1                    # contagem fora dos tempos
     assert DistributionEditor("0", for_time=False).combo.findData("POIS") >= 0
+
+
+def test_queue_checkbox_hides_time(app):
+    from PySide6.QtWidgets import QCheckBox
+    from idefsim.gui.dist_editor import DistributionEditor
+    from idefsim.model import Model
+    m = Model()
+    f = m.add_element(EK.FUNCTION, 0, 0, "Aguardar")
+    win = MainWindow()
+    win._set_model(m, None)
+    win.scene.select_element(f.id)
+    assert win.props.widget().findChildren(DistributionEditor)
+    box = next(b for b in win.props.widget().findChildren(QCheckBox)
+               if b.text().startswith("Representa uma fila"))
+    box.setChecked(True)
+    app.processEvents()
+    assert win.scene.model.elements[f.id].params["is_queue"]
+    assert not win.props.widget().findChildren(DistributionEditor)   # sem tempo
+    win.undo()
+    assert not win.scene.model.elements[f.id].params["is_queue"]
+    win.dirty = False
+    win.close()

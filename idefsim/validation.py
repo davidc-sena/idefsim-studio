@@ -73,11 +73,21 @@ def validate(model: Model) -> list[Issue]:
             if int(e.params.get("batch_size", 1)) < 1:
                 add(ERROR, f"{label}: tamanho do lote deve ser ≥ 1.", e.id)
 
-        if e.kind in PROCESS_KINDS:
+        if model.is_queue(e.id):
+            label = f"Fila '{e.name}'"
+            if model.resources_of(e.id):
+                add(WARNING, f"{label} representa uma fila: os recursos ligados a ela são ignorados.",
+                    e.id)
+            if outs and not model.queue_feeds(e.id):
+                add(WARNING, f"{label} deveria ter uma única saída para uma Função (ou Movimentação "
+                             "com recurso); assim ela é a fila de espera desse processo. No JaamSim "
+                             "ela será ignorada.", e.id)
+        elif e.kind in PROCESS_KINDS:
             try:
                 dist.parse(e.params.get("duration", ""), for_time=True)
             except dist.DistributionError as ex:
                 add(ERROR, f"{label}: tempo inválido — {ex}", e.id)
+        if e.kind in PROCESS_KINDS:
             if not ins:
                 add(WARNING, f"{label} não recebe nenhum fluxo de entidade.", e.id)
             if not outs:
@@ -175,6 +185,16 @@ def validate(model: Model) -> list[Issue]:
     for (kind, nm), n in names.items():
         if n > 1:
             add(WARNING, f"Existem {n} elementos '{KIND_LABELS[kind]}' com o nome '{nm}'.")
+
+    fed_by: dict[str, list[str]] = {}
+    for q in model.elements.values():
+        t = model.queue_feeds(q.id)
+        if t:
+            fed_by.setdefault(t, []).append(q.name)
+    for t, qs in fed_by.items():
+        if len(qs) > 1:
+            add(WARNING, f"'{model.elements[t].name}' é alimentada por {len(qs)} filas "
+                         f"({', '.join(qs)}); no JaamSim só a primeira será a fila de espera.", t)
 
     reach = _reachable(model)
     for e in model.elements.values():

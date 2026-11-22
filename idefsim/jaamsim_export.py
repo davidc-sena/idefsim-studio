@@ -9,6 +9,7 @@ IDEF-SIM                           JaamSim
 Entidade com chegada externa       SimEntity + EntityGenerator
 Entidade de transformação          Queue + Assemble (cria a nova entidade)
 Função                             Queue + EntityProcessor (ResourceList, Capacity, ServiceTime)
+Função que representa uma fila     Queue (WaitQueue do processo seguinte), sem tempo
 Movimentação                       EntityConveyor (com Seize/Release se tiver recurso)
 Recurso                            Resource (Capacity)
 Regra OU (X) – probabilidade       Branch + DiscreteDistribution
@@ -247,6 +248,9 @@ class _Exporter:
         e = self.m.elements[node]
         k, n = e.kind, self.names[node]
         ins, outs = self.m.incoming(node), self.m.outgoing(node)
+        if k == EK.FUNCTION and self.m.is_queue(node):
+            # função-fila: é o Queue de espera do processo seguinte (ou passagem direta)
+            return n if self.queue_active(node) else self.after(node, _seen)
         if k == EK.FUNCTION:
             return self.queue_of(node)          # o EntityProcessor puxa da sua fila
         if k == EK.MOVEMENT:
@@ -294,10 +298,25 @@ class _Exporter:
         return asg
 
     def queue_of(self, node: str) -> str:
-        """Nome (estável) da fila de espera de uma Função."""
+        """Nome (estável) da fila de espera de um processo: a função-fila que o alimenta
+        (a primeira, se houver mais de uma) ou uma fila criada para ele."""
         if node not in self.func_queues:
-            self.func_queues[node] = self.unique(f"{self.names[node]}_Fila")
+            feeders = [q.id for q in self.m.elements.values() if self.m.queue_feeds(q.id) == node]
+            self.func_queues[node] = (self.names[feeders[0]] if feeders
+                                      else self.unique(f"{self.names[node]}_Fila"))
         return self.func_queues[node]
+
+    def queue_active(self, node: str) -> bool:
+        """A função-fila é de fato a fila de espera do processo seguinte?"""
+        fed = self.m.queue_feeds(node)
+        return bool(fed) and self.queue_of(fed) == self.names[node]
+
+    def define_queue(self, name: str, x: float, y: float) -> str:
+        """Define o Queue uma única vez (pode ser compartilhado com uma função-fila)."""
+        if name not in self.defs.get("Queue", []):
+            self.define("Queue", name)
+            self.pos(name, x, y)
+        return name
 
     def after(self, node: str, _seen=None) -> str:
         """Componente seguinte ao processamento de ``node``."""
@@ -402,10 +421,19 @@ class _Exporter:
                     elif len(outs) > 1:
                         self.decision(e.id)
 
+            elif k == EK.FUNCTION and m.is_queue(e.id):
+                # Função que representa uma fila → só um Queue (WaitQueue do processo seguinte)
+                if self.queue_active(e.id):
+                    self.define_queue(n, e.x, e.y)
+                else:
+                    self.warnings.append(f"Fila '{e.name}' não alimenta uma Função (ou Movimentação "
+                                         "com recurso) e foi ignorada: as entidades passam direto.")
+                    self.decision(e.id)
+
             elif k == EK.FUNCTION:
                 # Função → Queue + EntityProcessor (captura os recursos, processa e libera)
                 res = m.resources_of(e.id)
-                q = self.define("Queue", self.queue_of(e.id))
+                q = self.define_queue(self.queue_of(e.id), e.x - 50, e.y - 40)
                 self.define("EntityProcessor", n)
                 self.kw("EntityProcessor", n, "NextComponent", self.after(e.id))
                 self.kw("EntityProcessor", n, "WaitQueue", q)
@@ -420,7 +448,6 @@ class _Exporter:
                 self.kw("EntityProcessor", n, "Capacity", str(cap))
                 self.kw("EntityProcessor", n, "ServiceTime",
                         self.time_value(e.params.get("duration", "0"), n, e.x, e.y))
-                self.pos(q, e.x - 50, e.y - 40)
                 self.pos(n, e.x, e.y)
                 self.decision(e.id)
 
@@ -429,7 +456,7 @@ class _Exporter:
                 dur = e.params.get("duration", "0")
                 nxt = self.after(e.id)
                 if res:
-                    q = self.define("Queue", self.unique(f"{n}_Fila"))
+                    q = self.define_queue(self.queue_of(e.id), e.x - 50, e.y - 40)
                     s = self.define("Seize", f"{n}_Seize")
                     r = self.define("Release", f"{n}_Release")
                     self.used |= {s, r}
@@ -439,7 +466,6 @@ class _Exporter:
                     self.kw("Seize", s, "ResourceList", rl)
                     self.kw("Release", r, "NextComponent", nxt)
                     self.kw("Release", r, "ResourceList", rl)
-                    self.pos(q, e.x - 50, e.y - 40)
                     self.pos(s, e.x - 50, e.y)
                     self.pos(r, e.x + 50, e.y)
                     nxt_of_proc = r

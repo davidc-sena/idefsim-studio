@@ -172,3 +172,39 @@ def test_connector_letters_pair_automatically():
     m = Model()
     names = [m.add_element(EK.CONNECTOR).name for _ in range(5)]
     assert names == ["A", "A", "B", "B", "C"]
+
+
+def _queue_model(target_kind=EK.FUNCTION):
+    m = Model()
+    m.settings.duration, m.settings.replications = 2000, 2
+    e = m.add_element(EK.ENTITY, 0, 0, "Peça", interarrival="EXPO(5)")
+    q = m.add_element(EK.FUNCTION, 150, 0, "Aguardar torno", is_queue=True)
+    f = m.add_element(target_kind, 300, 0, "Tornear", duration="EXPO(4)")
+    r = m.add_element(EK.RESOURCE, 300, 120, "Torno")
+    x = m.add_element(EK.EXIT, 450, 0, "Fim")
+    for a, b in ((e, q), (q, f), (f, x)):
+        m.add_connection(CK.FLOW, a.id, b.id)
+    m.add_connection(CK.RESOURCE, r.id, f.id)
+    return m, q, f
+
+
+def test_queue_function_simulation():
+    m, q, f = _queue_model()
+    assert m.is_queue(q.id) and m.queue_feeds(q.id) == f.id
+    assert not has_errors(validate(m))
+    rows = {(r.category, r.obj, r.metric): r.mean for r in run_simulation(m).rows()}
+    # a espera é a do processo alimentado; a fila não tem tempo próprio
+    assert rows[("Fila", "Aguardar torno", "Tempo médio em fila")] == \
+        rows[("Função", "Tornear", "Tempo médio em fila")]
+    assert rows[("Fila", "Aguardar torno", "Entidades que entraram")] > 0
+    assert ("Função", "Aguardar torno", "Atendimentos concluídos") not in rows
+
+
+def test_queue_function_without_process_warns():
+    m, q, f = _queue_model()
+    for c in list(m.outgoing(q.id)):
+        del m.connections[c.id]
+    x = next(e for e in m.elements.values() if e.kind == EK.EXIT)
+    m.add_connection(CK.FLOW, q.id, x.id)
+    assert any("Fila 'Aguardar torno'" in str(i) for i in validate(m))
+    run_simulation(m)   # passa direto, sem erro

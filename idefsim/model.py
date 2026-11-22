@@ -75,7 +75,8 @@ DEFAULT_PARAMS: dict[ElementKind, dict] = {
                          "external_arrival": True, "arrival_side": "left",
                          # atributos: [{"name": "tipo", "value": "DISC(1; 0,5; 2; 0,5)"}, ...]
                          "attributes": []},
-    ElementKind.FUNCTION: {"duration": "TRIA(4, 5, 6)"},
+    # is_queue: a função representa uma fila (sem tempo; no JaamSim vira só um Queue)
+    ElementKind.FUNCTION: {"duration": "TRIA(4, 5, 6)", "is_queue": False},
     # decisão da regra OU: "probability" | "condition" (atributo) | "visual" (não simula)
     ElementKind.RULE_OR: {"decision": "probability", "criterion": ""},
     ElementKind.MOVEMENT: {"duration": "CONST(2)"},
@@ -320,6 +321,25 @@ class Model:
                 if n and n not in seen:
                     seen.append(n)
         return seen
+
+    def is_queue(self, element_id: str) -> bool:
+        e = self.elements[element_id]
+        return e.kind == ElementKind.FUNCTION and bool(e.params.get("is_queue"))
+
+    def queue_feeds(self, element_id: str) -> str | None:
+        """Processo alimentado por uma função-fila: uma única saída para uma Função (que não
+        seja fila) ou Movimentação com recurso. None se a fila não alimenta ninguém assim."""
+        if not self.is_queue(element_id):
+            return None
+        outs = self.outgoing(element_id)
+        if len(outs) != 1:
+            return None
+        t = self.elements[outs[0].target]
+        if t.kind == ElementKind.FUNCTION and not self.is_queue(t.id):
+            return t.id
+        if t.kind == ElementKind.MOVEMENT and self.resources_of(t.id):
+            return t.id
+        return None
 
     def decision_of(self, element_id: str) -> str:
         e = self.elements[element_id]
